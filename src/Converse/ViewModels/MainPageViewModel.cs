@@ -8,16 +8,27 @@ using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using Converse.Resources;
+using Client;
+using Xamarin.Forms;
+using System.Threading.Tasks;
+using BarcodeScanner;
 
 namespace Converse.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
+        public Command OpenWelcomePageCommand { get; }
+
+        private readonly IBarcodeScannerService barcodeScannerService;
+
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService,
-                                 IDeviceService deviceService)
+                                 IDeviceService deviceService, IBarcodeScannerService barcodeScannerService)
             : base(navigationService, pageDialogService, deviceService)
         {
             Title = AppResources.MainPageTitle;
+            this.barcodeScannerService = barcodeScannerService;
+
+            OpenWelcomePageCommand = new Command(async () => await _navigationService.NavigateAsync("MainPage"));
         }
 
         public override void OnNavigatingTo(INavigationParameters parameters)

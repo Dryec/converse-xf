@@ -6,6 +6,9 @@ using Prism;
 using Prism.AppModel;
 using Prism.Navigation;
 using Prism.Services;
+using System.Windows.Input;
+using Xamarin.Forms;
+using Prism.Commands;
 
 namespace Converse.ViewModels
 {
@@ -17,12 +20,29 @@ namespace Converse.ViewModels
 
         protected INavigationService _navigationService { get; }
 
+        public ICommand NavigateCommand { get; }
+
         public ViewModelBase(INavigationService navigationService, IPageDialogService pageDialogService,
                              IDeviceService deviceService)
         {
             _pageDialogService = pageDialogService;
             _deviceService = deviceService;
             _navigationService = navigationService;
+
+            NavigateCommand = new DelegateCommand<string>(async (string arg) => {
+                if (arg == null || !IsActive)
+                    return;
+
+                switch (arg)
+                {
+                    case "..":
+                        await _navigationService.GoBackAsync();
+                        break;
+                    default:
+                        await _navigationService.NavigateAsync(arg);
+                        break;
+                }
+            });
         }
 
         public string Title { get; set; }

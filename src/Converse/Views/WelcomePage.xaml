@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Converse.Views;assembly=Converse"
+    xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+    xmlns:i18n="clr-namespace:Converse.i18n;assembly=Converse"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    NavigationPage.HasNavigationBar="False"
+    Title="{Binding Title}"
+    x:Class="Converse.Views.WelcomePage">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+        <Image
+            Grid.Row="0"
+      Margin="0,25,0,0"
+            Source="converse_logo_trans_background"
+            Aspect="AspectFit" />
+        <ScrollView
+            Grid.Row="1" VerticalOptions="Center">
+            <Grid
+                Margin="25"
+                RowSpacing="35">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="Auto" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+                <ffimageloading:CachedImage
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,-4,10,0"
+                    HeightRequest="35"
+                    Source="baseline_num1_blue_48"
+                    Aspect="AspectFit"
+                    VerticalOptions="Start" />
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Text="The first fully functional blockchain chat on the TRON network, which gives us tremendous speed and reliability to enable decentralized chats." />
+                <ffimageloading:CachedImage
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="0,-4,10,0"
+                    HeightRequest="35"
+                    Source="baseline_people_blue_48"
+                    Aspect="AspectFit"
+                    VerticalOptions="Start" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Text="Find friends and chat with them in single chats or in groups." />
+                <ffimageloading:CachedImage
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="0,-4,10,0"
+                    HeightRequest="35"
+                    Source="baseline_key_blue_48"
+                    Aspect="AspectFit"
+                    VerticalOptions="Start" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Text="With the power of Blockchain Technology you and your partner are the only one‘s who own your messages." />
+            </Grid>
+        </ScrollView>
+        <StackLayout
+            Grid.Row="2"
+            VerticalOptions="End" Margin="25">
+            <Button
+                Text="Login"/>
+            <Button
+                Text="Register" Command="{Binding NavigateCommand}" CommandParameter="RegisterInfoPage"/>
+        </StackLayout>
+    </Grid>
+</ContentPage>

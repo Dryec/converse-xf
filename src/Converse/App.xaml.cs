@@ -16,6 +16,9 @@ using BarcodeScanner;
 using Prism.Logging;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
+using Converse.ViewModels;
+using Converse.Views.Register;
+using Converse.ViewModels.Register;
 
 namespace Converse
 {
@@ -70,8 +73,12 @@ namespace Converse
             // Adding `selectedTab=ViewB` will set the current tab to ViewB
             containerRegistry.RegisterForNavigation<TabbedPage>();
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<MainPage>();
-            containerRegistry.RegisterForNavigation<SplashScreenPage>();
+            containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
+            containerRegistry.RegisterForNavigation<SplashScreenPage, SplashScreenPageViewModel>();
+            containerRegistry.RegisterForNavigation<WelcomePage, WelcomePageViewModel>();
+            containerRegistry.RegisterForNavigation<RegisterInfoPage, RegisterInfoPageViewModel>();
+            containerRegistry.RegisterForNavigation<RegisterPage, RegisterPageViewModel>();
+            containerRegistry.RegisterForNavigation<ConfirmRecoveryPhrasePage, ConfirmRecoveryPhrasePageViewModel>();
         }
 
         protected override void OnStart()

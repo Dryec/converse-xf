@@ -5,9 +5,9 @@
     x:Class="Converse.Theming.ColorPalette">
     <!-- See https://material.io/color for more help choosing a Material Design Color scheme -->
     <Color
-        x:Key="Primary">#78909c</Color>
+        x:Key="Primary">#16318f</Color>
     <Color
-        x:Key="PrimaryDark">#4b636e</Color>
+        x:Key="PrimaryDark">#242729</Color>
     <Color
         x:Key="PrimaryDarkTranslucent">#9926213C</Color>
     <Color

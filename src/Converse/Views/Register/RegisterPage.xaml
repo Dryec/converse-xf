@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Converse.Views;assembly=Converse"
+    xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+    xmlns:i18n="clr-namespace:Converse.i18n;assembly=Converse"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    NavigationPage.HasNavigationBar="False"
+    Title="{Binding Title}"
+    x:Class="Converse.Views.Register.RegisterPage">
+    <Grid
+        RowSpacing="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+        <local:BasicTitleBarView
+            Grid.Row="0"
+            CanGoBack="true" />
+        <ScrollView
+            Grid.Row="1"
+            Padding="15,15,15,50"
+            VerticalOptions="StartAndExpand">
+            <StackLayout>
+                <ffimageloading:CachedImage
+                    Margin="15"
+                    HeightRequest="128"
+                    WidthRequest="128"
+                    Source="https://content-static.upwork.com/uploads/2014/10/01073427/profilephoto1.jpg">
+                    <ffimageloading:CachedImage.Transformations>
+                        <fftransformations:CircleTransformation
+                            BorderHexColor="000000"
+                            BorderSize="2" />
+                    </ffimageloading:CachedImage.Transformations>
+                </ffimageloading:CachedImage>
+                <Entry
+                    Placeholder="Name"
+                    HorizontalTextAlignment="Center" />
+                <Entry
+                    Placeholder="Email (Optional)"
+                    HorizontalTextAlignment="Center" />
+                <BoxView
+                    Margin="0,15"
+                    HeightRequest="1"
+                    WidthRequest="25"
+                    HorizontalOptions="Center"
+                    Color="LightBlue" />
+                <Label
+                    Margin="0,0,0,15"
+                    HorizontalOptions="Center"
+                    Text="Recovery Phrase"
+                    FontSize="18"
+                    FontAttributes="Bold" />
+                <Grid
+                    Margin="50,0,50,0"
+                    HorizontalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="*" />
+                    </Grid.RowDefinitions>
+                    <!-- LEFT -->
+                    <Grid
+                        Grid.Row="0"
+                        Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition
+                                Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="*" />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Grid.Row="0"
+                            Text="1."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="Peter"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="1"
+                            Text="2."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="Peter"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="2"
+                            Text="3."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Text="Pascal"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="3"
+                            Text="4."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Text="Peter"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="4"
+                            Text="5."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Text="Dieter"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="5"
+                            Text="6."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Text="Peter"
+                            FontSize="16" />
+                    </Grid>
+                    <!-- RIGHT -->
+                    <Grid
+                        HorizontalOptions="End"
+                        Grid.Row="0"
+                        Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition
+                                Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="*" />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Grid.Row="0"
+                            Text="7."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="Sam"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="1"
+                            Text="8."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="Peter"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="2"
+                            Text="9."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Text="Marius"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="3"
+                            Text="10."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Text="Peter"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="4"
+                            Text="11."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Text="Peter"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="5"
+                            Text="12."
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                        <Label
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Text="Gabriela"
+                            FontSize="16" />
+                    </Grid>
+                </Grid>
+                <Label
+                    Margin="0,10,0,0"
+                    HorizontalOptions="Center"
+                    Text="*keep your recovery phrase secret and safe"
+                    FontSize="12" />
+            </StackLayout>
+        </ScrollView>
+        <Button
+            Grid.Row="2"
+            Margin="-2,-2"
+            VerticalOptions="End"
+            Text="Create Account" Command="{Binding NavigateCommand}" CommandParameter="ConfirmRecoveryPhrasePage"/>
+    </Grid>
+</ContentPage>

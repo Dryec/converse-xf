@@ -27,4 +27,21 @@
             Property="BarBackgroundColor"
             Value="{StaticResource PrimaryDark}" />
     </Style>
+    <Style
+        TargetType="Button"
+        ApplyToDerivedTypes="true">
+        <Setter
+            Property="BackgroundColor"
+            Value="{StaticResource Primary}" />
+        <Setter
+            Property="TextColor"
+            Value="White" />
+    </Style>
+    <Style
+        TargetType="Label"
+        ApplyToDerivedTypes="true">
+        <Setter
+            Property="TextColor"
+            Value="DimGray" />
+    </Style>
 </ResourceDictionary>

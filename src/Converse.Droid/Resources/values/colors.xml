@@ -2,11 +2,11 @@
 <resources>
     <!--Get colors from: http://www.materialpalette.com/-->
     <color
-        name="primary">#78909c</color>
+        name="primary">#16318f</color>
     <color
-        name="primaryDark">#4b636e</color>
+        name="primaryDark">#16318f</color>
     <color
-        name="accent">#7635EB</color>
+        name="accent">#16318f</color>
     <color
         name="lightPrimary">#a7c0cd</color>
     <color
