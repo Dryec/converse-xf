@@ -52,7 +52,7 @@ namespace Converse
             // Handle Xamarin Form Logging events such as Binding Errors
             Log.Listeners.Add(new TraceLogListener());
 #endif
-
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDYzNDRAMzEzNjJlMzMyZTMwTTZpbldCNWx6cjNjbzlaSk13TzBlSFhSMElrVzZRR2xnL2p1SklPWG5XMD0=");
             LogUnobservedTaskExceptions();
             AppResources.Culture = CrossMultilingual.Current.DeviceCultureInfo;
 
@@ -79,6 +79,7 @@ namespace Converse
             containerRegistry.RegisterForNavigation<RegisterInfoPage, RegisterInfoPageViewModel>();
             containerRegistry.RegisterForNavigation<RegisterPage, RegisterPageViewModel>();
             containerRegistry.RegisterForNavigation<ConfirmRecoveryPhrasePage, ConfirmRecoveryPhrasePageViewModel>();
+            containerRegistry.RegisterForNavigation<ChatsOverviewPage, ChatsOverviewPageViewModel>();
         }
 
         protected override void OnStart()

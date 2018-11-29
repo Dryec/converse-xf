@@ -17,6 +17,7 @@ namespace Converse.iOS
             global::FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             global::FFImageLoading.ImageService.Instance.Initialize();
             global::ZXing.Net.Mobile.Forms.iOS.Platform.Init();
+            Syncfusion.ListView.XForms.iOS.SfListViewRenderer.Init();
 
             // Code for starting up the Xamarin Test Cloud Agent
 #if !APPSTORE_RELEASE

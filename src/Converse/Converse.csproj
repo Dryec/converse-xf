@@ -20,10 +20,12 @@
     <PackageReference Include="Prism.QuickStart.MFractor.Config" Version="1.0.3" PrivateAssets="all" />
     <PackageReference Include="LiveXAML" Version="2.1.50" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.60.3" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="16.3.0.36" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="PrismFrame.xaml.cs" />
+    <Compile Remove="ViewModels\PrismTabbedPageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources\*.resx" Generator="ResXFileCodeGenerator" LastGenOutput="%(Filename).Designer.cs" />
@@ -31,6 +33,12 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Register\RegisterInfoPage.xaml.cs">
       <DependentUpon>..\Views\RegisterInfoPage.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Chat\NormalChatViewCell.xaml.cs">
+      <DependentUpon>NormalChatViewCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Chat\GroupChatViewCell.xaml.cs">
+      <DependentUpon>GroupChatViewCell.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -40,5 +48,10 @@
   <ItemGroup>
     <Folder Include="Views\Register\" />
     <Folder Include="ViewModels\Register\" />
+    <Folder Include="Enums\" />
+    <Folder Include="Views\Chat\" />
+    <Folder Include="ViewModels\Chat\" />
+    <Folder Include="DataTemplateSelectors\" />
+    <Folder Include="ValueConverters\" />
   </ItemGroup>
 </Project>
