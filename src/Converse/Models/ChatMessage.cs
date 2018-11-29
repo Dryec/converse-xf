@@ -7,7 +7,7 @@ namespace Converse.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public User Sender { get; set; }
+        public UserInfo Sender { get; set; }
 
         public string Message { get; set; }
 

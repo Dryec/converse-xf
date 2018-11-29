@@ -10,10 +10,10 @@ namespace Converse.Models
     public class ChatEntry : INotifyPropertyChanged
     {
         // null if Type == Group
-        public User ChatPartner { get; set; }
+        public UserInfo ChatPartner { get; set; }
 
-        // null if Type == Normal TODO
-        //public Group GroupInfo { get; set; }
+        // null if Type == Normal
+        public GroupInfo GroupInfo { get; set; }
 
         public ChatType Type { get; set; }
 

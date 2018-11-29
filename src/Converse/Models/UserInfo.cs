@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Converse.Models
 {
-    public class User : INotifyPropertyChanged
+    public class UserInfo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
