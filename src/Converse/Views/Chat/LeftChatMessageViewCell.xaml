@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:localvc="clr-namespace:Converse.ValueConverters;assembly=Converse"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    x:Name="view"
+    x:Class="Converse.Views.Chat.LeftChatMessageViewCell">
+    <Grid
+        Padding="5,5,75,5"
+        RowSpacing="0"
+        Margin="10,8,10,0"
+        ColumnSpacing="10">
+        <Grid.Resources>
+            <localvc:HasUnreadMessagesToColorConverter
+                x:Key="HasUnreadMessagesToColorConverter" />
+            <localvc:DateTimeToTimeStringConverter
+                x:Key="DateTimeToTimeStringConverter" />
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+        <Frame
+            Padding="10,10,10,3" CornerRadius="10"
+            BackgroundColor="{StaticResource LeftMessageBubbleColor}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label
+                    Grid.Row="0"
+                    Text="{Binding Message}"
+                    TextColor="Black" />
+                <Label
+                    Grid.Row="1"
+                    Margin="0,0,-5,0"
+                    HorizontalOptions="End"
+                    HorizontalTextAlignment="End"
+                    Text="{Binding Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}"
+                    FontSize="11"
+                    TextColor="Gray" />
+            </Grid>
+        </Frame>
+    </Grid>
+</ViewCell>

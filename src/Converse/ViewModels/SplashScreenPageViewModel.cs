@@ -22,7 +22,7 @@ namespace Converse.ViewModels
             // After performing the long running task we perform an absolute Navigation to remove the SplashScreen from
             // the Navigation Stack.
             //await _navigationService.NavigateAsync("/NavigationPage/WelcomePage");
-            await _navigationService.NavigateAsync("/ChatsOverviewPage");
+            await _navigationService.NavigateAsync("/ChatPage");
         }
     }
 }
