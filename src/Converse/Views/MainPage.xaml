@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage
+<TabbedPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Converse.Views;assembly=Converse"
+    xmlns:localregister="clr-namespace:Converse.Views.Register;assembly=Converse"
     xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
     xmlns:i18n="clr-namespace:Converse.i18n;assembly=Converse"
     xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
     xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
     NavigationPage.HasNavigationBar="False"
+    android:TabbedPage.BarBackgroundColor="{StaticResource Primary}"
+    android:TabbedPage.BarTextColor="White"
+    android:TabbedPage.IsSwipePagingEnabled="false"
+    android:TabbedPage.BarSelectedItemColor="White"
+    android:TabbedPage.ToolbarPlacement="Bottom"
     Title="{Binding Title}"
     x:Class="Converse.Views.MainPage">
-    <StackLayout>
-        <local:BasicTitleBarView
-             CanGoBack="true" />
-        <Button
-            x:Name="TestButton"
-            Text="Hallo!"
-            Command="{Binding OpenWelcomePageCommand}"
-            BackgroundColor="#16318f"
-            Margin="15"
-            TextColor="White" />
-    </StackLayout>
-</ContentPage>
+    <local:ChatsOverviewPage />
+</TabbedPage>
