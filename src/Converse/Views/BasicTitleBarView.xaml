@@ -2,7 +2,7 @@
 <ContentView
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:skiasharp="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+  xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
     x:Name="view"
     x:Class="Converse.Views.BasicTitleBarView"
     HeightRequest="58"
@@ -30,8 +30,7 @@
             </Image>
             <ContentView.GestureRecognizers>
                 <TapGestureRecognizer
-                    Command="{Binding NavigateCommand}"
-                    CommandParameter=".."
+                    Command="{prismnav:GoBack}"
                     NumberOfTapsRequired="1" />
             </ContentView.GestureRecognizers>
         </ContentView>

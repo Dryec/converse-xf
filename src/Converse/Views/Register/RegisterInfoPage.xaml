@@ -10,6 +10,7 @@
     xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+  xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
     NavigationPage.HasNavigationBar="False"
     Title="{Binding Title}"
     x:Class="Converse.Views.Register.RegisterInfoPage">
@@ -59,6 +60,6 @@ as any loss cannot be recovered.
         <Button
             Grid.Row="2" Margin="-2,-2"
             VerticalOptions="End"
-            Text="Continue" Command="{Binding NavigateCommand}" CommandParameter="RegisterPage"/>
+            Text="Continue" Command="{prismnav:NavigateTo 'RegisterPage'}"/>
     </Grid>
 </ContentPage>

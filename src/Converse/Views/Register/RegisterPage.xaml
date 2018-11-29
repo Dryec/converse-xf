@@ -10,6 +10,7 @@
     xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+  xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
     NavigationPage.HasNavigationBar="False"
     Title="{Binding Title}"
     x:Class="Converse.Views.Register.RegisterPage">
@@ -32,13 +33,13 @@
             CanGoBack="true" />
         <ScrollView
             Grid.Row="1"
-            Padding="15,15,15,50"
+            Padding="15,15,15,15"
             VerticalOptions="StartAndExpand">
             <StackLayout>
                 <ffimageloading:CachedImage
                     Margin="15"
-                    HeightRequest="128"
-                    WidthRequest="128"
+                    HeightRequest="110"
+                    WidthRequest="110"
                     Source="https://content-static.upwork.com/uploads/2014/10/01073427/profilephoto1.jpg">
                     <ffimageloading:CachedImage.Transformations>
                         <fftransformations:CircleTransformation
@@ -53,7 +54,7 @@
                     Placeholder="Email (Optional)"
                     HorizontalTextAlignment="Center" />
                 <BoxView
-                    Margin="0,15"
+                    Margin="0,20"
                     HeightRequest="1"
                     WidthRequest="25"
                     HorizontalOptions="Center"
@@ -229,15 +230,21 @@
                 </Grid>
                 <Label
                     Margin="0,10,0,0"
-                    HorizontalOptions="Center"
-                    Text="*keep your recovery phrase secret and safe"
-                    FontSize="12" />
+                    HorizontalOptions="Center" HorizontalTextAlignment="Center"
+                    FontSize="12">
+                    <Label.Text>
+*keep your recovery phrase secret and safe
+You won't be able to see it again
+                    </Label.Text>
+                </Label>
+        <Label Text="Create New" HorizontalOptions="Center" TextDecorations="Underline" TextColor="Blue"/>
             </StackLayout>
         </ScrollView>
         <Button
             Grid.Row="2"
             Margin="-2,-2"
             VerticalOptions="End"
-            Text="Create Account" Command="{Binding NavigateCommand}" CommandParameter="ConfirmRecoveryPhrasePage"/>
+            Text="Create Account"
+            Command="{prismnav:NavigateTo 'ConfirmRecoveryPhrasePage'}" />
     </Grid>
 </ContentPage>
