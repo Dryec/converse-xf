@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:localvc="clr-namespace:Converse.ValueConverters;assembly=Converse"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    x:Name="view"
+    x:Class="Converse.Views.Chat.NormalChatViewCell">
+    <Grid
+        RowSpacing="0"
+        Margin="0,6,0,0"
+        ColumnSpacing="10">
+        <Grid.Resources>
+            <localvc:HasUnreadMessagesToColorConverter
+                x:Key="HasUnreadMessagesToColorConverter" />
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="50" />
+            <ColumnDefinition
+                Width="*" />
+            <ColumnDefinition
+                Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="6" />
+        </Grid.RowDefinitions>
+        <ffimageloading:CachedImage
+            Grid.Column="0"
+            Source="{Binding ChatPartner.ImageUri}">
+            <ffimageloading:CachedImage.Transformations>
+                <fftransformations:CircleTransformation />
+            </ffimageloading:CachedImage.Transformations>
+        </ffimageloading:CachedImage>
+        <Grid
+            Grid.Column="1"
+            RowSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                VerticalOptions="End"
+                Text="{Binding ChatPartner.Name}"
+                FontAttributes="Bold"
+                TextColor="Black"
+                FontSize="16"
+                LineBreakMode="TailTruncation" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="{Binding LastMessage.Message}"
+                LineBreakMode="TailTruncation" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                Text="YESTERDAY"
+                FontSize="10"
+                TextColor="{Binding HasUnreadMessages, Converter={StaticResource HasUnreadMessagesToColorConverter}}"
+                LineBreakMode="TailTruncation" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="1" VerticalOptions="Center"
+                HorizontalOptions="End"
+        IsVisible="{Binding HasUnreadMessages}"
+                Text="{Binding UnreadMessagesCount}"
+                FontSize="11" FontAttributes="Bold"
+                TextColor="{Binding HasUnreadMessages, Converter={StaticResource HasUnreadMessagesToColorConverter}}"
+                LineBreakMode="TailTruncation" />
+        </Grid>
+        <BoxView
+            Grid.Row="1"
+            Grid.Column="1"
+            VerticalOptions="End"
+            HeightRequest="1"
+            Color="Gray"
+            Opacity=".2" />
+    </Grid>
+</ViewCell>
