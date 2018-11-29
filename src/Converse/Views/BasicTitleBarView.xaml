@@ -2,16 +2,13 @@
 <ContentView
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-  xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
     x:Name="view"
     x:Class="Converse.Views.BasicTitleBarView"
     HeightRequest="58"
-    MinimumHeightRequest="58"
-    BackgroundColor="{StaticResource Primary}">
-    <!-- <Label
-        Text="{Binding Foo,Source={x:Reference view}}" />
-  -->
-    <Grid>
+    MinimumHeightRequest="58">
+  <Frame Padding="0" CornerRadius="0" BackgroundColor="{StaticResource Primary}">
+    <Grid RowSpacing="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition
                 Width="*" />
@@ -19,8 +16,12 @@
         <Grid.RowDefinitions>
             <RowDefinition
                 Height="*" />
+            <RowDefinition
+                Height="1" />
         </Grid.RowDefinitions>
+    <BoxView Grid.Row="0"/>
         <ContentView
+            Grid.Row="0"
             HorizontalOptions="Start">
             <Image
                 Margin="12,15,0,15"
@@ -35,6 +36,7 @@
             </ContentView.GestureRecognizers>
         </ContentView>
         <Label
+            Grid.Row="0"
             Margin="20,0,20,0"
             Text="{Binding Title}"
             TextColor="White"
@@ -44,4 +46,5 @@
             VerticalOptions="Center"
             HorizontalOptions="Center" />
     </Grid>
+    </Frame>
 </ContentView>
