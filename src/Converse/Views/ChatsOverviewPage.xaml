@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:localdts="clr-namespace:Converse.DataTemplateSelectors;assembly=Converse"
+    xmlns:local="clr-namespace:Converse.Views;assembly=Converse"
+    xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+    xmlns:i18n="clr-namespace:Converse.i18n;assembly=Converse"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    xmlns:sflistview="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    Title="{Binding Title}"
+    x:Class="Converse.Views.ChatsOverviewPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <localdts:ChatEntryTemplateSelector
+                x:Key="ChatEntryTemplateSelector" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid
+        RowSpacing="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+        <local:BasicTitleBarView
+            Grid.Row="0"
+            CanGoBack="false" />
+        <sflistview:SfListView
+            Grid.Row="1"
+            Padding="15,10"
+            ItemTemplate="{StaticResource ChatEntryTemplateSelector}"
+            ItemsSource="{Binding ChatEntries}"
+            AutoFitMode="Height">
+        </sflistview:SfListView>
+    </Grid>
+</ContentPage>
