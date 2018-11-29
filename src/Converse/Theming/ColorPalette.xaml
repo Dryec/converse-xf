@@ -20,4 +20,8 @@
         x:Key="DetailTextColor">#979797</Color>
     <Color
         x:Key="UnreadMessagesColor">#4caf50</Color>
+    <Color
+        x:Key="RightMessageBubbleColor">#DCF8C5</Color>
+    <Color
+        x:Key="LeftMessageBubbleColor">#fafafa</Color>
 </ResourceDictionary>
