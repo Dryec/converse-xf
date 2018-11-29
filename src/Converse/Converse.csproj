@@ -43,9 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\Client.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Views\Register\" />
     <Folder Include="ViewModels\Register\" />
     <Folder Include="Enums\" />
@@ -53,5 +50,8 @@
     <Folder Include="ViewModels\Chat\" />
     <Folder Include="DataTemplateSelectors\" />
     <Folder Include="ValueConverters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\Client\Client.csproj" />
   </ItemGroup>
 </Project>
