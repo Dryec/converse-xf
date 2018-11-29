@@ -2,8 +2,108 @@
 <ViewCell
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:localvc="clr-namespace:Converse.ValueConverters;assembly=Converse"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
     x:Name="view"
     x:Class="Converse.Views.Chat.GroupChatViewCell">
-    <Label
-        Text="{Binding Foo,Source={x:Reference view}}" />
+    <Grid
+        RowSpacing="0"
+        Margin="10,8,10,0"
+        ColumnSpacing="10">
+        <Grid.Resources>
+            <localvc:HasUnreadMessagesToColorConverter
+                x:Key="HasUnreadMessagesToColorConverter" />
+            <localvc:AddColonToStringConverter
+                x:Key="AddColonToStringConverter" />
+            <localvc:DateTimeToEasyReadableStringConverter
+                x:Key="DateTimeToEasyReadableStringConverter" />
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="50" />
+            <ColumnDefinition
+                Width="*" />
+            <ColumnDefinition
+                Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="8" />
+        </Grid.RowDefinitions>
+        <ffimageloading:CachedImage
+            Grid.Column="0"
+            Source="{Binding GroupInfo.ImageUri}">
+            <ffimageloading:CachedImage.Transformations>
+                <fftransformations:CircleTransformation />
+            </ffimageloading:CachedImage.Transformations>
+        </ffimageloading:CachedImage>
+        <Grid
+            Grid.Column="1"
+            RowSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                VerticalOptions="End"
+                Text="{Binding GroupInfo.Name}"
+                FontAttributes="Bold"
+                TextColor="Black"
+                FontSize="16"
+                LineBreakMode="TailTruncation" />
+            <StackLayout
+                Grid.Row="1"
+                Grid.Column="0"
+                Orientation="Horizontal">
+                <Label
+                    FontSize="14"
+                    Text="{Binding LastMessage.Sender.Name, Converter={StaticResource AddColonToStringConverter}}"
+                    LineBreakMode="TailTruncation" TextColor="{StaticResource Primary}" />
+                <Label
+                    FontSize="14"
+                    Text="{Binding LastMessage.Message}"
+                    LineBreakMode="TailTruncation" />
+            </StackLayout>
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                Text="{Binding LastMessage.Timestamp, Converter={StaticResource DateTimeToEasyReadableStringConverter}}"
+                FontSize="12"
+                TextColor="{Binding HasUnreadMessages, Converter={StaticResource HasUnreadMessagesToColorConverter}}"
+                LineBreakMode="TailTruncation" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalOptions="Center"
+                HorizontalOptions="End"
+                IsVisible="{Binding HasUnreadMessages}"
+                Text="{Binding UnreadMessagesCount}"
+                FontSize="14"
+                FontAttributes="Bold"
+                TextColor="{Binding HasUnreadMessages, Converter={StaticResource HasUnreadMessagesToColorConverter}}"
+                LineBreakMode="TailTruncation" />
+        </Grid>
+        <BoxView
+            Grid.Row="1"
+            Grid.Column="1"
+            VerticalOptions="End"
+            HeightRequest="1"
+            Color="Gray"
+            Opacity=".2" />
+    </Grid>
 </ViewCell>

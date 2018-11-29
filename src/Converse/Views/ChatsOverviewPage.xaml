@@ -38,10 +38,9 @@
             CanGoBack="false" />
         <sflistview:SfListView
             Grid.Row="1"
-            Padding="15,10"
             ItemTemplate="{StaticResource ChatEntryTemplateSelector}"
             ItemsSource="{Binding ChatEntries}"
-            AutoFitMode="Height">
+            ItemSize="65">
         </sflistview:SfListView>
     </Grid>
 </ContentPage>
