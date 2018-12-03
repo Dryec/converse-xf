@@ -23,6 +23,7 @@ namespace Converse.ViewModels
             // the Navigation Stack.
             //await _navigationService.NavigateAsync("/NavigationPage/WelcomePage");
             await _navigationService.NavigateAsync("/ChatPage");
+            //await _navigationService.NavigateAsync("/ChatsOverviewPage");
         }
     }
 }

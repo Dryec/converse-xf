@@ -17,6 +17,8 @@
                 x:Key="HasUnreadMessagesToColorConverter" />
             <localvc:DateTimeToTimeStringConverter
                 x:Key="DateTimeToTimeStringConverter" />
+            <localvc:FormattedStringConverter
+                x:Key="FormattedStringConverter" />
         </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition
@@ -29,7 +31,7 @@
         <Frame
             Padding="10,10,10,3" CornerRadius="10"
             BackgroundColor="{StaticResource LeftMessageBubbleColor}">
-            <Grid>
+            <Grid RowSpacing="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition
                         Width="*" />
@@ -43,7 +45,7 @@
                 <Label
                     Grid.Row="0"
                     Text="{Binding Message}"
-                    TextColor="Black" />
+                    TextColor="Black" /> 
                 <Label
                     Grid.Row="1"
                     Margin="0,0,-5,0"

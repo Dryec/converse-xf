@@ -8,6 +8,8 @@ using Prism.Logging;
 using Prism.Services;
 using System.Collections.ObjectModel;
 using Converse.Models;
+using Converse.TokenMessages;
+using Newtonsoft.Json;
 
 namespace Converse.ViewModels
 {
@@ -22,11 +24,11 @@ namespace Converse.ViewModels
             Title = "Pascal";
 
             MySelf = new UserInfo { Name = "Marius" };
-            ChatPartner = new UserInfo { Name = "Pascal" };
+            ChatPartner = new UserInfo { Name = "Pascal", ImageUri = new Uri("https://www.tron-society.com/img/team/pascal.jpg") };
 
             Messages = new ObservableCollection<ChatMessage>();
 
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 10; i++)
             {
                 Messages.Add(new ChatMessage
                 {
@@ -113,6 +115,13 @@ namespace Converse.ViewModels
                     Timestamp = DateTime.Now.AddMinutes(-1)
                 });
             }
+        }
+
+
+        public override async void OnAppearing()
+        {
+            base.OnAppearing(); 
+            var b = await _pageDialogService.DisplayAlertAsync("JSON", JsonConvert.SerializeObject(new ChangeNameTokenMessage { Name = "Pascal" }), "Ok", "c");
         }
     }
 }
