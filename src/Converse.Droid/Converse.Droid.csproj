@@ -142,6 +142,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\baseline_info_blue_48.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\baseline_info_blue_48.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\baseline_info_blue_48.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\baseline_send_blue_48.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\baseline_send_blue_48.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\baseline_send_blue_48.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\baseline_send_blue_48.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\baseline_send_blue_48.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
