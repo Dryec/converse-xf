@@ -21,6 +21,7 @@
     <PackageReference Include="LiveXAML" Version="2.1.50" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.60.3" />
     <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="16.3.0.36" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +51,7 @@
     <Folder Include="ViewModels\Chat\" />
     <Folder Include="DataTemplateSelectors\" />
     <Folder Include="ValueConverters\" />
+    <Folder Include="TokenMessages\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\Client\Client.csproj" />
