@@ -14,7 +14,8 @@
     xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
     xmlns:sflistview="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
     Title="{Binding Title}"
-    x:Class="Converse.Views.ChatPage" BackgroundColor="#E1E8F2">
+    x:Class="Converse.Views.ChatPage"
+    BackgroundColor="#E1E8F2">
     <ContentPage.Resources>
         <ResourceDictionary>
             <localdts:ChatMessageTemplateSelector
@@ -32,15 +33,18 @@
                 Height="Auto" />
             <RowDefinition
                 Height="*" />
+            <RowDefinition
+                Height="Auto" />
         </Grid.RowDefinitions>
-        <local:BasicTitleBarView
+        <local:ChatTitleBarView
             Grid.Row="0"
-            CanGoBack="false" />
+            CanGoBack="true" />
         <sflistview:SfListView
-            Grid.Row="1"
+             Grid.Row="1"
             ItemTemplate="{StaticResource ChatMessageTemplateSelector}"
             ItemsSource="{Binding Messages}"
             AutoFitMode="Height">
         </sflistview:SfListView>
+        <local:ChatInputView Grid.Row="2" VerticalOptions="FillAndExpand"/>
     </Grid>
 </ContentPage>
