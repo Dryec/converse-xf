@@ -6,6 +6,11 @@ namespace Converse.Helpers
     {
         public static string TokenName = "Converse";
 
+        public const string DefaultFullNodeIP = "54.236.37.243";
+        public const int DefaultFullNodePort = 50051;
+        public const string DefaultSolidityNodeIP = "47.89.187.247";
+        public const int DefaultSolidityNodePort = 50051;
+
         public static class TokenMessageTypes
         {
             public static class User

@@ -52,6 +52,7 @@
     <Folder Include="DataTemplateSelectors\" />
     <Folder Include="ValueConverters\" />
     <Folder Include="TokenMessages\" />
+    <Folder Include="Tron\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\Client\Client.csproj" />

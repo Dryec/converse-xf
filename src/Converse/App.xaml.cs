@@ -67,6 +67,7 @@ namespace Converse
             // NOTE: Uses a Popup Page to contain the Scanner. You can optionally register 
             // the ContentPageBarcodeScannerService if you prefer a full screen approach.
             containerRegistry.RegisterSingleton<IBarcodeScannerService, PopupBarcodeScannerService>();
+            containerRegistry.RegisterSingleton<ITronConnection, TronConnection>();
 
             // Navigating to "TabbedPage?createTab=ViewA&createTab=ViewB&createTab=ViewC will generate a TabbedPage
             // with three tabs for ViewA, ViewB, & ViewC
@@ -104,7 +105,7 @@ namespace Converse
             // Handle when your app resumes
         }
 
-        private void LogUnobservedTaskExceptions()
+        void LogUnobservedTaskExceptions()
         {
             TaskScheduler.UnobservedTaskException += (sender, e) =>
             {
