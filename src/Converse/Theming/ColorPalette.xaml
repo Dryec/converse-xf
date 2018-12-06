@@ -7,6 +7,10 @@
     <Color
         x:Key="Primary">#16318f</Color>
     <Color
+        x:Key="Primary2">#318f16</Color>
+    <Color
+        x:Key="Primary3">#8f1631</Color>
+    <Color
         x:Key="PrimaryDark">#242729</Color>
     <Color
         x:Key="PrimaryDarkTranslucent">#9926213C</Color>

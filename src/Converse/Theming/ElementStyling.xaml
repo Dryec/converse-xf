@@ -44,4 +44,13 @@
             Property="TextColor"
             Value="DimGray" />
     </Style>
+  
+    <Style
+        TargetType="ActivityIndicator"
+        ApplyToDerivedTypes="true">
+        <Setter
+            Property="Color"
+            Value="{StaticResource Primary2}" />
+    </Style>
+  
 </ResourceDictionary>

@@ -19,6 +19,8 @@ using Xamarin.Forms.Internals;
 using Converse.ViewModels;
 using Converse.Views.Register;
 using Converse.ViewModels.Register;
+using Converse.Tron;
+using Converse.Database;
 
 namespace Converse
 {
@@ -67,7 +69,10 @@ namespace Converse
             // NOTE: Uses a Popup Page to contain the Scanner. You can optionally register 
             // the ContentPageBarcodeScannerService if you prefer a full screen approach.
             containerRegistry.RegisterSingleton<IBarcodeScannerService, PopupBarcodeScannerService>();
-            containerRegistry.RegisterSingleton<ITronConnection, TronConnection>();
+            containerRegistry.RegisterSingleton<TronConnection>();
+            containerRegistry.RegisterSingleton<TransactionsQueueService>();
+            containerRegistry.RegisterSingleton<ConverseDatabase>();
+            containerRegistry.RegisterSingleton<WalletManager>();
 
             // Navigating to "TabbedPage?createTab=ViewA&createTab=ViewB&createTab=ViewC will generate a TabbedPage
             // with three tabs for ViewA, ViewB, & ViewC
