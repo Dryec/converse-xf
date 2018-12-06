@@ -10,7 +10,7 @@
     xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-  xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
     NavigationPage.HasNavigationBar="False"
     Title="{Binding Title}"
     x:Class="Converse.Views.Register.ConfirmRecoveryPhrasePage">
@@ -35,57 +35,116 @@
             Grid.Row="1"
             Padding="15,15,15,50"
             VerticalOptions="CenterAndExpand">
-            <StackLayout>
-        
-                <Label
-                    Margin="0,0,0,15"
-                    HorizontalOptions="Center"
-                    Text="Confirm your recovery phrase"
-                    FontSize="18"
-                    FontAttributes="Bold" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="*" />
-                        <ColumnDefinition
-                            Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                    </Grid.RowDefinitions>
-          
-          <Entry Grid.Row="0" Grid.Column="0" Placeholder="1" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="1" Grid.Column="0" Placeholder="2" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="2" Grid.Column="0" Placeholder="3" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="3" Grid.Column="0" Placeholder="4" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="4" Grid.Column="0" Placeholder="5" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="5" Grid.Column="0" Placeholder="6" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="0" Grid.Column="1" Placeholder="7" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="1" Grid.Column="1" Placeholder="8" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="2" Grid.Column="1" Placeholder="9" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="3" Grid.Column="1" Placeholder="10" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="4" Grid.Column="1" Placeholder="11" HorizontalTextAlignment="Center"/>
-          <Entry Grid.Row="5" Grid.Column="1" Placeholder="12" HorizontalTextAlignment="Center"/>
-          
-                </Grid>
-            </StackLayout>
+            <Frame>
+                <StackLayout>
+                    <Label
+                        Margin="0,0,0,15"
+                        HorizontalOptions="Center"
+                        Text="Confirm your recovery phrase"
+                        FontSize="18"
+                        FontAttributes="Bold" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="*" />
+                            <ColumnDefinition
+                                Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                        </Grid.RowDefinitions>
+                        <Entry
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Placeholder="1"
+                            Text="{Binding RecoveryPhraseConfirmation[0]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Placeholder="2"
+                            Text="{Binding RecoveryPhraseConfirmation[1]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Placeholder="3"
+                            Text="{Binding RecoveryPhraseConfirmation[2]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Placeholder="4"
+                            Text="{Binding RecoveryPhraseConfirmation[3]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Placeholder="5"
+                            Text="{Binding RecoveryPhraseConfirmation[4]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            Placeholder="6"
+                            Text="{Binding RecoveryPhraseConfirmation[5]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Placeholder="7"
+                            Text="{Binding RecoveryPhraseConfirmation[6]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Placeholder="8"
+                            Text="{Binding RecoveryPhraseConfirmation[7]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Placeholder="9"
+                            Text="{Binding RecoveryPhraseConfirmation[8]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Placeholder="10"
+                            Text="{Binding RecoveryPhraseConfirmation[9]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Placeholder="11"
+                            Text="{Binding RecoveryPhraseConfirmation[10]}"
+                            HorizontalTextAlignment="Center" />
+                        <Entry
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Placeholder="12"
+                            Text="{Binding RecoveryPhraseConfirmation[11]}"
+                            HorizontalTextAlignment="Center" />
+                    </Grid>
+                </StackLayout>
+            </Frame>
         </ScrollView>
         <Button
             Grid.Row="2"
             Margin="-2,-2"
             VerticalOptions="End"
             Text="Finish"
-            Command="{prismnav:NavigateTo ''}"/>
+            Command="{Binding ContinueCommand}" />
     </Grid>
 </ContentPage>

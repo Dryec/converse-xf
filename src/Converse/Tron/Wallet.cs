@@ -61,9 +61,10 @@ namespace Converse.Tron
             ECKey = new ECKey();
         }
 
-        public Wallet(ECKey eCKey)
+        public Wallet(ECKey eCKey, string mnenomic = null)
         {
             ECKey = eCKey;
+            MnemonicSentence = mnenomic;
         }
 
         public void SignTransaction(Transaction transaction, bool setTimestamp = true)

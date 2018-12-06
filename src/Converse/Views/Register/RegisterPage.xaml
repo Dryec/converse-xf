@@ -10,7 +10,7 @@
     xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-  xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
     NavigationPage.HasNavigationBar="False"
     Title="{Binding Title}"
     x:Class="Converse.Views.Register.RegisterPage">
@@ -59,192 +59,202 @@
                     WidthRequest="25"
                     HorizontalOptions="Center"
                     Color="LightBlue" />
-                <Label
-                    Margin="0,0,0,15"
-                    HorizontalOptions="Center"
-                    Text="Recovery Phrase"
-                    FontSize="18"
-                    FontAttributes="Bold" />
-                <Grid
-                    Margin="50,0,50,0"
-                    HorizontalOptions="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition
-                            Height="*" />
-                    </Grid.RowDefinitions>
-                    <!-- LEFT -->
-                    <Grid
-                        Grid.Row="0"
-                        Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="Auto" />
-                            <ColumnDefinition
-                                Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition
-                                Height="*" />
-                        </Grid.RowDefinitions>
+                <Frame
+                    Margin="5"
+                    Padding="0,10">
+                    <StackLayout>
                         <Label
-                            Grid.Row="0"
-                            Text="1."
-                            FontAttributes="Bold"
-                            FontSize="16" />
+                            Margin="0,0,0,15"
+                            HorizontalOptions="Center"
+                            Text="Recovery Phrase"
+                            FontSize="18"
+                            FontAttributes="Bold" />
+                        <ActivityIndicator
+                            IsRunning="{Binding IsBusy}"
+                            IsVisible="{Binding IsBusy}" />
+                        <Grid
+                            Margin="50,0,50,0"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding IsNotBusy}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="*" />
+                            </Grid.RowDefinitions>
+                            <!-- LEFT -->
+                            <Grid
+                                Grid.Row="0"
+                                Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="Auto" />
+                                    <ColumnDefinition
+                                        Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Text="1."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[0]}"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="1"
+                                    Text="2."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[1]}"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="2"
+                                    Text="3."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[2]}"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="3"
+                                    Text="4."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[3]}"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="4"
+                                    Text="5."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="4"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[4]}"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="5"
+                                    Text="6."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="5"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[5]}"
+                                    FontSize="16" />
+                            </Grid>
+                            <!-- RIGHT -->
+                            <Grid
+                                HorizontalOptions="End"
+                                Grid.Row="0"
+                                Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="Auto" />
+                                    <ColumnDefinition
+                                        Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Text="7."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[6]}"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="1"
+                                    Text="8."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[7]}"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="2"
+                                    Text="9."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[8]}"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="3"
+                                    Text="10."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[9]}"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="4"
+                                    Text="11."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="4"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[10]}"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="5"
+                                    Text="12."
+                                    FontAttributes="Bold"
+                                    FontSize="16" />
+                                <Label
+                                    Grid.Row="5"
+                                    Grid.Column="1"
+                                    Text="{Binding RecoveryPhrase[11]}"
+                                    FontSize="16" />
+                            </Grid>
+                        </Grid>
                         <Label
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Text="Peter"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="1"
-                            Text="2."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Text="Peter"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="2"
-                            Text="3."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Text="Pascal"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="3"
-                            Text="4."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            Text="Peter"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="4"
-                            Text="5."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="4"
-                            Grid.Column="1"
-                            Text="Dieter"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="5"
-                            Text="6."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="5"
-                            Grid.Column="1"
-                            Text="Peter"
-                            FontSize="16" />
-                    </Grid>
-                    <!-- RIGHT -->
-                    <Grid
-                        HorizontalOptions="End"
-                        Grid.Row="0"
-                        Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="Auto" />
-                            <ColumnDefinition
-                                Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition
-                                Height="*" />
-                        </Grid.RowDefinitions>
-                        <Label
-                            Grid.Row="0"
-                            Text="7."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Text="Sam"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="1"
-                            Text="8."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Text="Peter"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="2"
-                            Text="9."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Text="Marius"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="3"
-                            Text="10."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            Text="Peter"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="4"
-                            Text="11."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="4"
-                            Grid.Column="1"
-                            Text="Peter"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="5"
-                            Text="12."
-                            FontAttributes="Bold"
-                            FontSize="16" />
-                        <Label
-                            Grid.Row="5"
-                            Grid.Column="1"
-                            Text="Gabriela"
-                            FontSize="16" />
-                    </Grid>
-                </Grid>
-                <Label
-                    Margin="0,10,0,0"
-                    HorizontalOptions="Center" HorizontalTextAlignment="Center"
-                    FontSize="12">
-                    <Label.Text>
+                            Margin="0,10,0,0"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            FontSize="12">
+                            <Label.Text>
 *keep your recovery phrase secret and safe
 You won't be able to see it again
                     </Label.Text>
-                </Label>
-        <Label Text="Create New" HorizontalOptions="Center" TextDecorations="Underline" TextColor="Blue"/>
+                        </Label>
+                    </StackLayout>
+                </Frame>
             </StackLayout>
         </ScrollView>
         <Button
             Grid.Row="2"
             Margin="-2,-2"
             VerticalOptions="End"
-            Text="Create Account"
-            Command="{prismnav:NavigateTo 'ConfirmRecoveryPhrasePage'}" />
+            Text="Continue"
+            Command="{prismnav:NavigateTo 'ConfirmRecoveryPhrasePage'}" CommandParameter="{Binding RecoveryPhrase}" />
     </Grid>
 </ContentPage>
