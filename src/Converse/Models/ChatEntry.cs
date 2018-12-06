@@ -9,6 +9,10 @@ namespace Converse.Models
 {
     public class ChatEntry : INotifyPropertyChanged
     {
+        public int ID { get; set; }
+
+        public int MessageCount { get; set; }
+
         // null if Type == Group
         public UserInfo ChatPartner { get; set; }
 
