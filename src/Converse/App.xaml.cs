@@ -73,6 +73,7 @@ namespace Converse
             containerRegistry.RegisterSingleton<TransactionsQueueService>();
             containerRegistry.RegisterSingleton<ConverseDatabase>();
             containerRegistry.RegisterSingleton<WalletManager>();
+            containerRegistry.RegisterSingleton<SyncServerConnection>();
 
             // Navigating to "TabbedPage?createTab=ViewA&createTab=ViewB&createTab=ViewC will generate a TabbedPage
             // with three tabs for ViewA, ViewB, & ViewC
