@@ -10,8 +10,8 @@ namespace Converse.Database.Models
         [PrimaryKey, AutoIncrement, Column("_id")]
         public int ID { get; set; }
 
-        [Column("_id")]
-        public int GroupID { get; set; } // TODO
+        [Column("group_id")]
+        public int GroupID { get; set; }
 
         [Column("address")]
         public string Address { get; set; }
@@ -26,7 +26,7 @@ namespace Converse.Database.Models
                 throw new ArgumentNullException(nameof(group));
             }
 
-            return new Group { GroupID = 0/* TODO */, Address = group.TronAddress , Json = JsonConvert.SerializeObject(group) };
+            return new Group { GroupID = group.GroupID, Address = group.TronAddress , Json = JsonConvert.SerializeObject(group) };
         }
 
         public Converse.Models.GroupInfo ToGroupInfo()

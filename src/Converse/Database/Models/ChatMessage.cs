@@ -10,7 +10,7 @@ namespace Converse.Database.Models
         [PrimaryKey, AutoIncrement, Column("_id")]
         public int ID { get; set; }
 
-        [Column("_id")]
+        [Column("chat_id")]
         public int ChatID { get; set; }
 
         [Column("json")]

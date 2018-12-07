@@ -11,7 +11,7 @@ namespace Converse.Database.Models
         [PrimaryKey, AutoIncrement, Column("_id")]
         public int ID { get; set; }
 
-        [Column("_id"), Unique]
+        [Column("chat_id"), Unique]
         public int ChatID { get; set; }
 
         [Column("json")]

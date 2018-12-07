@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Converse.Models
 {
@@ -7,12 +8,19 @@ namespace Converse.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [JsonProperty("id")]
+        public int UserID { get; set; }
+
+        [JsonProperty("address")]
         public string TronAddress { get; set; }
 
+        [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("image")]
         public Uri ImageUri { get; set; }
 
+        [JsonProperty("status")]
         public UserStatus Status { get; set; }
     }
 }

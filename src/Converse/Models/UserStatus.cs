@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Converse.Models
 {
@@ -7,8 +8,10 @@ namespace Converse.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [JsonProperty("message")]
         public string Message { get; set; }
 
+        [JsonProperty("timestamp")]
         public DateTime Timestamp { get; set; }
     }
 }

@@ -10,8 +10,8 @@ namespace Converse.Database.Models
         [PrimaryKey, AutoIncrement, Column("_id")]
         public int ID { get; set; }
 
-        [Column("_id")]
-        public int UserID { get; set; } // TODO
+        [Column("user_id")]
+        public int UserID { get; set; }
 
         [Column("address")]
         public string Address { get; set; }
@@ -26,7 +26,7 @@ namespace Converse.Database.Models
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return new User { UserID = 0/* TODO */, Address = user.TronAddress , Json = JsonConvert.SerializeObject(user) };
+            return new User { UserID = user.UserID, Address = user.TronAddress , Json = JsonConvert.SerializeObject(user) };
         }
 
         public Converse.Models.UserInfo ToUserInfo()
