@@ -13,6 +13,7 @@
     xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
     xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
     xmlns:sflistview="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    NavigationPage.HasNavigationBar="False"
     Title="{Binding Title}"
     x:Class="Converse.Views.ChatsOverviewPage">
     <ContentPage.Resources>
@@ -38,7 +39,7 @@
             CanGoBack="false" />
         <sflistview:SfListView
             Grid.Row="1"
-            ItemTemplate="{StaticResource ChatEntryTemplateSelector}"
+            ItemTemplate="{StaticResource ChatEntryTemplateSelector}" TapCommand="{prismnav:NavigateTo 'ChatPage'}"
             ItemsSource="{Binding ChatEntries}"
             ItemSize="65">
         </sflistview:SfListView>

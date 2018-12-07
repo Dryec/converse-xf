@@ -10,24 +10,59 @@ using System.Collections.ObjectModel;
 using Converse.Models;
 using Converse.TokenMessages;
 using Newtonsoft.Json;
+using Converse.Services;
+using Xamarin.Forms;
+using System.Diagnostics;
+using System.Windows.Input;
+using Syncfusion.ListView.XForms;
 
 namespace Converse.ViewModels
 {
+    public class ScrollEventArgs : EventArgs
+    {
+        public int Index { get; }
+        public bool Animated { get; }
+
+        public ScrollEventArgs(int index, bool animated)
+        {
+            Index = index;
+            Animated = animated;
+        }
+    }
+
     public class ChatPageViewModel : ViewModelBase
     {
+        SyncServerConnection _syncServer { get; }
+
+        public event EventHandler ScrollMessagesEvent;
+
+        public ICommand LoadMoreCommand { get; set; }
+
         public UserInfo MySelf { get; set; }
         public UserInfo ChatPartner { get; set; }
         public ObservableCollection<ChatMessage> Messages { get; set; }
+        public ChatMessage SelectedMessage { get; set; }
 
-        public ChatPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService) : base(navigationService, pageDialogService, deviceService)
+        public double LastScrollY { get; set; }
+        public double ScrollY { get; set; }
+        public Size ScrollViewSize { get; set; }
+        public double ScrollViewHeight { get; set; }
+
+        public ChatPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, SyncServerConnection syncServer) : base(navigationService, pageDialogService, deviceService)
         {
-            Title = "Pascal";
+            _syncServer = syncServer;
 
-            MySelf = new UserInfo { Name = "Marius" };
-            ChatPartner = new UserInfo { Name = "Pascal", ImageUri = new Uri("https://www.tron-society.com/img/team/pascal.jpg") };
+            MySelf = new UserInfo { Name = "Pascal", TronAddress = "TNgzM6dDTV4GErEAqJaBkZp72Vmpkc18Xv" };
+            ChatPartner = new UserInfo { Name = "Dave", ImageUri = new Uri("https://www.tron-society.com/img/team/dave.jpg") };
+            Title = ChatPartner.Name;
 
             Messages = new ObservableCollection<ChatMessage>();
 
+            LoadMoreCommand = new DelegateCommand<SfListView>(LoadMoreMessages);
+
+            PropertyChanged += ChatPageViewModel_PropertyChanged;
+
+            /*
             for (var i = 0; i < 10; i++)
             {
                 Messages.Add(new ChatMessage
@@ -114,14 +149,76 @@ namespace Converse.ViewModels
                     IsSender = true,
                     Timestamp = DateTime.Now.AddMinutes(-1)
                 });
+            }*/
+        }
+
+        void ChatPageViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ScrollY):
+                    // Try Load previous messages if near top and scroll direction to top
+                    if(ScrollY <= 500 && LastScrollY > ScrollY)
+                    {
+                        // TODO load previous messages
+                        Debug.WriteLine("Load More");
+                    }
+                    LastScrollY = ScrollY;
+                    break;
+                default:
+                    break;
             }
         }
 
-
-        public override async void OnAppearing()
+        void LoadMoreMessages(SfListView obj)
         {
-            base.OnAppearing(); 
-            var b = await _pageDialogService.DisplayAlertAsync("JSON", JsonConvert.SerializeObject(new ChangeNameTokenMessage { Name = "Pascal" }), "Ok", "c");
+            Debug.WriteLine("LoadMore");
+        }
+
+        public override void OnAppearing()
+        {
+            base.OnAppearing();
+        }
+
+        public override async void OnNavigatedTo(INavigationParameters parameters)
+        {
+            var messages = await _syncServer.GetChatMessagesAsync();
+
+            foreach (var message in messages.Messages)
+            {
+                message.IsSender = message.Sender.TronAddress.Equals(MySelf.TronAddress);
+            }
+
+            messages.Messages.ForEach(Messages.Add);
+            //Messages = new ObservableCollection<ChatMessage>(messages.Messages);
+
+            //await Task.Delay(1);
+            Device.BeginInvokeOnMainThread(() => ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, false)));
+
+            var random = new Random();
+            while (true)
+            {
+                var lastHeight = ScrollViewSize.Height;
+                Messages.Add(new ChatMessage
+                {
+                    Message = WaffleGenerator.WaffleEngine.Text(1, false), //random.Next(2, int.MaxValue).ToString(),
+                    Sender = MySelf,
+                    IsSender = true,
+                    Timestamp = DateTime.Now.AddMinutes(-1)
+                });
+                Debug.WriteLine(ScrollViewSize, "Before");
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Debug.WriteLine(ScrollViewSize, "After");
+                    if (ScrollY+ScrollViewHeight >= ScrollViewSize.Height - (ScrollViewSize.Height - lastHeight) - 80)
+                    {
+                        Debug.WriteLine(ScrollViewSize, "Scrolling Down");
+                        ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, true));
+                    }
+                });
+                await Task.Delay(1500);
+            }
         }
     }
 }

@@ -12,7 +12,10 @@
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
     xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
     xmlns:sflistview="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    prism:ViewModelLocator.AutowireViewModel="True"
+    NavigationPage.HasNavigationBar="False"
     Title="{Binding Title}"
     x:Class="Converse.Views.ChatPage"
     BackgroundColor="#E1E8F2">
@@ -40,11 +43,17 @@
             Grid.Row="0"
             CanGoBack="true" />
         <sflistview:SfListView
-             Grid.Row="1"
+            x:Name="ChatMessagesListView"
+            Grid.Row="1"
+            VerticalOptions="EndAndExpand"
             ItemTemplate="{StaticResource ChatMessageTemplateSelector}"
             ItemsSource="{Binding Messages}"
+            LoadMoreCommand="{Binding LoadMoreCommand}"
+            LoadMoreCommandParameter="{Binding Source={x:Reference ChatMessagesListView}}"
             AutoFitMode="Height">
         </sflistview:SfListView>
-        <local:ChatInputView Grid.Row="2" VerticalOptions="FillAndExpand"/>
+        <local:ChatInputView
+            Grid.Row="2"
+            VerticalOptions="FillAndExpand" />
     </Grid>
 </ContentPage>

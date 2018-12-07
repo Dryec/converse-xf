@@ -9,20 +9,24 @@ using Prism.Services;
 using System.Collections.ObjectModel;
 using Converse.Models;
 using Converse.Enums;
+using Converse.Services;
 
 namespace Converse.ViewModels
 {
     public class ChatsOverviewPageViewModel : ViewModelBase
     {
         public ObservableCollection<ChatEntry> ChatEntries { get; private set; }
+        SyncServerConnection _syncServer { get; }
 
-        public ChatsOverviewPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService) : base(navigationService, pageDialogService, deviceService)
+        public ChatsOverviewPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, SyncServerConnection syncServer) 
+                                : base(navigationService, pageDialogService, deviceService)
         {
             Title = "Converse";
 
             ChatEntries = new ObservableCollection<ChatEntry>();
+            _syncServer = syncServer;
 
-            for (var i = 0; i < 1; i++)
+            /*for (var i = 0; i < 1; i++)
             {
                 ChatEntries.Add(new ChatEntry
                 {
@@ -66,7 +70,12 @@ namespace Converse.ViewModels
                     LastMessage = new ChatMessage { Message = "When do you have time?", Timestamp = DateTime.Now.AddDays(-35) },
                     UnreadMessagesCount = 2
                 });
-            }
+            }*/
+        }
+
+        public override async void OnNavigatedTo(INavigationParameters parameters)
+        {
+            ChatEntries = new ObservableCollection<ChatEntry>(await _syncServer.GetChatsAsync());
         }
     }
 }
