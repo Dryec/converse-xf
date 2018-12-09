@@ -10,10 +10,10 @@ namespace Converse.Database.Models
         [PrimaryKey, AutoIncrement, Column("_id")]
         public int ID { get; set; }
 
-        [Column("user_id")]
+        [Column("user_id"), Unique]
         public int UserID { get; set; }
 
-        [Column("address")]
+        [Column("address"), Unique]
         public string Address { get; set; }
 
         [Column("json")]
