@@ -70,7 +70,7 @@ namespace Converse
             // the ContentPageBarcodeScannerService if you prefer a full screen approach.
             containerRegistry.RegisterSingleton<IBarcodeScannerService, PopupBarcodeScannerService>();
             containerRegistry.RegisterSingleton<TronConnection>();
-            containerRegistry.RegisterSingleton<TransactionsQueueService>();
+            containerRegistry.RegisterSingleton<TokenMessagesQueueService>();
             containerRegistry.RegisterSingleton<ConverseDatabase>();
             containerRegistry.RegisterSingleton<WalletManager>();
             containerRegistry.RegisterSingleton<SyncServerConnection>();
@@ -88,6 +88,7 @@ namespace Converse
             containerRegistry.RegisterForNavigation<ConfirmRecoveryPhrasePage, ConfirmRecoveryPhrasePageViewModel>();
             containerRegistry.RegisterForNavigation<ChatsOverviewPage, ChatsOverviewPageViewModel>();
             containerRegistry.RegisterForNavigation<ChatPage, ChatPageViewModel>();
+            containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
         }
 
         protected override void OnStart()
