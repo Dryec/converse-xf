@@ -18,7 +18,7 @@ namespace Converse.Models
         public string Name { get; set; }
 
         [JsonProperty("image")]
-        public Uri ImageUri { get; set; }
+        public string ImageUrl { get; set; }
 
         [JsonProperty("status")]
         public UserStatus Status { get; set; }

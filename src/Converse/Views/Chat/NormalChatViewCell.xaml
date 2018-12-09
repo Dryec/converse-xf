@@ -33,7 +33,7 @@
         </Grid.RowDefinitions>
         <ffimageloading:CachedImage
             Grid.Column="0"
-            Source="{Binding ChatPartner.ImageUri}">
+            Source="{Binding ChatPartner.ImageUrl}">
             <ffimageloading:CachedImage.Transformations>
                 <fftransformations:CircleTransformation />
             </ffimageloading:CachedImage.Transformations>

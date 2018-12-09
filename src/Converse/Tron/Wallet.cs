@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Bitcoin.BIP39;
 using Client;
 using Common;
+using Converse.Helpers;
+using Converse.Services;
 using Crypto;
 using Google.Protobuf;
 using Protocol;
@@ -10,6 +15,9 @@ namespace Converse.Tron
     public class Wallet
     {
         public ECKey ECKey { get; }
+        public string Mnemonic { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
 
         string _privateKey;
         public string PrivateKey
@@ -31,7 +39,6 @@ namespace Converse.Tron
             set => _privateKey = value;
         }
 
-        public string MnemonicSentence { get; set; }
 
         string _address;
         public string Address
@@ -61,10 +68,28 @@ namespace Converse.Tron
             ECKey = new ECKey();
         }
 
-        public Wallet(ECKey eCKey, string mnenomic = null)
+        public Wallet(ECKey eCKey)
         {
             ECKey = eCKey;
-            MnemonicSentence = mnenomic;
+        }
+
+        public Wallet(string mnemonic)
+        {
+            ECKey = new ECKey(BIP39.GetSeedBytes(mnemonic).Take(32).ToArray());
+            Mnemonic = mnemonic;
+        }
+
+        public async Task<long> GetConverseTokenAmountAsync(TronConnection connection)
+        {
+            try
+            {
+                var account = await connection.Client.GetAccountAsync(new Account { Address = ByteString.CopyFrom(WalletAddress.Decode58Check(Address)) });
+                return account.Asset.ContainsKey(AppConstants.TokenName) ? account.Asset[AppConstants.TokenName] : 0;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
 
         public void SignTransaction(Transaction transaction, bool setTimestamp = true)

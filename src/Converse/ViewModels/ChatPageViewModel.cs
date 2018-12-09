@@ -15,6 +15,7 @@ using Xamarin.Forms;
 using System.Diagnostics;
 using System.Windows.Input;
 using Syncfusion.ListView.XForms;
+using Converse.Tron;
 
 namespace Converse.ViewModels
 {
@@ -33,32 +34,42 @@ namespace Converse.ViewModels
     public class ChatPageViewModel : ViewModelBase
     {
         SyncServerConnection _syncServer { get; }
+         TronConnection _tronConnection { get; }
+         WalletManager _walletManager { get; }
 
         public event EventHandler ScrollMessagesEvent;
 
         public ICommand LoadMoreCommand { get; set; }
+        public ICommand SendMessageCommand { get; set; }
 
         public UserInfo MySelf { get; set; }
         public UserInfo ChatPartner { get; set; }
         public ObservableCollection<ChatMessage> Messages { get; set; }
         public ChatMessage SelectedMessage { get; set; }
 
+        public string Message { get; set; }
+
         public double LastScrollY { get; set; }
         public double ScrollY { get; set; }
         public Size ScrollViewSize { get; set; }
         public double ScrollViewHeight { get; set; }
 
-        public ChatPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, SyncServerConnection syncServer) : base(navigationService, pageDialogService, deviceService)
+        public ChatPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, 
+                                    SyncServerConnection syncServer, TronConnection tronConnection, WalletManager walletManager) 
+            : base(navigationService, pageDialogService, deviceService)
         {
             _syncServer = syncServer;
-
-            MySelf = new UserInfo { Name = "Pascal", TronAddress = "TNgzM6dDTV4GErEAqJaBkZp72Vmpkc18Xv" };
-            ChatPartner = new UserInfo { Name = "Dave", ImageUri = new Uri("https://www.tron-society.com/img/team/dave.jpg") };
+            _tronConnection = tronConnection;
+            _walletManager = walletManager;
+            MySelf = new UserInfo { Name = "Dave", TronAddress = "TERA14Y1HBpcEf1iCaDyeSpMady9MuDM2o" };
+            ChatPartner = new UserInfo { Name = "Pascal", TronAddress = "TERA14Y1HBpcEf1iCaDyeSpMady9MuDM2o", ImageUrl = ("https://www.tron-society.com/img/team/pascal.jpg") };
             Title = ChatPartner.Name;
 
+            Message = string.Empty;
             Messages = new ObservableCollection<ChatMessage>();
 
             LoadMoreCommand = new DelegateCommand<SfListView>(LoadMoreMessages);
+            SendMessageCommand = new DelegateCommand(SendMessage);
 
             PropertyChanged += ChatPageViewModel_PropertyChanged;
 
@@ -152,6 +163,17 @@ namespace Converse.ViewModels
             }*/
         }
 
+        private async void SendMessage()
+        {
+            /*var messageToken = new SendMessageTokenMessage { Message = Message};
+
+            var transaction = await _tronConnection.CreateTransactionFromTokenMessageAsync(messageToken, _walletManager.Wallet.Address, ChatPartner.TronAddress);
+
+            _walletManager.Wallet.SignTransaction(transaction.Transaction);
+
+            var result = await _tronConnection.Client.BroadcastTransactionAsync(transaction.Transaction);*/
+        }
+
         void ChatPageViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
@@ -182,7 +204,7 @@ namespace Converse.ViewModels
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            var messages = await _syncServer.GetChatMessagesAsync();
+            /*var messages = await _syncServer.GetChatMessagesAsync();
 
             foreach (var message in messages.Messages)
             {
@@ -218,7 +240,7 @@ namespace Converse.ViewModels
                     }
                 });
                 await Task.Delay(1500);
-            }
+            }*/
         }
     }
 }

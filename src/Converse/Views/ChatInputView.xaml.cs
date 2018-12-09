@@ -1,21 +1,31 @@
-﻿using Xamarin.Forms;
+﻿using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace Converse.Views
 {
     public partial class ChatInputView : ContentView
     {
-        public static readonly BindableProperty FooProperty =
-            BindableProperty.Create(nameof(Foo), typeof(string), typeof(ChatInputView), null);
+        public static readonly BindableProperty MessageProperty =
+            BindableProperty.Create(nameof(Message), typeof(string), typeof(ChatInputView), "", BindingMode.TwoWay);
+
+        public static readonly BindableProperty SendCommandProperty =
+            BindableProperty.Create(nameof(SendCommand), typeof(ICommand), typeof(ChatInputView), null);
 
         public ChatInputView()
         {
             InitializeComponent();
         }
 
-        public string Foo
+        public string Message
         {
-            get => (string)GetValue(FooProperty);
-            set => SetValue(FooProperty, value);
+            get => (string)GetValue(MessageProperty);
+            set => SetValue(MessageProperty, value);
+        }
+
+        public ICommand SendCommand
+        {
+            get => (ICommand)GetValue(SendCommandProperty);
+            set => SetValue(SendCommandProperty, value);
         }
     }
 }

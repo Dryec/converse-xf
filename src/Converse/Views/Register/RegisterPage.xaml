@@ -49,9 +49,11 @@
                 </ffimageloading:CachedImage>
                 <Entry
                     Placeholder="Name"
+                    Text="{Binding Wallet.Name}"
                     HorizontalTextAlignment="Center" />
                 <Entry
                     Placeholder="Email (Optional)"
+                    Text="{Binding Wallet.Email}"
                     HorizontalTextAlignment="Center" />
                 <BoxView
                     Margin="0,20"
@@ -255,6 +257,6 @@ You won't be able to see it again
             Margin="-2,-2"
             VerticalOptions="End"
             Text="Continue"
-            Command="{prismnav:NavigateTo 'ConfirmRecoveryPhrasePage'}" CommandParameter="{Binding RecoveryPhrase}" />
+            Command="{Binding ContinueCommand}" />
     </Grid>
 </ContentPage>

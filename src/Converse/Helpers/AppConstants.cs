@@ -11,7 +11,7 @@ namespace Converse.Helpers
         public const string DefaultSolidityNodeIP = "47.89.187.247";
         public const int DefaultSolidityNodePort = 50051;
 
-        public const string PropertyAddress = "TD5G3dAfMR9e8dR3KN19EnRAtN7LtpEHrR";
+        public const string PropertyAddress = "TFnJbbEXKWVNz84L9ysbWMvJGD2v8seZu8";
 
         public static class TokenMessageTypes
         {

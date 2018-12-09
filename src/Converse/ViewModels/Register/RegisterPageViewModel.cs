@@ -7,6 +7,7 @@ using Prism.Navigation;
 using Prism.Logging;
 using Prism.Services;
 using Converse.Tron;
+using System.Windows.Input;
 
 namespace Converse.ViewModels.Register
 {
@@ -14,7 +15,9 @@ namespace Converse.ViewModels.Register
     {
         WalletManager _walletManager { get; }
 
-        public Wallet Wallet { get; private set; }
+        public ICommand ContinueCommand { get; private set; }
+
+        public Wallet Wallet { get; set; }
         public List<string> RecoveryPhrase { get; private set; }
 
         public RegisterPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, WalletManager walletManager)
@@ -22,6 +25,8 @@ namespace Converse.ViewModels.Register
         {
             Title = "Register";
             _walletManager = walletManager;
+
+            ContinueCommand = new DelegateCommand(Continue);
         }
 
         public override void OnNavigatingTo(INavigationParameters parameters)
@@ -40,10 +45,24 @@ namespace Converse.ViewModels.Register
             IsBusy = true;
 
             await Task.Delay(1500);
-            Wallet = await _walletManager.CreateNewWalletAsync();
-            RecoveryPhrase = Wallet.MnemonicSentence.Split(' ').Select(p => p.Trim()).ToList();
+            Wallet = _walletManager.CreateNewWalletAsync();
+            RecoveryPhrase = Wallet.Mnemonic.Split(' ').Select(p => p.Trim()).ToList();
 
             IsBusy = false;
         }
+
+        async void Continue()
+        {
+            if(string.IsNullOrWhiteSpace(Wallet.Name))
+            {
+                await _pageDialogService.DisplayAlertAsync("Invalid Name", "Please enter a name", "Ok");
+                return;
+            }
+
+            var navParams = new NavigationParameters();
+            navParams.Add("RecoveryPhrase", RecoveryPhrase);
+            await _navigationService.NavigateAsync("ConfirmRecoveryPhrasePage", navParams);
+        }
+
     }
 }

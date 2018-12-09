@@ -29,6 +29,7 @@
                 Placeholder="Message"
                 Keyboard="Chat"
                 VerticalOptions="FillAndExpand"
+                Text="{Binding Message,Source={x:Reference view}}"
                 AutoSize="TextChanges" />
             <ContentView
                 Grid.Row="0"
@@ -42,6 +43,11 @@
                             EnableSolidColor="true" />
                     </ffimageloading:CachedImage.Transformations>
                 </ffimageloading:CachedImage>
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding SendCommand,Source={x:Reference view}}"
+                        NumberOfTapsRequired="1" />
+                </ContentView.GestureRecognizers>
             </ContentView>
         </Grid>
     </Frame>

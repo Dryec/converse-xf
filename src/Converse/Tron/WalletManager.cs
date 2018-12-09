@@ -20,33 +20,35 @@ namespace Converse.Tron
                 return false;
             }
 
-            var ecKey = new ECKey(BIP39.GetSeedBytes(mnemonic).Take(32).ToArray());
-            Wallet = new Wallet(ecKey, mnemonic);
+            Wallet = new Wallet(mnemonic)
+            {
+                Mnemonic = mnemonic,
+                Name = await Xamarin.Essentials.SecureStorage.GetAsync(AppConstants.Keys.User.Name),
+                Email = await Xamarin.Essentials.SecureStorage.GetAsync(AppConstants.Keys.User.Email)
+            };
             return true;
         }
 
-        public async Task<Wallet> CreateNewWalletAsync(bool save = false)
+        public Wallet CreateNewWalletAsync()
         {
             var bip39 = new BIP39();
             var mnemonic = bip39.MnemonicSentence;
             var eCKey = new ECKey(bip39.SeedBytes.Take(32).ToArray());
 
-            if (save)
-            {
-                await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Mnemonic, mnemonic);
-            }
-            Wallet = new Wallet(eCKey, mnemonic);
+            Wallet = new Wallet(mnemonic);
             return Wallet;
         }
 
         public async Task<bool> SaveAsync()
         {
-            if (Wallet == null || string.IsNullOrWhiteSpace(Wallet.MnemonicSentence))
+            if (Wallet == null || string.IsNullOrWhiteSpace(Wallet.Mnemonic))
             {
                 return false;
             }
 
-            await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Mnemonic, Wallet.MnemonicSentence);
+            await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Mnemonic, Wallet.Mnemonic);
+            await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Name, Wallet.Name ?? string.Empty);
+            await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Email, Wallet.Email ?? string.Empty);
             return true;
         }
     }

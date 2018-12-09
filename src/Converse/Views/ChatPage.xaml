@@ -54,6 +54,6 @@
         </sflistview:SfListView>
         <local:ChatInputView
             Grid.Row="2"
-            VerticalOptions="FillAndExpand" />
+            VerticalOptions="FillAndExpand" Message="{Binding Message}" SendCommand="{Binding SendMessageCommand}"/>
     </Grid>
 </ContentPage>
