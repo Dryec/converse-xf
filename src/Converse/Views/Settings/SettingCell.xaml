@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    x:Name="view"
+    x:Class="Converse.Views.SettingCell">
+    <StackLayout
+        Orientation="Horizontal"
+        Margin="15,7"
+        Spacing="20">
+        <ffimageloading:CachedImage
+            Source="{Binding Icon,Source={x:Reference view}}">
+            <ffimageloading:CachedImage.Transformations>
+                <fftransformations:TintTransformation
+                    HexColor="#6616318f" />
+            </ffimageloading:CachedImage.Transformations>
+        </ffimageloading:CachedImage>
+        <Label
+            VerticalOptions="Center"
+            Text="{Binding Text,Source={x:Reference view}}"
+            FontAttributes="Bold" />
+        <ffimageloading:CachedImage
+            HorizontalOptions="EndAndExpand"
+            Margin="0,5"
+            Source="baseline_arrow_back_ios_white"
+            Rotation="180">
+            <ffimageloading:CachedImage.Transformations>
+                <fftransformations:TintTransformation
+                    HexColor="#22000000" />
+            </ffimageloading:CachedImage.Transformations>
+        </ffimageloading:CachedImage>
+    </StackLayout>
+</ViewCell>

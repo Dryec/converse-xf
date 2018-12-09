@@ -18,4 +18,5 @@
     Title="{Binding Title}"
     x:Class="Converse.Views.MainPage">
     <local:ChatsOverviewPage />
+    <local:SettingsPage />
 </TabbedPage>

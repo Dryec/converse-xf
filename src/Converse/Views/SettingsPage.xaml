@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:localdts="clr-namespace:Converse.DataTemplateSelectors;assembly=Converse"
+    xmlns:local="clr-namespace:Converse.Views;assembly=Converse"
+    xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+    xmlns:i18n="clr-namespace:Converse.i18n;assembly=Converse"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    xmlns:sflistview="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    NavigationPage.HasNavigationBar="False"
+    Title="{Binding Title}"
+    x:Class="Converse.Views.SettingsPage">
+    <Grid
+        RowSpacing="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+        <local:BasicTitleBarView
+            Grid.Row="0"
+            CanGoBack="false" />
+        <StackLayout
+            Grid.Row="1"
+            VerticalOptions="Start">
+            <Frame
+                Margin="10"
+                VerticalOptions="Start"
+                Padding="15"
+                CornerRadius="15">
+                <Grid
+                    Grid.Row="0"
+                    RowSpacing="0"
+                    ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="75" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="*" />
+                    </Grid.RowDefinitions>
+                    <ffimageloading:CachedImage
+                        Grid.Column="0"
+                        Source="https://www.tron-society.com/img/team/marius.jpg">
+                        <ffimageloading:CachedImage.Transformations>
+                            <fftransformations:ColorFillTransformation HexColor="#15000000" />
+                            <fftransformations:CircleTransformation />
+                        </ffimageloading:CachedImage.Transformations>
+                    </ffimageloading:CachedImage>
+                    <StackLayout
+                        Grid.Column="1"
+                        Spacing="0"
+                        VerticalOptions="Center">
+                        <Label
+                            VerticalOptions="End"
+                            Text="Marius"
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            FontSize="18"
+                            LineBreakMode="TailTruncation" />
+                        <Label
+                            FontSize="14"
+                            Text="Hey! I'm new here…"
+                            LineBreakMode="TailTruncation" />
+                    </StackLayout>
+                </Grid>
+            </Frame>
+            <TableView
+                Intent="Settings"
+                HasUnevenRows="false">
+                <TableRoot>
+                    <TableSection>
+                        <local:SettingCell
+                            Icon="baseline_info_blue_48"
+                            Text="Account" />
+                        <local:SettingCell
+                            Icon="baseline_people_blue_48"
+                            Text="Contacts" />
+                        <local:SettingCell
+                            Icon="baseline_people_blue_48"
+                            Text="Notifications" />
+                        <local:SettingCell
+                            Icon="baseline_people_blue_48"
+                            Text="Statistics" />
+                        <local:SettingCell
+                            Icon="baseline_key_blue_48"
+                            Text="Help" />
+                        <local:SettingCell
+                            Icon="baseline_people_blue_48"
+                            Text="About" />
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+        </StackLayout>
+    </Grid>
+</ContentPage>
