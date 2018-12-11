@@ -10,21 +10,26 @@ using System.Collections.ObjectModel;
 using Converse.Models;
 using Converse.Enums;
 using Converse.Services;
+using Converse.Tron;
 
 namespace Converse.ViewModels
 {
     public class ChatsOverviewPageViewModel : ViewModelBase
     {
-        public ObservableCollection<ChatEntry> ChatEntries { get; private set; }
         SyncServerConnection _syncServer { get; }
+        WalletManager _walletManager { get; }
 
-        public ChatsOverviewPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, SyncServerConnection syncServer) 
+        public ObservableCollection<ChatEntry> ChatEntries { get; private set; }
+
+        public ChatsOverviewPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService,
+                                            SyncServerConnection syncServer, WalletManager walletManager) 
                                 : base(navigationService, pageDialogService, deviceService)
         {
             Title = "Converse";
 
             ChatEntries = new ObservableCollection<ChatEntry>();
             _syncServer = syncServer;
+            _walletManager = walletManager;
 
             /*for (var i = 0; i < 1; i++)
             {
@@ -75,7 +80,11 @@ namespace Converse.ViewModels
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            ChatEntries = new ObservableCollection<ChatEntry>(await _syncServer.GetChatsAsync());
+            var chats = await _syncServer.GetChatsAsync(_walletManager.Wallet.Address);
+            if(chats != null)
+            {
+                ChatEntries = new ObservableCollection<ChatEntry>(chats);
+            }
         }
     }
 }

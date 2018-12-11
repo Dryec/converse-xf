@@ -22,7 +22,8 @@ namespace Converse.Database.Accessors
             {
                 return -1;
             }
-            return await _database.InsertAsync(p);
+            var insertedRows = await _database.InsertAsync(p);
+            return insertedRows == 1 ? p.ID : -1;
         }
 
         public async Task<int> Insert(Chat chat)
@@ -31,7 +32,9 @@ namespace Converse.Database.Accessors
             {
                 return -1;
             }
-            return await _database.InsertAsync(chat);
+
+            var insertedRows = await _database.InsertAsync(chat);
+            return insertedRows == 1 ? chat.ID : -1;
         }
 
         public async Task<int> Update(ChatEntry chatEntry)

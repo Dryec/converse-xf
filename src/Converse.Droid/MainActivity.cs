@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using Converse.Helpers;
 using Xamarin.Forms.Platform.Android;
+using Acr.UserDialogs;
 
 namespace Converse.Droid
 {
@@ -30,6 +31,7 @@ namespace Converse.Droid
             global::FFImageLoading.Forms.Platform.CachedImageRenderer.Init(enableFastRenderer: true);
             global::FFImageLoading.ImageService.Instance.Initialize();
             global::ZXing.Net.Mobile.Forms.Android.Platform.Init();
+            UserDialogs.Init(this);
 
             LoadApplication(new App(new AndroidInitializer()));
         }
@@ -38,6 +40,14 @@ namespace Converse.Droid
                                                         Permission[] grantResults)
         {
             ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        public override void OnBackPressed()
+        {
+            if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed))
+            {
+
+            }
         }
     }
 }

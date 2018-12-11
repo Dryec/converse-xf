@@ -26,6 +26,9 @@ namespace Converse.ViewModels
             _pageDialogService = pageDialogService;
             _deviceService = deviceService;
             _navigationService = navigationService;
+
+            IsBusy = false;
+            IsNotBusy = true;
         }
 
         public string Title { get; set; }

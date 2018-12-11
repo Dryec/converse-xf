@@ -22,7 +22,8 @@ namespace Converse.Database.Accessors
             {
                 return -1;
             }
-            return await _database.InsertAsync(p);
+            var insertedRows = await _database.InsertAsync(p);
+            return insertedRows == 1 ? p.ID : -1;
         }
 
         public async Task<int> Insert(PendingTokenMessage pendingTokenMessage)
@@ -31,7 +32,8 @@ namespace Converse.Database.Accessors
             {
                 return -1;
             }
-            return await _database.InsertAsync(pendingTokenMessage);
+            var insertedRows = await _database.InsertAsync(pendingTokenMessage);
+            return insertedRows == 1 ? pendingTokenMessage.ID : -1;
         }
 
         public async Task<int> GetCount()
@@ -42,6 +44,11 @@ namespace Converse.Database.Accessors
         public async Task<PendingTokenMessage> GetFirst()
         {
             return await _database.Table<PendingTokenMessage>().FirstOrDefaultAsync();
+        }
+
+        public async Task<PendingTokenMessage> GetFirst(string sender)
+        {
+            return await _database.Table<PendingTokenMessage>().FirstOrDefaultAsync(p => p.Sender == sender);
         }
 
         public async Task<PendingTokenMessage> GetLast()

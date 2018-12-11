@@ -34,9 +34,9 @@
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
-        <local:BasicTitleBarView
+        <local:ChatsOverviewTitleBarView
             Grid.Row="0"
-            CanGoBack="false" />
+            CanGoBack="false" AddCommand="{prismnav:NavigateTo 'AddChatOptionPopupPage'}"/>
         <sflistview:SfListView
             Grid.Row="1"
             ItemTemplate="{StaticResource ChatEntryTemplateSelector}" TapCommand="{prismnav:NavigateTo 'ChatPage'}"

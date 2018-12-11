@@ -22,7 +22,8 @@ namespace Converse.Database.Accessors
             {
                 return -1;
             }
-            return await _database.InsertAsync(p);
+            var insertedRows = await _database.InsertAsync(p);
+            return insertedRows == 1 ? p.ID : -1;
         }
 
         public async Task<int> Insert(Group group)
@@ -31,7 +32,8 @@ namespace Converse.Database.Accessors
             {
                 return -1;
             }
-            return await _database.InsertAsync(group);
+            var insertedRows = await _database.InsertAsync(group);
+            return insertedRows == 1 ? group.ID : -1;
         }
 
         public async Task<int> Update(GroupInfo groupInfo)

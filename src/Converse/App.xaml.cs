@@ -21,6 +21,7 @@ using Converse.Views.Register;
 using Converse.ViewModels.Register;
 using Converse.Tron;
 using Converse.Database;
+using Acr.UserDialogs;
 
 namespace Converse
 {
@@ -69,6 +70,7 @@ namespace Converse
             // NOTE: Uses a Popup Page to contain the Scanner. You can optionally register 
             // the ContentPageBarcodeScannerService if you prefer a full screen approach.
             containerRegistry.RegisterSingleton<IBarcodeScannerService, PopupBarcodeScannerService>();
+            containerRegistry.RegisterInstance<IUserDialogs>(UserDialogs.Instance);
             containerRegistry.RegisterSingleton<TronConnection>();
             containerRegistry.RegisterSingleton<TokenMessagesQueueService>();
             containerRegistry.RegisterSingleton<ConverseDatabase>();
@@ -89,6 +91,7 @@ namespace Converse
             containerRegistry.RegisterForNavigation<ChatsOverviewPage, ChatsOverviewPageViewModel>();
             containerRegistry.RegisterForNavigation<ChatPage, ChatPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
+            containerRegistry.RegisterForNavigation<AddChatOptionPopupPage, AddChatOptionPopupPageViewModel>();
         }
 
         protected override void OnStart()

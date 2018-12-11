@@ -8,6 +8,8 @@ namespace Converse.Database
     {
         SQLiteAsyncConnection _database { get; set; }
         public PendingTokenMessagesAccessor PendingTokenMessages { get; private set; }
+        public UserAccessor Users { get; private set; }
+        public GroupsAccessor Groups { get; private set; }
         public ChatsAccessor Chats { get; private set; }
 
         public ConverseDatabase()
@@ -20,6 +22,8 @@ namespace Converse.Database
 
             PendingTokenMessages = new PendingTokenMessagesAccessor(_database);
             Chats = new ChatsAccessor(_database);
+            Users = new UserAccessor(_database);
+            Groups = new GroupsAccessor(_database);
         }
     }
 }

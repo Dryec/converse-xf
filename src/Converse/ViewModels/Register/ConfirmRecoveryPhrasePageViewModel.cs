@@ -10,6 +10,7 @@ using Converse.Tron;
 using Converse.Services;
 using Converse.TokenMessages;
 using Converse.Helpers;
+using Acr.UserDialogs;
 
 namespace Converse.ViewModels.Register
 {
@@ -17,6 +18,7 @@ namespace Converse.ViewModels.Register
     {
         TronConnection _tronConnection { get; }
         TokenMessagesQueueService _tokenMessagesQueueService { get; }
+        IUserDialogs _userDialogs { get; }
         WalletManager _walletManager { get; }
 
         public List<string> RecoveryPhrase { get; private set; }
@@ -24,13 +26,14 @@ namespace Converse.ViewModels.Register
 
         public DelegateCommand ContinueCommand { get; private set; }
 
-        public ConfirmRecoveryPhrasePageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService,
+        public ConfirmRecoveryPhrasePageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IUserDialogs userDialogs,
                                                     WalletManager walletManager, TronConnection tronConnection, TokenMessagesQueueService tokenMessagesQueueService)
                               : base(navigationService, pageDialogService, deviceService)
         {
             Title = "Recovery Phrase";
             _tronConnection = tronConnection;
             _tokenMessagesQueueService = tokenMessagesQueueService;
+            _userDialogs = userDialogs;
             _walletManager = walletManager;
 
             RecoveryPhraseConfirmation = new List<string>(new string[12]);
@@ -51,8 +54,15 @@ namespace Converse.ViewModels.Register
 
         public async void Continue()
         {
+            if(IsBusy)
+            {
+                return;
+            }
+
             if (true)//RecoveryPhraseConfirmation.Select(p => p.Trim()).SequenceEqual(RecoveryPhrase))
             {
+                IsBusy = true;
+                _userDialogs.ShowLoading();
                 await Xamarin.Essentials.Clipboard.SetTextAsync(_walletManager.Wallet.Address);
                 await _walletManager.SaveAsync();
 
@@ -64,6 +74,8 @@ namespace Converse.ViewModels.Register
                 var result = await _tokenMessagesQueueService.WaitForAsync(pendingId);
 
                 await _navigationService.NavigateAsync("/NavigationPage/MainPage");
+                _userDialogs.HideLoading();
+                IsBusy = false;
             }
             else
             {

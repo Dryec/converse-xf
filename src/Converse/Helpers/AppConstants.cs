@@ -12,6 +12,7 @@ namespace Converse.Helpers
         public const int DefaultSolidityNodePort = 50051;
 
         public const string PropertyAddress = "TFnJbbEXKWVNz84L9ysbWMvJGD2v8seZu8";
+        public const int RequestTokenLimit = 20;
 
         public static class TokenMessageTypes
         {

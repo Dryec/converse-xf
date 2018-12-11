@@ -17,17 +17,19 @@ namespace Converse.Services
         TronConnection _tronConnection { get; set; }
         ConverseDatabase _database { get; set; }
         WalletManager _walletManager { get; set; }
+        SyncServerConnection _syncServerConnection { get; set; }
 
         public TokenMessagesQueueService()
         {
 
         }
 
-        public void Start(TronConnection tronConnection, ConverseDatabase database, WalletManager walletManager)
+        public void Start(TronConnection tronConnection, ConverseDatabase database, WalletManager walletManager, SyncServerConnection syncServerConnection)
         {
             _tronConnection = tronConnection ?? throw new ArgumentNullException(nameof(tronConnection));
             _database = database ?? throw new ArgumentNullException(nameof(database));
             _walletManager = walletManager ?? throw new ArgumentNullException(nameof(walletManager));
+            _syncServerConnection = syncServerConnection ?? throw new ArgumentNullException(nameof(syncServerConnection));
 
             Task.Run(QueueTask);
         }
@@ -62,23 +64,53 @@ namespace Converse.Services
             {
                 if (_walletManager.Wallet != null)
                 {
-                    var tokenAmount = await _walletManager.Wallet.GetConverseTokenAmountAsync(_tronConnection);
-                    if (tokenAmount > 0)
+                    try
                     {
-                        try
+                        // Get first pending transaction
+                        var pendingTokenMessage = await _database.PendingTokenMessages.GetFirst(_walletManager.Wallet.Address);
+                        if (pendingTokenMessage != null)
                         {
-                            var pendingTokenMessage = await _database.PendingTokenMessages.GetFirst();
-                            if (pendingTokenMessage != null)
+                            // Check token amount
+                            var tokenAmount = await _walletManager.Wallet.GetConverseTokenAmountAsync(_tronConnection);
+                            if (tokenAmount <= AppConstants.RequestTokenLimit)
+                            {
+                                // Request token
+                                var result = await _syncServerConnection.RequestTokens(_walletManager.Wallet.Address);
+                                if (result != null)
+                                {
+                                    switch (result.Result)
+                                    {
+                                        case Models.TokenRequestResponse.ResultType.Transferred:
+                                            tokenAmount = await _walletManager.Wallet.GetConverseTokenAmountAsync(_tronConnection);
+                                            break;
+                                        case Models.TokenRequestResponse.ResultType.HasEnough:
+                                            break;
+                                        case Models.TokenRequestResponse.ResultType.MaximumReached:
+                                            break;
+                                        case Models.TokenRequestResponse.ResultType.ServerError:
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                            }
+
+                            if (tokenAmount > 0)
                             {
                                 try
                                 {
                                     // TODO check for exceptions - internet off, wrong node ip…
                                     var transaction = await _tronConnection.CreateTransactionAsync(pendingTokenMessage.Sender, pendingTokenMessage.Receiver, pendingTokenMessage.Data);
 
-                                    if (transaction != null && transaction.Result.Result)
+                                    if (transaction != null)
                                     {
-                                        _walletManager.Wallet.SignTransaction(transaction.Transaction);
-                                        var result = await _tronConnection.Client.BroadcastTransactionAsync(transaction.Transaction);
+                                        var result = transaction.Result;
+                                        if (result.Result)
+                                        {
+                                            _walletManager.Wallet.SignTransaction(transaction.Transaction);
+                                            result = await _tronConnection.Client.BroadcastTransactionAsync(transaction.Transaction);
+                                        }
+
                                         switch (result.Code)
                                         {
                                             case Protocol.Return.Types.response_code.BandwithError:
@@ -87,8 +119,8 @@ namespace Converse.Services
                                                 break;
                                             case Protocol.Return.Types.response_code.OtherError:
                                                 break;
-                                            case Protocol.Return.Types.response_code.ContractValidateError:
-                                                break;
+                                            case Protocol.Return.Types.response_code.ContractValidateError: // TODO Could break queue when wallet address changes
+                                                    break;
                                             case Protocol.Return.Types.response_code.Success:
                                             case Protocol.Return.Types.response_code.Sigerror:
                                             case Protocol.Return.Types.response_code.ContractExeError:
@@ -106,7 +138,9 @@ namespace Converse.Services
                                     {
                                         await _database.PendingTokenMessages.Delete(pendingTokenMessage.ID);
                                     }
+
                                 }
+
                                 catch (RpcException ex)
                                 {
                                     switch (ex.StatusCode)
@@ -143,11 +177,12 @@ namespace Converse.Services
                                 }
                             }
                         }
-                        catch (Exception e)
-                        {
-                            Device.BeginInvokeOnMainThread(() => throw e);
-                        }
                     }
+                    catch (Exception e)
+                    {
+                        Device.BeginInvokeOnMainThread(() => throw e);
+                    }
+
                 }
                 await Task.Delay(500);
             }
