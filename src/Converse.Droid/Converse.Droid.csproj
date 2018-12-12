@@ -87,6 +87,9 @@
     <PackageReference Include="ZXing.Net.Mobile">
       <Version>2.4.1</Version>
     </PackageReference>
+    <PackageReference Include="FirebaseStorage.net">
+      <Version>1.0.3</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -152,6 +155,17 @@
     <AndroidResource Include="Resources\drawable-xhdpi\baseline_add_comment_white_48.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\baseline_add_comment_white_48.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\baseline_add_comment_white_48.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\baseline_person_grayish_48.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\baseline_person_grayish_48.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\baseline_person_grayish_48.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\baseline_person_grayish_48.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\baseline_person_grayish_48.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\baseline_group_grayish_48.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\baseline_group_grayish_48.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\baseline_group_grayish_48.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\baseline_group_grayish_48.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\baseline_group_grayish_48.png" />
+    <AndroidResource Include="Resources\xml\file_paths.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -176,6 +190,9 @@
       <Project>{42AB903E-42AD-4EC2-B38A-8406F53156DB}</Project>
       <Name>Converse</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\xml\" />
   </ItemGroup>
   <Import Project="$(MobileBuildToolsTargets)" Condition="Exists('$(MobileBuildToolsTargets)')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

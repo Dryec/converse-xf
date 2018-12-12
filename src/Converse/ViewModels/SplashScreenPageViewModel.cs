@@ -41,12 +41,12 @@ namespace Converse.ViewModels
             var loadedWallet = await _walletManager.LoadWalletAsync();
 
             // After performing the long running task we perform an absolute Navigation to remove the SplashScreen from the Navigation Stack.
-            //loadedWallet = false;
+            loadedWallet = false;
             if (loadedWallet)
             {
                 //await _navigationService.NavigateAsync("/NavigationPage/ChatsOverviewPage");
-                await _navigationService.NavigateAsync("/NavigationPage/MainPage");
-                //await _navigationService.NavigateAsync("/NavigationPage/SettingsPage");
+                //await _navigationService.NavigateAsync("/NavigationPage/MainPage");
+                await _navigationService.NavigateAsync("/NavigationPage/SettingsPage");
             }
             else
             {

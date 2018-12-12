@@ -56,10 +56,13 @@
                             Height="*" />
                     </Grid.RowDefinitions>
                     <ffimageloading:CachedImage
-                        Grid.Column="0"
-                        Source="https://www.tron-society.com/img/team/marius.jpg">
+                        Grid.Column="0" HeightRequest="64"
+                        Source="User.ImageUrl"
+                        ErrorPlaceholder="baseline_person_grayish_48"
+                        LoadingPlaceholder="baseline_person_grayish_48">
                         <ffimageloading:CachedImage.Transformations>
-                            <fftransformations:ColorFillTransformation HexColor="#15000000" />
+                            <fftransformations:ColorFillTransformation
+                                HexColor="#efefef" />
                             <fftransformations:CircleTransformation />
                         </ffimageloading:CachedImage.Transformations>
                     </ffimageloading:CachedImage>
@@ -69,14 +72,14 @@
                         VerticalOptions="Center">
                         <Label
                             VerticalOptions="End"
-                            Text="Marius"
+                            Text="{Binding User.Name}"
                             FontAttributes="Bold"
                             TextColor="Black"
                             FontSize="18"
                             LineBreakMode="TailTruncation" />
                         <Label
                             FontSize="14"
-                            Text="Hey! I'm new here…"
+                            Text="{Binding User.Status.Message}"
                             LineBreakMode="TailTruncation" />
                     </StackLayout>
                 </Grid>

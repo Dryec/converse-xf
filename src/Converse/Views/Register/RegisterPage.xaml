@@ -36,17 +36,26 @@
             Padding="15,15,15,15"
             VerticalOptions="StartAndExpand">
             <StackLayout>
-                <ffimageloading:CachedImage
-                    Margin="15"
-                    HeightRequest="110"
-                    WidthRequest="110"
-                    Source="https://content-static.upwork.com/uploads/2014/10/01073427/profilephoto1.jpg">
-                    <ffimageloading:CachedImage.Transformations>
-                        <fftransformations:CircleTransformation
-                            BorderHexColor="000000"
-                            BorderSize="2" />
-                    </ffimageloading:CachedImage.Transformations>
-                </ffimageloading:CachedImage>
+                <ContentView>
+                    <ffimageloading:CachedImage
+                        Margin="15"
+                        HeightRequest="110"
+                        WidthRequest="110"
+                        Source="{Binding ProfileImageUrl}"
+                        ErrorPlaceholder="baseline_person_grayish_48"
+                        LoadingPlaceholder="baseline_person_grayish_48">
+                        <ffimageloading:CachedImage.Transformations>
+                            <fftransformations:ColorFillTransformation
+                                HexColor="#efefef" />
+                            <fftransformations:CircleTransformation />
+                        </ffimageloading:CachedImage.Transformations>
+                    </ffimageloading:CachedImage>
+                    <ContentView.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding SelectProfilePictureCommand}"
+                            NumberOfTapsRequired="1" />
+                    </ContentView.GestureRecognizers>
+                </ContentView>
                 <Entry
                     Placeholder="Name"
                     Text="{Binding Wallet.Name}"

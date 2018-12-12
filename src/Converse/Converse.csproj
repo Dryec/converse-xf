@@ -26,6 +26,9 @@
     <PackageReference Include="RestSharp" Version="106.5.4" />
     <PackageReference Include="WaffleGenerator" Version="3.0.0" />
     <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
+    <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
+    <PackageReference Include="NETCore.Encrypt" Version="2.0.7" />
   </ItemGroup>
 
   <ItemGroup>

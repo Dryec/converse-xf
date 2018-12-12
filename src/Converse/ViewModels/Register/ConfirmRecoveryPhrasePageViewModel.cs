@@ -54,7 +54,7 @@ namespace Converse.ViewModels.Register
 
         public async void Continue()
         {
-            if(IsBusy)
+            if (IsBusy)
             {
                 return;
             }
@@ -66,11 +66,21 @@ namespace Converse.ViewModels.Register
                 await Xamarin.Essentials.Clipboard.SetTextAsync(_walletManager.Wallet.Address);
                 await _walletManager.SaveAsync();
 
+                // Set Name
                 var pendingId = await _tokenMessagesQueueService.AddAsync(
                     _walletManager.Wallet.Address,
                     AppConstants.PropertyAddress,
                     new ChangeNameTokenMessage { Name = _walletManager.Wallet.Name }
                 );
+
+                // Set Status to default
+                await _tokenMessagesQueueService.AddAsync(
+                 _walletManager.Wallet.Address,
+                 AppConstants.PropertyAddress,
+                 new ChangeStatusTokenMessage { Status = AppConstants.DefaultStatusMessage });
+
+                // TODO Set Image if exist
+
                 var result = await _tokenMessagesQueueService.WaitForAsync(pendingId);
 
                 await _navigationService.NavigateAsync("/NavigationPage/MainPage");

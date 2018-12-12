@@ -14,6 +14,8 @@ namespace Converse.Helpers
         public const string PropertyAddress = "TFnJbbEXKWVNz84L9ysbWMvJGD2v8seZu8";
         public const int RequestTokenLimit = 20;
 
+        public const string DefaultStatusMessage = "Hey, I'm new here!";
+
         public static class TokenMessageTypes
         {
             public static class User

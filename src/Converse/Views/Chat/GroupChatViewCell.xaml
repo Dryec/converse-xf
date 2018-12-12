@@ -35,8 +35,12 @@
         </Grid.RowDefinitions>
         <ffimageloading:CachedImage
             Grid.Column="0"
-            Source="{Binding GroupInfo.ImageUrl}">
+            Source="{Binding GroupInfo.ImageUrl}"
+            ErrorPlaceholder="baseline_group_grayish_48"
+            LoadingPlaceholder="baseline_group_grayish_48">
             <ffimageloading:CachedImage.Transformations>
+                <fftransformations:ColorFillTransformation
+                    HexColor="#efefef" />
                 <fftransformations:CircleTransformation />
             </ffimageloading:CachedImage.Transformations>
         </ffimageloading:CachedImage>
@@ -71,7 +75,8 @@
                 <Label
                     FontSize="14"
                     Text="{Binding LastMessage.Sender.Name, Converter={StaticResource AddColonToStringConverter}}"
-                    LineBreakMode="TailTruncation" TextColor="{StaticResource Primary}" />
+                    LineBreakMode="TailTruncation"
+                    TextColor="{StaticResource Primary}" />
                 <Label
                     FontSize="14"
                     Text="{Binding LastMessage.Message}"
