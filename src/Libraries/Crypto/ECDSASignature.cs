@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Math;
 
@@ -8,6 +9,13 @@ namespace Crypto
     public class ECDSASignature
     {
         private const string InvalidDERSignature = "Invalid DER signature";
+
+        public ECDSASignature(BigInteger r, BigInteger s, byte v)
+        {
+            R = r;
+            S = s;
+            V = new byte[] { v };
+        }
 
         public ECDSASignature(BigInteger r, BigInteger s)
         {
@@ -21,21 +29,9 @@ namespace Crypto
             S = rs[1];
         }
 
-        public ECDSASignature(byte[] derSig)
+        public ECDSASignature(byte[] sig) : this(new BigInteger(1, sig.Take(32).ToArray()), new BigInteger(1, sig.Skip(32).Take(32).ToArray()), sig.Last())
         {
-            try
-            {
-                var decoder = new Asn1InputStream(derSig);
-                var seq = decoder.ReadObject() as DerSequence;
-                if (seq == null || seq.Count != 2)
-                    throw new FormatException(InvalidDERSignature);
-                R = ((DerInteger)seq[0]).Value;
-                S = ((DerInteger)seq[1]).Value;
-            }
-            catch (Exception ex)
-            {
-                throw new FormatException(InvalidDERSignature, ex);
-            }
+
         }
 
         public BigInteger R { get; }
@@ -48,7 +44,18 @@ namespace Crypto
 
         public static ECDSASignature FromDER(byte[] sig)
         {
-            return new ECDSASignature(sig);
+            try
+            {
+                var decoder = new Asn1InputStream(sig);
+                var seq = decoder.ReadObject() as DerSequence;
+                if (seq == null || seq.Count != 2)
+                    throw new FormatException(InvalidDERSignature);
+                return new ECDSASignature(((DerInteger)seq[0]).Value, ((DerInteger)seq[1]).Value);
+            }
+            catch (Exception ex)
+            {
+                throw new FormatException(InvalidDERSignature, ex);
+            }
         }
 
         public static bool IsValidDER(byte[] bytes)

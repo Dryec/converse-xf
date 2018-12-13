@@ -12,6 +12,12 @@ using Org.BouncyCastle.Crypto.Signers;
 using System.IO;
 using Org.BouncyCastle.Asn1;
 using System.Collections.Generic;
+using Org.BouncyCastle.Crypto.Encodings;
+using Org.BouncyCastle.Crypto.Digests;
+using System.Text;
+using Org.BouncyCastle.Crypto.Agreement;
+using Org.BouncyCastle.Crypto.Agreement.Kdf;
+using Org.BouncyCastle.Crypto;
 
 namespace Crypto
 {
@@ -50,7 +56,6 @@ namespace Crypto
             _pubKey = (ECPublicKeyParameters)pair.Public;
         }
 
-
         public ECKey(BigInteger privateKey, ECPoint publicPoint)
         {
             _privateKey = new ECPrivateKeyParameters(privateKey, CURVE);
@@ -74,6 +79,119 @@ namespace Crypto
             return _privateKey.D;
         }
 
+        public ECPrivateKeyParameters GetPrivateKeyParameters()
+        {
+            return _privateKey;
+        }
+
+        public ECPublicKeyParameters GetPublicKeyParameters()
+        {
+            return _pubKey;
+        }
+
+        public BigInteger GetSharedSecret(byte[] pubBytes)
+        {
+            return GetSharedSecret((ECPublicKeyParameters)PublicKeyFactory.CreateKey(pubBytes));
+        }
+
+        public BigInteger GetSharedSecret(ECPublicKeyParameters pub)
+        {
+            var aKeyAgree = AgreementUtilities.GetBasicAgreement("ECDH");
+            aKeyAgree.Init(_privateKey);
+            var sharedSecret = aKeyAgree.CalculateAgreement(pub);
+            return sharedSecret;
+        }
+
+        public byte[] DeriveSymmetricKeyFromSharedSecret(byte[] sharedSecret)
+        {
+            var egH =
+                 new ECDHKekGenerator(DigestUtilities.GetDigest("SHA256"));
+
+            egH.Init(new DHKdfParameters(SecObjectIdentifiers.SecP256k1, sharedSecret.Length, sharedSecret));
+            var symmetricKey = new byte[DigestUtilities.GetDigest("SHA256").GetDigestSize()];
+            egH.GenerateBytes(symmetricKey, 0, symmetricKey.Length);
+
+            return symmetricKey;
+        }
+
+        public byte[] Encrypt(byte[] data, byte[] encodedReceiverPub)
+        {
+            return Encrypt(data, GetPublicKeyParamsFromEncoded(encodedReceiverPub));
+        }
+
+        public byte[] Encrypt(byte[] data, ECPublicKeyParameters receiverPub)
+        {
+            var sharedSecret = GetSharedSecret(receiverPub);
+            var symKey = DeriveSymmetricKeyFromSharedSecret(sharedSecret.ToByteArray());
+            return EncryptFinal(data, symKey);
+        }
+
+        byte[] EncryptFinal(byte[] data, byte[] derivedKey)
+        {
+            byte[] output = null;
+            try
+            {
+                var keyparam = ParameterUtilities.CreateKeyParameter("DES", derivedKey);
+                var cipher = CipherUtilities.GetCipher("DES/ECB/ISO7816_4PADDING");
+                cipher.Init(true, keyparam);
+                try
+                {
+                    output = cipher.DoFinal(data);
+                    return output;
+                }
+                catch (System.Exception ex)
+                {
+                    throw new CryptoException("Invalid Data");
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return output;
+        }
+
+        public byte[] Decrypt(byte[] data, byte[] encodedSenderPub)
+        {
+            return Decrypt(data, GetPublicKeyParamsFromEncoded(encodedSenderPub));
+        }
+
+        public byte[] Decrypt(byte[] cipherData, ECPublicKeyParameters senderPub)
+        {
+            var sharedSecret = GetSharedSecret(senderPub);
+            var symKey = DeriveSymmetricKeyFromSharedSecret(sharedSecret.ToByteArray());
+            return DecryptFinal(cipherData, symKey);
+        }
+
+        byte[] DecryptFinal(byte[] cipherData, byte[] derivedKey)
+        {
+            byte[] output = null;
+            try
+            {
+                var keyparam = ParameterUtilities.CreateKeyParameter("DES", derivedKey);
+                var cipher = CipherUtilities.GetCipher("DES/ECB/ISO7816_4PADDING");
+                cipher.Init(false, keyparam);
+                try
+                {
+                    output = cipher.DoFinal(cipherData);
+
+                }
+                catch (System.Exception ex)
+                {
+                    throw new CryptoException("Invalid Data");
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return output;
+        }
+
+
+
+
         public byte[] Sign(byte[] hash)
         {
             var signer = new DeterministicECDSA();
@@ -88,8 +206,6 @@ namespace Crypto
             return signature.R.BigIntegerToBytes(32)
                             .Concat(signature.S.BigIntegerToBytes(32))
                             .Concat(new byte[] { fixedV }).ToArray();
-
-            // TTTTTUxA6VACn9sBAUpbJFvHv8XM7JuHiV
         }
 
         public bool Verify(byte[] hash, ECDSASignature sig)
@@ -116,6 +232,10 @@ namespace Crypto
             if (recId == -1)
                 throw new Exception("Could not construct a recoverable key. This should never happen.");
             return recId;
+        }
+        public static byte[] RecoverPubBytesFromSignature(ECDSASignature sig, byte[] message, bool compressed)
+        {
+            return RecoverPubBytesFromSignature(sig.V[0], sig, message, compressed);
         }
 
         public static byte[] RecoverPubBytesFromSignature(int recId, ECDSASignature sig, byte[] message, bool compressed)
@@ -214,6 +334,11 @@ namespace Crypto
         {
             var bytes = privateKeyStr.FromHexToByteArray();
             return FromPrivate(new BigInteger(1, bytes));
+        }
+
+        public static ECPublicKeyParameters GetPublicKeyParamsFromEncoded(byte[] encoded)
+        {
+            return new ECPublicKeyParameters(CURVE.Curve.DecodePoint(encoded), CURVE);
         }
     }
 }
