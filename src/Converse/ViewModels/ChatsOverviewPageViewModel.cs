@@ -11,25 +11,22 @@ using Converse.Models;
 using Converse.Enums;
 using Converse.Services;
 using Converse.Tron;
+using Plugin.FirebasePushNotification.Abstractions;
+using Acr.UserDialogs;
 
 namespace Converse.ViewModels
 {
     public class ChatsOverviewPageViewModel : ViewModelBase
     {
-        SyncServerConnection _syncServer { get; }
-        WalletManager _walletManager { get; }
-
         public ObservableCollection<ChatEntry> ChatEntries { get; private set; }
 
-        public ChatsOverviewPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService,
-                                            SyncServerConnection syncServer, WalletManager walletManager) 
-                                : base(navigationService, pageDialogService, deviceService)
+        public ChatsOverviewPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IUserDialogs userDialogs, IFirebasePushNotification firebasePushNotification,
+                                            SyncServerConnection syncServer, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService)
+                                : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServer, tronConnection, walletManager, tokenMessagesQueueService)
         {
             Title = "Converse";
 
             ChatEntries = new ObservableCollection<ChatEntry>();
-            _syncServer = syncServer;
-            _walletManager = walletManager;
 
             /*for (var i = 0; i < 1; i++)
             {
@@ -80,8 +77,8 @@ namespace Converse.ViewModels
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            var chats = await _syncServer.GetChatsAsync(_walletManager.Wallet.Address);
-            if(chats != null)
+            var chats = await _syncServerConnection.GetChatsAsync(_walletManager.Wallet.Address);
+            if (chats != null)
             {
                 ChatEntries = new ObservableCollection<ChatEntry>(chats);
             }

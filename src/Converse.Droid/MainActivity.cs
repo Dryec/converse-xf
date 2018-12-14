@@ -10,6 +10,7 @@ using Converse.Helpers;
 using Xamarin.Forms.Platform.Android;
 using Acr.UserDialogs;
 using Plugin.CurrentActivity;
+using Plugin.FirebasePushNotification;
 
 namespace Converse.Droid
 {
@@ -36,12 +37,33 @@ namespace Converse.Droid
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
 
             LoadApplication(new App(new AndroidInitializer()));
+
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
+            {
+                //Change for your default notification channel id here
+                FirebasePushNotificationManager.DefaultNotificationChannelId = "FirebasePushNotificationChannel";
+
+                //Change for your default notification channel name here
+                FirebasePushNotificationManager.DefaultNotificationChannelName = "General";
+            }
+            //If debug you should reset the token each time.
+//#if DEBUG
+//            FirebasePushNotificationManager.Initialize(this, true);
+//#else
+              FirebasePushNotificationManager.Initialize(this, false);
+//#endif
+            FirebasePushNotificationManager.ProcessIntent(this, Intent);
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions,
-                                                        Permission[] grantResults)
+        protected override void OnNewIntent(Intent intent)
         {
-            ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults); 
+            base.OnNewIntent(intent);
+            FirebasePushNotificationManager.ProcessIntent(this, intent);
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 

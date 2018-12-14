@@ -41,7 +41,7 @@
                         Margin="15"
                         HeightRequest="110"
                         WidthRequest="110"
-                        Source="{Binding ProfileImageUrl}"
+                        Source="{Binding Wallet.ProfileImageUrl}"
                         ErrorPlaceholder="baseline_person_grayish_48"
                         LoadingPlaceholder="baseline_person_grayish_48">
                         <ffimageloading:CachedImage.Transformations>

@@ -16,6 +16,10 @@ using System.Diagnostics;
 using System.Windows.Input;
 using Syncfusion.ListView.XForms;
 using Converse.Tron;
+using Plugin.FirebasePushNotification.Abstractions;
+using Client;
+using Acr.UserDialogs;
+using ItemTappedEventArgs = Syncfusion.ListView.XForms.ItemTappedEventArgs;
 
 namespace Converse.ViewModels
 {
@@ -33,9 +37,6 @@ namespace Converse.ViewModels
 
     public class ChatPageViewModel : ViewModelBase
     {
-        SyncServerConnection _syncServer { get; }
-         TronConnection _tronConnection { get; }
-         WalletManager _walletManager { get; }
 
         public event EventHandler ScrollMessagesEvent;
 
@@ -54,16 +55,12 @@ namespace Converse.ViewModels
         public Size ScrollViewSize { get; set; }
         public double ScrollViewHeight { get; set; }
 
-        public ChatPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, 
-                                    SyncServerConnection syncServer, TronConnection tronConnection, WalletManager walletManager) 
-            : base(navigationService, pageDialogService, deviceService)
+        public ChatPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IFirebasePushNotification firebasePushNotification, IUserDialogs userDialogs,
+                                    SyncServerConnection syncServer, TokenMessagesQueueService tokenMessagesQueueService, TronConnection tronConnection, WalletManager walletManager)
+            : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServer, tronConnection, walletManager, tokenMessagesQueueService)
         {
-            _syncServer = syncServer;
-            _tronConnection = tronConnection;
-            _walletManager = walletManager;
             MySelf = new UserInfo { Name = "Dave", TronAddress = "TERA14Y1HBpcEf1iCaDyeSpMady9MuDM2o" };
-            ChatPartner = new UserInfo { Name = "Pascal", TronAddress = "TERA14Y1HBpcEf1iCaDyeSpMady9MuDM2o", ImageUrl = ("https://www.tron-society.com/img/team/pascal.jpg") };
-            Title = ChatPartner.Name;
+            //Title = ChatPartner.Name;
 
             Message = string.Empty;
             Messages = new ObservableCollection<ChatMessage>();
@@ -163,8 +160,13 @@ namespace Converse.ViewModels
             }*/
         }
 
-        private async void SendMessage()
+        async void SendMessage()
         {
+            await _tokenMessagesQueueService.AddAsync(
+                    _walletManager.Wallet.Address,
+                    ChatPartner.TronAddress,
+                    new SendMessageTokenMessage { Message = Message }
+                );
             /*var messageToken = new SendMessageTokenMessage { Message = Message};
 
             var transaction = await _tronConnection.CreateTransactionFromTokenMessageAsync(messageToken, _walletManager.Wallet.Address, ChatPartner.TronAddress);
@@ -180,7 +182,7 @@ namespace Converse.ViewModels
             {
                 case nameof(ScrollY):
                     // Try Load previous messages if near top and scroll direction to top
-                    if(ScrollY <= 500 && LastScrollY > ScrollY)
+                    if (ScrollY <= 500 && LastScrollY > ScrollY)
                     {
                         // TODO load previous messages
                         Debug.WriteLine("Load More");
@@ -200,6 +202,34 @@ namespace Converse.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
+        }
+
+        public override async void OnNavigatingTo(INavigationParameters parameters)
+        {
+            if (parameters.TryGetValue(KnownNavigationParameters.XamlParam, out object data)
+                || parameters.TryGetValue("address", out data))
+            {
+                if (data is string address)
+                {
+                    // TODO
+                    ChatPartner = await _syncServerConnection.GetUserAsync(address);
+                }
+                else if (data is ItemTappedEventArgs itemTappedEventArgs)
+                {
+                    if (itemTappedEventArgs.ItemData is ChatEntry chatEntry && chatEntry.Type == Enums.ChatType.Normal)
+                    {
+                        ChatPartner = chatEntry.ChatPartner;
+                    }
+                }
+
+                if (ChatPartner != null)
+                {
+                    return;
+                }
+            }
+
+            _userDialogs.Toast("not an user");
+            await _navigationService.GoBackAsync();
         }
 
         public override async void OnNavigatedTo(INavigationParameters parameters)

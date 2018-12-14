@@ -40,7 +40,7 @@ namespace Converse.Services
                 request.AddUrlSegment("address_id", addressOrId);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
-                var result = JsonConvert.DeserializeObject<TokenRequestResponse>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                var result = JsonConvert.DeserializeObject<TokenRequestResponse>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Local });
                 return result;
             }
             catch (JsonException e)
@@ -56,7 +56,7 @@ namespace Converse.Services
                 var request = new RestRequest(Endpoints.Chats + "all/" + addressOrId, dataFormat: DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
-                var chats = JsonConvert.DeserializeObject<List<ChatEntry>>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                var chats = JsonConvert.DeserializeObject<List<ChatEntry>>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Local });
                 if (chats != null)
                 {
                     foreach (var chat in chats)
@@ -79,7 +79,7 @@ namespace Converse.Services
                 var request = new RestRequest(Endpoints.Chats + $"{chatId}/{start}/{end}/", dataFormat: DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
-                var messages = JsonConvert.DeserializeObject<ChatMessages>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                var messages = JsonConvert.DeserializeObject<ChatMessages>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Local });
                 return messages;
             }
             catch (JsonException e)
@@ -95,8 +95,12 @@ namespace Converse.Services
                 var request = new RestRequest(Endpoints.Users + addressOrId, dataFormat: DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
-                var user = JsonConvert.DeserializeObject<UserInfo>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                await _database.Users.Update(user);
+                var user = JsonConvert.DeserializeObject<UserInfo>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Local });
+
+                if (user != null)
+                {
+                    await _database.Users.Update(user);
+                }
                 return user;
             }
             catch (JsonException e)
@@ -112,8 +116,12 @@ namespace Converse.Services
                 var request = new RestRequest(Endpoints.Groups + addressOrId, dataFormat: DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
-                var group = JsonConvert.DeserializeObject<GroupInfo>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                await _database.Groups.Update(group);
+                var group = JsonConvert.DeserializeObject<GroupInfo>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Local });
+
+                if (group != null)
+                {
+                    await _database.Groups.Update(group);
+                }
                 return group;
             }
             catch (JsonException e)

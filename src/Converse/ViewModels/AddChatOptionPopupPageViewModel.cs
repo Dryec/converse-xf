@@ -12,27 +12,25 @@ using Client;
 using Google.Protobuf;
 using Grpc.Core;
 using Acr.UserDialogs;
+using Plugin.FirebasePushNotification.Abstractions;
+using Converse.Tron;
 
 namespace Converse.ViewModels
 {
     public class AddChatOptionPopupPageViewModel : ViewModelBase
     {
         IBarcodeScannerService _barcodeScanner { get; }
-        IUserDialogs _userDialogs { get; }
-        TronConnection _tronConnection { get; }
 
         public DelegateCommand ScanCommand { get; }
         public DelegateCommand OpenChatCommand { get; }
 
         public string UserAddress { get; set; }
 
-        public AddChatOptionPopupPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService,
-                                                IBarcodeScannerService barcodeScanner, IUserDialogs userDialogs, TronConnection tronConnection)
-            : base(navigationService, pageDialogService, deviceService)
+        public AddChatOptionPopupPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IFirebasePushNotification firebasePushNotification,
+                                                IBarcodeScannerService barcodeScanner, IUserDialogs userDialogs, SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService)
+            : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService)
         {
             _barcodeScanner = barcodeScanner;
-            _userDialogs = userDialogs;
-            _tronConnection = tronConnection;
 
             ScanCommand = new DelegateCommand(OnScanCommandExecuted);
             OpenChatCommand = new DelegateCommand(OpenChatCommandExecuted);
@@ -51,9 +49,18 @@ namespace Converse.ViewModels
                     var account = await _tronConnection.Client.GetAccountAsync(new Protocol.Account { Address = ByteString.CopyFrom(addressBytes) });
                     if(!account.Address.IsEmpty)
                     {
-                        var navParams = new NavigationParameters();
-                        navParams.Add("address", UserAddress);
-                        await _navigationService.NavigateAsync("ChatPage", navParams);
+                        var user = await _syncServerConnection.GetUserAsync(UserAddress);
+
+                        if (user != null)
+                        {
+                            var navParams = new NavigationParameters();
+                            navParams.Add("address", UserAddress);
+                            await _navigationService.NavigateAsync("ChatPage", navParams);
+                        }
+                        else
+                        {
+                            _userDialogs.Toast("User is not registered");
+                        }
                     }
                     else
                     {

@@ -11,30 +11,22 @@ using Converse.Services;
 using Converse.TokenMessages;
 using Converse.Helpers;
 using Acr.UserDialogs;
+using Plugin.FirebasePushNotification.Abstractions;
 
 namespace Converse.ViewModels.Register
 {
     public class ConfirmRecoveryPhrasePageViewModel : ViewModelBase
     {
-        TronConnection _tronConnection { get; }
-        TokenMessagesQueueService _tokenMessagesQueueService { get; }
-        IUserDialogs _userDialogs { get; }
-        WalletManager _walletManager { get; }
-
         public List<string> RecoveryPhrase { get; private set; }
         public List<string> RecoveryPhraseConfirmation { get; private set; }
 
         public DelegateCommand ContinueCommand { get; private set; }
 
         public ConfirmRecoveryPhrasePageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IUserDialogs userDialogs,
-                                                    WalletManager walletManager, TronConnection tronConnection, TokenMessagesQueueService tokenMessagesQueueService)
-                              : base(navigationService, pageDialogService, deviceService)
+                                                    IFirebasePushNotification firebasePushNotification, WalletManager walletManager, SyncServerConnection syncServerConnection, TronConnection tronConnection, TokenMessagesQueueService tokenMessagesQueueService)
+                              : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService)
         {
             Title = "Recovery Phrase";
-            _tronConnection = tronConnection;
-            _tokenMessagesQueueService = tokenMessagesQueueService;
-            _userDialogs = userDialogs;
-            _walletManager = walletManager;
 
             RecoveryPhraseConfirmation = new List<string>(new string[12]);
             ContinueCommand = new DelegateCommand(Continue);
@@ -63,11 +55,21 @@ namespace Converse.ViewModels.Register
             {
                 IsBusy = true;
                 _userDialogs.ShowLoading();
-                await Xamarin.Essentials.Clipboard.SetTextAsync(_walletManager.Wallet.Address);
+
                 await _walletManager.SaveAsync();
 
-                // Set Name
+                // Set firebase token to property address
                 var pendingId = await _tokenMessagesQueueService.AddAsync(
+                    _walletManager.Wallet.Address,
+                    AppConstants.PropertyAddress,
+                    new AddDeviceIdTokenMessage
+                    {
+                        DeviceID = _walletManager.Wallet.EncryptToHexString(_firebasePushNotification.Token, AppConstants.PropertyAddressPublicKey)
+                    }
+                );
+
+                // Set Name
+                await _tokenMessagesQueueService.AddAsync(
                     _walletManager.Wallet.Address,
                     AppConstants.PropertyAddress,
                     new ChangeNameTokenMessage { Name = _walletManager.Wallet.Name }
@@ -75,11 +77,18 @@ namespace Converse.ViewModels.Register
 
                 // Set Status to default
                 await _tokenMessagesQueueService.AddAsync(
-                 _walletManager.Wallet.Address,
-                 AppConstants.PropertyAddress,
-                 new ChangeStatusTokenMessage { Status = AppConstants.DefaultStatusMessage });
+                                     _walletManager.Wallet.Address,
+                                     AppConstants.PropertyAddress,
+                                     new ChangeStatusTokenMessage { Status = AppConstants.DefaultStatusMessage });
 
-                // TODO Set Image if exist
+                // Set Image if exist
+                if (_walletManager.Wallet.ProfileImageUrl != null && Uri.IsWellFormedUriString(_walletManager.Wallet.ProfileImageUrl, UriKind.Absolute))
+                {
+                    await _tokenMessagesQueueService.AddAsync(
+                                         _walletManager.Wallet.Address,
+                                         AppConstants.PropertyAddress,
+                                         new ChangeImageTokenMessage { ImageUrl = _walletManager.Wallet.ProfileImageUrl });
+                }
 
                 var result = await _tokenMessagesQueueService.WaitForAsync(pendingId);
 

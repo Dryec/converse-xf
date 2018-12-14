@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Bitcoin.BIP39;
 using Client;
@@ -12,12 +14,15 @@ using Protocol;
 
 namespace Converse.Tron
 {
-    public class Wallet
+    public class Wallet : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ECKey ECKey { get; }
         public string Mnemonic { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public string ProfileImageUrl { get; set; }
 
         string _privateKey;
         public string PrivateKey
@@ -116,6 +121,16 @@ namespace Converse.Tron
             {
                 transaction.Signature.Add(ByteString.CopyFrom(signature));
             }
+        }
+
+        public string EncryptToHexString(string message, byte[] publicKey)
+        {
+            return ECKey.Encrypt(Encoding.UTF8.GetBytes(message), publicKey).ToHexString();
+        }
+
+        public string DecryptFromHexString(string encryptedMessage, byte[] publicKey)
+        {
+            return Encoding.UTF8.GetString(Encoding.UTF8.GetString(ECKey.Decrypt(Encoding.UTF8.GetBytes(encryptedMessage), publicKey)).FromHexToByteArray());
         }
     }
 }

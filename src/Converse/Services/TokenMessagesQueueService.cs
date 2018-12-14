@@ -100,7 +100,9 @@ namespace Converse.Services
                                 try
                                 {
                                     // TODO check for exceptions - internet off, wrong node ip…
-                                    var transaction = await _tronConnection.CreateTransactionAsync(pendingTokenMessage.Sender, pendingTokenMessage.Receiver, pendingTokenMessage.Data);
+                                    var transaction = await _tronConnection.CreateTransactionAsync(
+                                                                                    pendingTokenMessage.Sender.Equals("_") ? _walletManager.Wallet.Address : pendingTokenMessage.Sender, 
+                                                                                    pendingTokenMessage.Receiver, pendingTokenMessage.Data);
 
                                     if (transaction != null)
                                     {

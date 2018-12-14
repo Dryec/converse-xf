@@ -15,31 +15,26 @@ using Xamarin.Forms;
 using Firebase.Storage;
 using NETCore.Encrypt;
 using System.Diagnostics;
+using Plugin.FirebasePushNotification.Abstractions;
+using Converse.Services;
 
 namespace Converse.ViewModels.Register
 {
     public class RegisterPageViewModel : ViewModelBase
     {
-        WalletManager _walletManager { get; }
-        public IUserDialogs _userDialogs { get; }
-
         public ICommand ContinueCommand { get; private set; }
         public ICommand SelectProfilePictureCommand { get; private set; }
 
         public Wallet Wallet { get; set; }
         public List<string> RecoveryPhrase { get; private set; }
-        public string ProfileImageUrl { get; set; }
 
-        public RegisterPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService,
-                                        WalletManager walletManager, IUserDialogs userDialogs)
-                : base(navigationService, pageDialogService, deviceService)
+        public RegisterPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IFirebasePushNotification firebasePushNotification,
+                                       IUserDialogs userDialogs, SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService)
+                : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService)
         {
             Title = "Register";
-            _walletManager = walletManager;
-            _userDialogs = userDialogs;
             ContinueCommand = new DelegateCommand(ContinueCommandExecuted);
             SelectProfilePictureCommand = new DelegateCommand(SelectProfilePictureCommandExecuted);
-            ProfileImageUrl = "baseline_person_grayish_48";
         }
 
         public override void OnNavigatingTo(INavigationParameters parameters)
@@ -59,6 +54,8 @@ namespace Converse.ViewModels.Register
 
             await Task.Delay(1500);
             Wallet = _walletManager.CreateNewWalletAsync();
+            Wallet.ProfileImageUrl = "baseline_person_grayish_48";
+
             RecoveryPhrase = Wallet.Mnemonic.Split(' ').Select(p => p.Trim()).ToList();
 
             IsBusy = false;
@@ -130,7 +127,7 @@ namespace Converse.ViewModels.Register
                                                     .PutAsync(stream);
                     if(!string.IsNullOrWhiteSpace(storedImageUrl))
                     {
-                        ProfileImageUrl = storedImageUrl;
+                        Wallet.ProfileImageUrl = storedImageUrl;
                     }
                 }
             }

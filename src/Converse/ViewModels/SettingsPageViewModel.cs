@@ -9,22 +9,22 @@ using Prism.Services;
 using Converse.Models;
 using Converse.Services;
 using Converse.Tron;
+using Plugin.FirebasePushNotification.Abstractions;
+using Acr.UserDialogs;
 
 namespace Converse.ViewModels
 {
     public class SettingsPageViewModel : ViewModelBase
     {
         public UserInfo User { get; set; }
-        SyncServerConnection _syncServerConnection { get; }
-        public WalletManager _walletManager { get; }
 
-        public SettingsPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService,
-                                     SyncServerConnection syncServerConnection, WalletManager walletManager) 
-        : base(navigationService, pageDialogService, deviceService)
+        public string AddressQrCodeContent => string.IsNullOrWhiteSpace(User?.TronAddress) ? "none" : User.TronAddress;
+
+        public SettingsPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IFirebasePushNotification firebasePushNotification, IUserDialogs userDialogs,
+                                     SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager,TokenMessagesQueueService tokenMessagesQueueService) 
+        : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService)
         {
             Title = "Settings";
-            _syncServerConnection = syncServerConnection;
-            _walletManager = walletManager;
         }
 
         public override async void OnNavigatingTo(INavigationParameters parameters)

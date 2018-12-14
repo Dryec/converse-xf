@@ -12,6 +12,10 @@ using Client;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using BarcodeScanner;
+using Plugin.FirebasePushNotification.Abstractions;
+using Acr.UserDialogs;
+using Converse.Services;
+using Converse.Tron;
 
 namespace Converse.ViewModels
 {
@@ -21,9 +25,9 @@ namespace Converse.ViewModels
 
         private readonly IBarcodeScannerService barcodeScannerService;
 
-        public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService,
-                                 IDeviceService deviceService, IBarcodeScannerService barcodeScannerService)
-            : base(navigationService, pageDialogService, deviceService)
+        public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IFirebasePushNotification firebasePushNotification,
+                                 IDeviceService deviceService, IBarcodeScannerService barcodeScannerService, IUserDialogs userDialogs, SyncServerConnection syncServer, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService)
+            : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServer,tronConnection,walletManager,tokenMessagesQueueService)
         {
             Title = AppResources.MainPageTitle;
             this.barcodeScannerService = barcodeScannerService;

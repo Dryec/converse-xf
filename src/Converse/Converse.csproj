@@ -29,6 +29,7 @@
     <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
     <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
     <PackageReference Include="NETCore.Encrypt" Version="2.0.7" />
+    <PackageReference Include="Plugin.FirebasePushNotification" Version="2.3.5" />
   </ItemGroup>
 
   <ItemGroup>

@@ -24,7 +24,8 @@ namespace Converse.Tron
             {
                 Mnemonic = mnemonic,
                 Name = await Xamarin.Essentials.SecureStorage.GetAsync(AppConstants.Keys.User.Name),
-                Email = await Xamarin.Essentials.SecureStorage.GetAsync(AppConstants.Keys.User.Email)
+                Email = await Xamarin.Essentials.SecureStorage.GetAsync(AppConstants.Keys.User.Email),
+                ProfileImageUrl = await Xamarin.Essentials.SecureStorage.GetAsync(AppConstants.Keys.User.ProfileImageUrl)
             };
             return true;
         }
@@ -49,6 +50,7 @@ namespace Converse.Tron
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Mnemonic, Wallet.Mnemonic);
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Name, Wallet.Name ?? string.Empty);
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Email, Wallet.Email ?? string.Empty);
+            await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.ProfileImageUrl, Wallet.ProfileImageUrl ?? string.Empty);
             return true;
         }
     }
