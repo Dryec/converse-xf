@@ -93,6 +93,27 @@
     <PackageReference Include="Plugin.FirebasePushNotification">
       <Version>2.3.5</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Android.Crashlytics">
+      <Version>2.9.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Android.Crashlytics.Core">
+      <Version>2.6.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Android.Fabric">
+      <Version>1.4.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Android.Crashlytics.Answers">
+      <Version>1.4.2</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Android.Crashlytics.Beta">
+      <Version>1.2.9</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Firebase.Analytics">
+      <Version>60.1142.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Firebase.Analytics.Impl">
+      <Version>60.1142.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />

@@ -40,7 +40,7 @@
                     <ffimageloading:CachedImage
                         Margin="15"
                         HeightRequest="110"
-                        WidthRequest="110"
+                           WidthRequest="11" FadeAnimationForCachedImages="true" FadeAnimationEnabled="true"
                         Source="{Binding Wallet.ProfileImageUrl}"
                         ErrorPlaceholder="baseline_person_grayish_48"
                         LoadingPlaceholder="baseline_person_grayish_48">

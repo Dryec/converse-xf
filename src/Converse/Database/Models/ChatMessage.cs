@@ -13,17 +13,20 @@ namespace Converse.Database.Models
         [Column("chat_id")]
         public int ChatID { get; set; }
 
+        [Column("message_id")]
+        public int MessageID { get; set; }
+
         [Column("json")]
         public string Json { get; set; }
 
-        public static Chat FromChatMessage(Converse.Models.ChatMessage message)
+        public static ChatMessage FromChatMessage(Converse.Models.ChatMessage message)
         {
             if (message == null)
             {
                 throw new ArgumentNullException(nameof(message));
             }
 
-            return new Chat { ChatID = message.ChatID, Json = JsonConvert.SerializeObject(message) };
+            return new ChatMessage { ChatID = message.ChatID, MessageID = message.ID, Json = JsonConvert.SerializeObject(message) };
         }
 
         public Converse.Models.ChatMessage ToChatMessage()

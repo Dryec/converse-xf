@@ -35,6 +35,8 @@ namespace Converse.Droid
             global::ZXing.Net.Mobile.Forms.Android.Platform.Init();
             UserDialogs.Init(this);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
+            Fabric.Fabric.With(this, new Crashlytics.Crashlytics());
+            Crashlytics.Crashlytics.HandleManagedExceptions();
 
             LoadApplication(new App(new AndroidInitializer()));
 

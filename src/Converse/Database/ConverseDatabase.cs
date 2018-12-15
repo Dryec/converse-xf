@@ -11,6 +11,7 @@ namespace Converse.Database
         public UserAccessor Users { get; private set; }
         public GroupsAccessor Groups { get; private set; }
         public ChatsAccessor Chats { get; private set; }
+        public ChatMessagesAccessor ChatMessages { get; private set; }
 
         public ConverseDatabase()
         {
@@ -24,6 +25,7 @@ namespace Converse.Database
             Chats = new ChatsAccessor(_database);
             Users = new UserAccessor(_database);
             Groups = new GroupsAccessor(_database);
+            ChatMessages = new ChatMessagesAccessor(_database);
         }
     }
 }

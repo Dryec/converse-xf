@@ -13,6 +13,7 @@ using Plugin.FirebasePushNotification.Abstractions;
 using Acr.UserDialogs;
 using Converse.Services;
 using Converse.Tron;
+using Converse.Database;
 
 namespace Converse.ViewModels
 {
@@ -21,26 +22,29 @@ namespace Converse.ViewModels
         protected IPageDialogService _pageDialogService { get; }
         protected IDeviceService _deviceService { get; }
         protected INavigationService _navigationService { get; }
-        protected IFirebasePushNotification _firebasePushNotification { get; }
+        protected IFirebasePushNotification _fcm { get; }
         protected IUserDialogs _userDialogs { get; }
-        protected SyncServerConnection _syncServerConnection { get; }
+        protected SyncServerConnection _syncServer { get; }
         protected TronConnection _tronConnection { get; }
         protected WalletManager _walletManager { get; }
-        protected TokenMessagesQueueService _tokenMessagesQueueService { get; }
+        protected TokenMessagesQueueService _tokenMessagesQueue { get; }
+        protected ConverseDatabase _database { get; }
 
         public ViewModelBase(INavigationService navigationService, IPageDialogService pageDialogService,
                                 IDeviceService deviceService, IFirebasePushNotification firebasePushNotification, IUserDialogs userDialogs,
-                                SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService)
+                                SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager,
+                                TokenMessagesQueueService tokenMessagesQueueService, ConverseDatabase converseDatabase)
         {
             _pageDialogService = pageDialogService;
             _deviceService = deviceService;
             _navigationService = navigationService;
-            _firebasePushNotification = firebasePushNotification;
+            _fcm = firebasePushNotification;
             _userDialogs = userDialogs;
-            _syncServerConnection = syncServerConnection;
+            _syncServer = syncServerConnection;
             _tronConnection = tronConnection;
             _walletManager = walletManager;
-            _tokenMessagesQueueService = tokenMessagesQueueService;
+            _tokenMessagesQueue = tokenMessagesQueueService;
+            _database = converseDatabase;
             IsBusy = false;
             IsNotBusy = true;
         }

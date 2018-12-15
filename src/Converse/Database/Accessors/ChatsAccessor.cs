@@ -50,7 +50,8 @@ namespace Converse.Database.Accessors
                 return await _database.InsertAsync(chat);
             }
 
-            return await _database.UpdateAsync(dbEntry);
+            chat.ID = dbEntry.ID;
+            return await _database.UpdateAsync(chat);
         }
 
         public async Task<int> Update(Chat chat)
@@ -85,6 +86,11 @@ namespace Converse.Database.Accessors
         public async Task<Chat> Get(int id)
         {
             return await _database.Table<Chat>().FirstOrDefaultAsync(p => p.ID == id);
+        }
+
+        public async Task<Chat> GetByChatID(int id)
+        {
+            return await _database.Table<Chat>().FirstOrDefaultAsync(p => p.ChatID == id);
         }
 
         public async Task<int> Delete(int id)

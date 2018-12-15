@@ -13,7 +13,7 @@ namespace Converse.Database.Models
         [Column("group_id")]
         public int GroupID { get; set; }
 
-        [Column("address")]
+        [Column("address"), Unique]
         public string Address { get; set; }
 
         [Column("json")]

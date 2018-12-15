@@ -12,6 +12,7 @@ using Converse.TokenMessages;
 using Converse.Helpers;
 using Acr.UserDialogs;
 using Plugin.FirebasePushNotification.Abstractions;
+using Converse.Database;
 
 namespace Converse.ViewModels.Register
 {
@@ -23,8 +24,8 @@ namespace Converse.ViewModels.Register
         public DelegateCommand ContinueCommand { get; private set; }
 
         public ConfirmRecoveryPhrasePageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IUserDialogs userDialogs,
-                                                    IFirebasePushNotification firebasePushNotification, WalletManager walletManager, SyncServerConnection syncServerConnection, TronConnection tronConnection, TokenMessagesQueueService tokenMessagesQueueService)
-                              : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService)
+                                                    IFirebasePushNotification firebasePushNotification, WalletManager walletManager, SyncServerConnection syncServerConnection, TronConnection tronConnection, TokenMessagesQueueService tokenMessagesQueueService, ConverseDatabase converseDatabase)
+                              : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService, converseDatabase)
         {
             Title = "Recovery Phrase";
 
@@ -59,24 +60,24 @@ namespace Converse.ViewModels.Register
                 await _walletManager.SaveAsync();
 
                 // Set firebase token to property address
-                var pendingId = await _tokenMessagesQueueService.AddAsync(
+                var pendingId = await _tokenMessagesQueue.AddAsync(
                     _walletManager.Wallet.Address,
                     AppConstants.PropertyAddress,
                     new AddDeviceIdTokenMessage
                     {
-                        DeviceID = _walletManager.Wallet.EncryptToHexString(_firebasePushNotification.Token, AppConstants.PropertyAddressPublicKey)
+                        DeviceID = _walletManager.Wallet.EncryptToHexString(_fcm.Token, AppConstants.PropertyAddressPublicKey)
                     }
                 );
 
                 // Set Name
-                await _tokenMessagesQueueService.AddAsync(
+                await _tokenMessagesQueue.AddAsync(
                     _walletManager.Wallet.Address,
                     AppConstants.PropertyAddress,
                     new ChangeNameTokenMessage { Name = _walletManager.Wallet.Name }
                 );
 
                 // Set Status to default
-                await _tokenMessagesQueueService.AddAsync(
+                await _tokenMessagesQueue.AddAsync(
                                      _walletManager.Wallet.Address,
                                      AppConstants.PropertyAddress,
                                      new ChangeStatusTokenMessage { Status = AppConstants.DefaultStatusMessage });
@@ -84,13 +85,13 @@ namespace Converse.ViewModels.Register
                 // Set Image if exist
                 if (_walletManager.Wallet.ProfileImageUrl != null && Uri.IsWellFormedUriString(_walletManager.Wallet.ProfileImageUrl, UriKind.Absolute))
                 {
-                    await _tokenMessagesQueueService.AddAsync(
+                    await _tokenMessagesQueue.AddAsync(
                                          _walletManager.Wallet.Address,
                                          AppConstants.PropertyAddress,
                                          new ChangeImageTokenMessage { ImageUrl = _walletManager.Wallet.ProfileImageUrl });
                 }
 
-                var result = await _tokenMessagesQueueService.WaitForAsync(pendingId);
+                var result = await _tokenMessagesQueue.WaitForAsync(pendingId);
 
                 await _navigationService.NavigateAsync("/NavigationPage/MainPage");
                 _userDialogs.HideLoading();

@@ -43,13 +43,14 @@ namespace Converse.Database.Accessors
             {
                 return -1;
             }
-            var dbEntry = await _database.FindAsync<User>(c => c.UserID == user.UserID);
+            var dbEntry = await _database.FindAsync<User>(c => c.Address == user.Address);
             if(dbEntry == null)
             {
                 return await _database.InsertAsync(user);
             }
 
-            return await _database.UpdateAsync(dbEntry);
+            user.ID = dbEntry.ID;
+            return await _database.UpdateAsync(user);
         }
 
         public async Task<int> Update(User user)
@@ -91,6 +92,11 @@ namespace Converse.Database.Accessors
             return await _database.Table<User>().FirstOrDefaultAsync(p => p.UserID == userId);
         }
 
+        public async Task<User> GetByAddress(string address)
+        {
+            return await _database.Table<User>().FirstOrDefaultAsync(p => p.Address == address);
+        }
+
         public async Task<int> Delete(int id)
         {
             return await _database.DeleteAsync<User>(id);
@@ -105,5 +111,16 @@ namespace Converse.Database.Accessors
             }
             return -1;
         }
+
+        public async Task<int> DeleteByAddress(string address)
+        {
+            var dbEntry = await _database.FindAsync<User>(c => c.Address == address);
+            if (dbEntry != null)
+            {
+                return await _database.DeleteAsync<User>(dbEntry.ID);
+            }
+            return -1;
+        }
+
     }
 }

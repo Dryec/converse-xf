@@ -43,13 +43,14 @@ namespace Converse.Database.Accessors
             {
                 return -1;
             }
-            var dbEntry = await _database.FindAsync<Group>(c => c.GroupID == group.GroupID);
+            var dbEntry = await _database.FindAsync<Group>(c => c.Address == group.Address);
             if(dbEntry == null)
             {
                 return await _database.InsertAsync(group);
             }
 
-            return await _database.UpdateAsync(dbEntry);
+            group.ID = dbEntry.ID;
+            return await _database.UpdateAsync(group);
         }
 
         public async Task<int> Update(Group group)

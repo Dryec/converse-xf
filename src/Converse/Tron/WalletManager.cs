@@ -32,11 +32,11 @@ namespace Converse.Tron
 
         public Wallet CreateNewWalletAsync()
         {
-            var bip39 = new BIP39();
-            var mnemonic = bip39.MnemonicSentence;
-            var eCKey = new ECKey(bip39.SeedBytes.Take(32).ToArray());
+                var bip39 = new BIP39();
+                var mnemonic = bip39.MnemonicSentence;
+                var eCKey = new ECKey(bip39.SeedBytes.Take(32).ToArray());
 
-            Wallet = new Wallet(mnemonic);
+                Wallet = new Wallet(mnemonic);
             return Wallet;
         }
 

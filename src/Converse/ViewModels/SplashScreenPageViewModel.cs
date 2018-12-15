@@ -14,22 +14,19 @@ namespace Converse.ViewModels
 {
     public class SplashScreenPageViewModel : ViewModelBase
     {
-        ConverseDatabase _database { get; }
-
         public SplashScreenPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService,
                                             IDeviceService deviceService, IFirebasePushNotification firebasePushNotification, IUserDialogs userDialogs, TronConnection tronConnection, ConverseDatabase database,
                                             TokenMessagesQueueService tokenMessagesQueueService, WalletManager walletManager, SyncServerConnection syncServerConnection)
-            : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService)
+            : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService, database)
         {
-            _database = database;
         }
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
             _tronConnection.Connect();
             _database.Init(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ConverseDatabase.db3"));
-            _tokenMessagesQueueService.Start(_tronConnection, _database, _walletManager, _syncServerConnection);
-            _syncServerConnection.SetDatabase(_database);
+            _tokenMessagesQueue.Start(_tronConnection, _database, _walletManager, _syncServer);
+            _syncServer.SetDatabase(_database);
 
             var loadedWallet = await _walletManager.LoadWalletAsync();
 

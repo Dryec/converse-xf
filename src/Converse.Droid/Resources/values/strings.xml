@@ -2,4 +2,6 @@
 <resources>
     <string
         name="ApplicationName">Converse</string>
+  <string
+        name="com.crashlytics.android.build_id">BETA_1</string>
 </resources>

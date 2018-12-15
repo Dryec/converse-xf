@@ -14,6 +14,7 @@ using Grpc.Core;
 using Acr.UserDialogs;
 using Plugin.FirebasePushNotification.Abstractions;
 using Converse.Tron;
+using Converse.Database;
 
 namespace Converse.ViewModels
 {
@@ -27,8 +28,8 @@ namespace Converse.ViewModels
         public string UserAddress { get; set; }
 
         public AddChatOptionPopupPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IFirebasePushNotification firebasePushNotification,
-                                                IBarcodeScannerService barcodeScanner, IUserDialogs userDialogs, SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService)
-            : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService)
+                                                IBarcodeScannerService barcodeScanner, IUserDialogs userDialogs, SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService, ConverseDatabase converseDatabase)
+            : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService, converseDatabase)
         {
             _barcodeScanner = barcodeScanner;
 
@@ -49,7 +50,7 @@ namespace Converse.ViewModels
                     var account = await _tronConnection.Client.GetAccountAsync(new Protocol.Account { Address = ByteString.CopyFrom(addressBytes) });
                     if(!account.Address.IsEmpty)
                     {
-                        var user = await _syncServerConnection.GetUserAsync(UserAddress);
+                        var user = await _syncServer.GetUserAsync(UserAddress);
 
                         if (user != null)
                         {

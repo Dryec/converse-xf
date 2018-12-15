@@ -17,6 +17,7 @@ using NETCore.Encrypt;
 using System.Diagnostics;
 using Plugin.FirebasePushNotification.Abstractions;
 using Converse.Services;
+using Converse.Database;
 
 namespace Converse.ViewModels.Register
 {
@@ -29,12 +30,15 @@ namespace Converse.ViewModels.Register
         public List<string> RecoveryPhrase { get; private set; }
 
         public RegisterPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IFirebasePushNotification firebasePushNotification,
-                                       IUserDialogs userDialogs, SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService)
-                : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService)
+                                       IUserDialogs userDialogs, SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService, ConverseDatabase converseDatabase)
+                : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService, converseDatabase)
         {
             Title = "Register";
             ContinueCommand = new DelegateCommand(ContinueCommandExecuted);
             SelectProfilePictureCommand = new DelegateCommand(SelectProfilePictureCommandExecuted);
+
+            Wallet = _walletManager.CreateNewWalletAsync();
+            Wallet.ProfileImageUrl = "baseline_person_grayish_48";
         }
 
         public override void OnNavigatingTo(INavigationParameters parameters)
@@ -52,9 +56,7 @@ namespace Converse.ViewModels.Register
 
             IsBusy = true;
 
-            await Task.Delay(1500);
-            Wallet = _walletManager.CreateNewWalletAsync();
-            Wallet.ProfileImageUrl = "baseline_person_grayish_48";
+            await Task.Delay(1000);
 
             RecoveryPhrase = Wallet.Mnemonic.Split(' ').Select(p => p.Trim()).ToList();
 
@@ -79,7 +81,7 @@ namespace Converse.ViewModels.Register
             await CrossMedia.Current.Initialize();
             try
             {
-                var selection = await _userDialogs.ActionSheetAsync("Profile Picture", "", null, null, "Take Photo", "Select from Gallery");
+                var selection = await _userDialogs.ActionSheetAsync("Profile Picture", "", null, null, "Take Photo", "Select from Gallery", "Clear");
 
                 _userDialogs.ShowLoading();
                 MediaFile file = null;
@@ -113,6 +115,10 @@ namespace Converse.ViewModels.Register
                         MaxWidthHeight = 1024,
                         CompressionQuality = 50
                     });
+                }
+                else if(selection.Equals("Clear"))
+                {
+                    Wallet.ProfileImageUrl = "baseline_person_grayish_48";
                 }
 
                 if (file != null)

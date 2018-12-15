@@ -54,7 +54,7 @@
                 Grid.Row="0"
                 Margin="5,6,6,6"
                 HorizontalOptions="End"
-                Source="{Binding ChatPartner.ImageUri}">
+                Source="{Binding Chat.ChatPartner.ImageUrl}">
                 <ffimageloading:CachedImage.Transformations>
                     <fftransformations:CircleTransformation />
                 </ffimageloading:CachedImage.Transformations>

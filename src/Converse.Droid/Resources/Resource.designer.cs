@@ -4256,6 +4256,9 @@ namespace Converse.Droid
 			// aapt resource value: 0x7f09003f
 			public const int character_counter_pattern = 2131296319;
 			
+			// aapt resource value: 0x7f090049
+			public const int com_crashlytics_android_build_id = 2131296329;
+			
 			// aapt resource value: 0x7f090008
 			public const int common_google_play_services_unknown_issue = 2131296264;
 			

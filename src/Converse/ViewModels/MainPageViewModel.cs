@@ -16,6 +16,7 @@ using Plugin.FirebasePushNotification.Abstractions;
 using Acr.UserDialogs;
 using Converse.Services;
 using Converse.Tron;
+using Converse.Database;
 
 namespace Converse.ViewModels
 {
@@ -26,8 +27,8 @@ namespace Converse.ViewModels
         private readonly IBarcodeScannerService barcodeScannerService;
 
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IFirebasePushNotification firebasePushNotification,
-                                 IDeviceService deviceService, IBarcodeScannerService barcodeScannerService, IUserDialogs userDialogs, SyncServerConnection syncServer, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService)
-            : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServer,tronConnection,walletManager,tokenMessagesQueueService)
+                                 IDeviceService deviceService, IBarcodeScannerService barcodeScannerService, IUserDialogs userDialogs, SyncServerConnection syncServer, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService, ConverseDatabase converseDatabase)
+            : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServer,tronConnection,walletManager,tokenMessagesQueueService, converseDatabase)
         {
             Title = AppResources.MainPageTitle;
             this.barcodeScannerService = barcodeScannerService;

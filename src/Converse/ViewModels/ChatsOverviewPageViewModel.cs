@@ -13,20 +13,22 @@ using Converse.Services;
 using Converse.Tron;
 using Plugin.FirebasePushNotification.Abstractions;
 using Acr.UserDialogs;
+using Converse.Database;
 
 namespace Converse.ViewModels
 {
     public class ChatsOverviewPageViewModel : ViewModelBase
     {
+        public DelegateCommand UpdateChatEntriesCommand { get; private set; }
+
         public ObservableCollection<ChatEntry> ChatEntries { get; private set; }
 
         public ChatsOverviewPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IUserDialogs userDialogs, IFirebasePushNotification firebasePushNotification,
-                                            SyncServerConnection syncServer, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService)
-                                : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServer, tronConnection, walletManager, tokenMessagesQueueService)
+                                            SyncServerConnection syncServer, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService, ConverseDatabase converseDatabase)
+                                : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServer, tronConnection, walletManager, tokenMessagesQueueService, converseDatabase)
         {
             Title = "Converse";
-
-            ChatEntries = new ObservableCollection<ChatEntry>();
+            UpdateChatEntriesCommand = new DelegateCommand(UpdateChatEntriesCommandExcecuted);
 
             /*for (var i = 0; i < 1; i++)
             {
@@ -75,13 +77,46 @@ namespace Converse.ViewModels
             }*/
         }
 
-        public override async void OnNavigatedTo(INavigationParameters parameters)
+        async void UpdateChatEntriesCommandExcecuted()
         {
-            var chats = await _syncServerConnection.GetChatsAsync(_walletManager.Wallet.Address);
+            var chats = await _syncServer.GetChatsAsync(_walletManager.Wallet.Address);
             if (chats != null)
             {
-                ChatEntries = new ObservableCollection<ChatEntry>(chats);
+                foreach (var chat in chats)
+                {
+                    var alreadyExist = false;
+                    for (var i = 0; i < ChatEntries.Count; i++)
+                    {
+                        if (chat.ID == ChatEntries[i].ID)
+                        {
+                            ChatEntries[i] = chat;
+                            alreadyExist = true;
+                        }
+                    }
+                    if(!alreadyExist)
+                    {
+                        ChatEntries.Add(chat);
+                    }
+                }
             }
+        }
+
+        public override async void OnNavigatingTo(INavigationParameters parameters)
+        {
+            var dbChats = await _database.Chats.GetAll();
+
+            var chatEntries = new List<ChatEntry>();
+            foreach (var dbChat in dbChats)
+            {
+                var chatEntry = dbChat.ToChatEntry();
+                chatEntries.Add(chatEntry);
+            }
+            ChatEntries = new ObservableCollection<ChatEntry>(chatEntries);
+        }
+
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            UpdateChatEntriesCommand.Execute();
         }
     }
 }

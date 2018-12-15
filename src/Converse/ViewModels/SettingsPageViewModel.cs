@@ -11,6 +11,7 @@ using Converse.Services;
 using Converse.Tron;
 using Plugin.FirebasePushNotification.Abstractions;
 using Acr.UserDialogs;
+using Converse.Database;
 
 namespace Converse.ViewModels
 {
@@ -21,15 +22,15 @@ namespace Converse.ViewModels
         public string AddressQrCodeContent => string.IsNullOrWhiteSpace(User?.TronAddress) ? "none" : User.TronAddress;
 
         public SettingsPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IFirebasePushNotification firebasePushNotification, IUserDialogs userDialogs,
-                                     SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager,TokenMessagesQueueService tokenMessagesQueueService) 
-        : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService)
+                                     SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager,TokenMessagesQueueService tokenMessagesQueueService, ConverseDatabase converseDatabase) 
+        : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService, converseDatabase)
         {
             Title = "Settings";
         }
 
         public override async void OnNavigatingTo(INavigationParameters parameters)
         {
-            User = await _syncServerConnection.GetUserAsync(_walletManager.Wallet.Address);
+            User = await _syncServer.GetUserAsync(_walletManager.Wallet.Address);
         }
     }
 }

@@ -16,15 +16,26 @@ namespace Converse.Services
             public const string Users = Api + "users/";
             public const string Groups = Api + "groups/";
             public const string Chats = Api + "chats/";
+            public const string ChatMessages = Chats + "{chatID}/messages/{start}/{end}";
             public const string RequestTokens = Users + "{address_id}/requesttokens";
         }
 
         RestClient _client { get; }
+        JsonSerializerSettings _jsonSerializerSettings;
+
         ConverseDatabase _database { get; set; }
 
         public SyncServerConnection()
         {
             _client = new RestClient("http://ec2-52-28-62-110.eu-central-1.compute.amazonaws.com");
+
+            _jsonSerializerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Populate,
+                DateTimeZoneHandling = DateTimeZoneHandling.Local,
+            };
         }
 
         public void SetDatabase(ConverseDatabase database)
@@ -40,7 +51,7 @@ namespace Converse.Services
                 request.AddUrlSegment("address_id", addressOrId);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
-                var result = JsonConvert.DeserializeObject<TokenRequestResponse>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Local });
+                var result = JsonConvert.DeserializeObject<TokenRequestResponse>(response.Content, _jsonSerializerSettings);
                 return result;
             }
             catch (JsonException e)
@@ -56,7 +67,7 @@ namespace Converse.Services
                 var request = new RestRequest(Endpoints.Chats + "all/" + addressOrId, dataFormat: DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
-                var chats = JsonConvert.DeserializeObject<List<ChatEntry>>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Local });
+                var chats = JsonConvert.DeserializeObject<List<ChatEntry>>(response.Content, _jsonSerializerSettings);
                 if (chats != null)
                 {
                     foreach (var chat in chats)
@@ -72,14 +83,43 @@ namespace Converse.Services
             }
         }
 
+        public async Task<ChatEntry> GetChatAsync(int chatId, string userAddressOrId)
+        {
+            try
+            {
+                var request = new RestRequest(Endpoints.Chats + $"{userAddressOrId}/{chatId}", dataFormat: DataFormat.Json);
+                var response = await _client.ExecuteGetTaskAsync(request);
+
+                var chat = JsonConvert.DeserializeObject<ChatEntry>(response.Content, _jsonSerializerSettings);
+                if (chat != null)
+                {
+                    await _database.Chats.Update(chat);
+                }
+                return chat;
+            }
+            catch (JsonException e)
+            {
+                return null;
+            }
+        }
+
         public async Task<ChatMessages> GetMessagesAsync(int chatId, int start, int end)
         {
             try
             {
-                var request = new RestRequest(Endpoints.Chats + $"{chatId}/{start}/{end}/", dataFormat: DataFormat.Json);
+                var request = new RestRequest(Endpoints.ChatMessages, dataFormat: DataFormat.Json);
+                request.AddUrlSegment("chatID", chatId);
+                request.AddUrlSegment("start", start);
+                request.AddUrlSegment("end", end);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
-                var messages = JsonConvert.DeserializeObject<ChatMessages>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Local });
+                var messages = JsonConvert.DeserializeObject<ChatMessages>(response.Content, _jsonSerializerSettings);
+
+                if (messages != null)
+                {
+                    await _database.ChatMessages.Update(messages);
+                }
+
                 return messages;
             }
             catch (JsonException e)
@@ -95,7 +135,7 @@ namespace Converse.Services
                 var request = new RestRequest(Endpoints.Users + addressOrId, dataFormat: DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
-                var user = JsonConvert.DeserializeObject<UserInfo>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Local });
+                var user = JsonConvert.DeserializeObject<UserInfo>(response.Content, _jsonSerializerSettings);
 
                 if (user != null)
                 {
@@ -116,7 +156,7 @@ namespace Converse.Services
                 var request = new RestRequest(Endpoints.Groups + addressOrId, dataFormat: DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
-                var group = JsonConvert.DeserializeObject<GroupInfo>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Local });
+                var group = JsonConvert.DeserializeObject<GroupInfo>(response.Content, _jsonSerializerSettings);
 
                 if (group != null)
                 {

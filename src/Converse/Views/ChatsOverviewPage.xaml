@@ -45,3 +45,6 @@
         </sflistview:SfListView>
     </Grid>
 </ContentPage>
+
+<!--prismnav:NavigateTo 'AddChatOptionPopupPage'-->
+<!--Binding UpdateChatEntriesCommand-->
