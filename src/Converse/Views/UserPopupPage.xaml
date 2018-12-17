@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:zx="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+    xmlns:zxcm="clr-namespace:ZXing.Common;assembly=zxing.portable"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    Title="{Binding Title}"
+    x:Class="Converse.Views.UserPopupPage">
+    <Frame
+        Margin="15,50"
+        Padding="0"
+        VerticalOptions="Center"
+        HorizontalOptions="Fill">
+        <ScrollView
+            Padding="0,0,0,15">
+            <Grid
+                RowSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="120" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+                <ffimageloading:CachedImage
+                    Grid.Row="0"
+                    Source="{Binding User.ImageUrl}"
+                    Aspect="AspectFill">
+                    <ffimageloading:CachedImage.Transformations>
+                        <fftransformations:BlurredTransformation
+                            Radius="25" />
+                    </ffimageloading:CachedImage.Transformations>
+                </ffimageloading:CachedImage>
+                <ffimageloading:CachedImage
+                    Grid.Row="0" Margin="10"
+                    Source="{Binding User.ImageUrl}"
+                    ErrorPlaceholder="baseline_person_grayish_48"
+                    LoadingPlaceholder="baseline_person_grayish_48">
+                    <ffimageloading:CachedImage.Transformations>
+                        <fftransformations:ColorFillTransformation
+                            HexColor="#efefef" />
+                        <fftransformations:CircleTransformation />
+                    </ffimageloading:CachedImage.Transformations>
+                        <ContentView.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{prismnav:NavigateTo 'ImagePopupPage'}"
+                                CommandParameter="{Binding User.ImageUrl}"
+                                NumberOfTapsRequired="1" />
+                        </ContentView.GestureRecognizers>
+                </ffimageloading:CachedImage>
+                <Frame
+                    Grid.Row="0" Margin="0,5,5,0"
+                    VerticalOptions="Start"
+                    HorizontalOptions="End"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    Padding="0"
+                    HasShadow="false">
+          
+                    <zx:ZXingBarcodeImageView
+                        BarcodeFormat="QR_CODE"
+                        BarcodeValue="{Binding AddressQrCodeContent}"
+                        Aspect="AspectFill"
+                        HeightRequest="250"
+                        WidthRequest="250"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="CenterAndExpand">
+                        <zx:ZXingBarcodeImageView.BarcodeOptions>
+                            <zxcm:EncodingOptions
+                                Width="500"
+                                Height="500" />
+                        </zx:ZXingBarcodeImageView.BarcodeOptions>
+                        <ContentView.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{prismnav:NavigateTo 'QrCodePopupPage'}"
+                                CommandParameter="{Binding AddressQrCodeContent}"
+                                NumberOfTapsRequired="1" />
+                        </ContentView.GestureRecognizers>
+                    </zx:ZXingBarcodeImageView>
+          
+                </Frame>
+                <ContentView
+                    Grid.Row="1"
+                    BackgroundColor="White">
+                    <StackLayout
+                        Margin="15,0"
+                        Grid.Row="2">
+                        <Label
+                            Grid.Row="1"
+                            Margin="0,10,0,0"
+                            HorizontalOptions="Center"
+                            FontSize="21"
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            Text="{Binding User.Name}" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="{Binding User.Status.Message}" />
+                        <Label
+                            HorizontalOptions="Center"
+                            FontSize="9"
+                            Text="{Binding User.Status.Timestamp}" />
+                    </StackLayout>
+                </ContentView>
+            </Grid>
+        </ScrollView>
+    </Frame>
+</pages:PopupPage>

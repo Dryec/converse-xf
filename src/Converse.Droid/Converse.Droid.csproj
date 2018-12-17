@@ -35,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mock|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -190,6 +191,17 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\baseline_group_grayish_48.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\baseline_group_grayish_48.png" />
     <AndroidResource Include="Resources\xml\file_paths.xml" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_icon_white_32.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\baseline_settings_white_32.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\baseline_settings_white_32.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\baseline_settings_white_32.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\baseline_settings_white_32.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\baseline_settings_white_32.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\baseline_save_black_48.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\baseline_save_black_48.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\baseline_save_black_48.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\baseline_save_black_48.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\baseline_save_black_48.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

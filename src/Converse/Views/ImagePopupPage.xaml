@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:zx="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+    xmlns:zxcm="clr-namespace:ZXing.Common;assembly=zxing.portable"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    Title="{Binding Title}"
+    x:Class="Converse.Views.ImagePopupPage">
+    <Frame
+        Margin="15,50"
+        Padding="0" VerticalOptions="Center">
+        <Grid
+            RowSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
+            <ffimageloading:CachedImage
+                Grid.Row="0"
+                Source="{Binding Source}"
+                Aspect="AspectFill">
+                <ffimageloading:CachedImage.Transformations>
+                    <fftransformations:BlurredTransformation
+                        Radius="25" />
+                </ffimageloading:CachedImage.Transformations>
+            </ffimageloading:CachedImage>
+            <ffimageloading:CachedImage
+                x:Name="Image"
+                Grid.Row="0"
+                VerticalOptions="Fill"
+                Aspect="AspectFit"
+                Source="{Binding Source}">
+            </ffimageloading:CachedImage>
+            <Frame IsVisible="false"
+                Grid.Row="0"
+                HeightRequest="50"
+                WidthRequest="50"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                Margin="0,0,5,5"
+                Padding="0">
+                <ffimageloading:CachedImage
+                    Margin="5"
+                    Source="baseline_save_black_48"
+                    ErrorPlaceholder="baseline_person_grayish_48"
+                    LoadingPlaceholder="baseline_person_grayish_48">
+                    <ffimageloading:CachedImage.Transformations>
+                    </ffimageloading:CachedImage.Transformations>
+                </ffimageloading:CachedImage>
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding SaveCommand}"
+                        CommandParameter="{x:Reference Image}"
+                        NumberOfTapsRequired="1" />
+                </ContentView.GestureRecognizers>
+            </Frame>
+        </Grid>
+    </Frame>
+</pages:PopupPage>

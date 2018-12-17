@@ -14,10 +14,13 @@ namespace Converse.Models
         [JsonProperty("address")]
         public string TronAddress { get; set; }
 
+        [JsonProperty("public_key")]
+        public byte[] PublicKey { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("image"), DefaultValue("")]
+        [JsonProperty("image")]
         public string ImageUrl { get; set; }
 
         [JsonProperty("status")]

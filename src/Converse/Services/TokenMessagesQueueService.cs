@@ -114,6 +114,8 @@ namespace Converse.Services
                                             result = await _tronConnection.Client.BroadcastTransactionAsync(transaction.Transaction);
                                         }
 
+                                        Debug.WriteLine($"{result.Code.ToString()} : {result.Message.ToStringUtf8()}", "MessageQueue");
+
                                         switch (result.Code)
                                         {
                                             case Protocol.Return.Types.response_code.BandwithError:

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Converse.Database;
 using Converse.Models;
@@ -72,7 +73,7 @@ namespace Converse.Services
                 {
                     foreach (var chat in chats)
                     {
-                        await _database.Chats.Update(chat);
+                        var x = await _database.Chats.Update(chat);
                     }
                 }
                 return chats;
@@ -87,7 +88,7 @@ namespace Converse.Services
         {
             try
             {
-                var request = new RestRequest(Endpoints.Chats + $"{userAddressOrId}/{chatId}", dataFormat: DataFormat.Json);
+                var request = new RestRequest(Endpoints.Chats + $"{chatId}/{userAddressOrId}", dataFormat: DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
                 var chat = JsonConvert.DeserializeObject<ChatEntry>(response.Content, _jsonSerializerSettings);
@@ -117,6 +118,7 @@ namespace Converse.Services
 
                 if (messages != null)
                 {
+                    await _database.ChatMessages.Update(messages);
                     await _database.ChatMessages.Update(messages);
                 }
 

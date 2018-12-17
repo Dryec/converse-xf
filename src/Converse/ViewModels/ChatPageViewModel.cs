@@ -21,6 +21,7 @@ using Client;
 using Acr.UserDialogs;
 using ItemTappedEventArgs = Syncfusion.ListView.XForms.ItemTappedEventArgs;
 using Converse.Database;
+using Converse.Helpers;
 
 namespace Converse.ViewModels
 {
@@ -28,11 +29,13 @@ namespace Converse.ViewModels
     {
         public int Index { get; }
         public bool Animated { get; }
+        public Syncfusion.ListView.XForms.ScrollToPosition ScrollPosition { get; set; }
 
-        public ScrollEventArgs(int index, bool animated)
+        public ScrollEventArgs(int index, bool animated, Syncfusion.ListView.XForms.ScrollToPosition scrollToPosition)
         {
             Index = index;
             Animated = animated;
+            ScrollPosition = scrollToPosition;
         }
     }
 
@@ -41,31 +44,34 @@ namespace Converse.ViewModels
 
         public event EventHandler ScrollMessagesEvent;
 
+        public ICommand LoadMoreCommand { get; set; }
         public ICommand SendMessageCommand { get; set; }
 
         public ChatEntry Chat { get; set; }
-        public UserInfo MySelf { get; set; }
-        //public UserInfo ChatPartner { get; set; }
+        //public UserInfo MySelf { get; set; }
+
         public ObservableCollection<ChatMessage> Messages { get; set; }
         public ChatMessage SelectedMessage { get; set; }
 
         public string Message { get; set; }
+        public bool IsLoadingPreviousMessages { get; set; }
+        public bool IsLoadingNewMessages { get; set; }
 
+        public LoadMoreOption LoadMoreOption { get; set; }
         public double LastScrollY { get; set; }
         public double ScrollY { get; set; }
         public Size ScrollViewSize { get; set; }
         public double ScrollViewHeight { get; set; }
 
+
         public ChatPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IFirebasePushNotification firebasePushNotification, IUserDialogs userDialogs,
                                     SyncServerConnection syncServer, TokenMessagesQueueService tokenMessagesQueueService, TronConnection tronConnection, WalletManager walletManager, ConverseDatabase converseDatabase)
             : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServer, tronConnection, walletManager, tokenMessagesQueueService, converseDatabase)
         {
-            MySelf = new UserInfo { Name = "Dave", TronAddress = "TERA14Y1HBpcEf1iCaDyeSpMady9MuDM2o" };
-            //Title = ChatPartner.Name;
-
             Message = string.Empty;
             Messages = new ObservableCollection<ChatMessage>();
 
+            LoadMoreCommand = new DelegateCommand<SfListView>(LoadMoreCommandExecuted);
             SendMessageCommand = new DelegateCommand(SendMessage);
 
             PropertyChanged += ChatPageViewModel_PropertyChanged;
@@ -78,13 +84,8 @@ namespace Converse.ViewModels
                     Chat.ChatPartner.TronAddress,
                     new SendMessageTokenMessage { Message = Message }
                 );
-            /*var messageToken = new SendMessageTokenMessage { Message = Message};
 
-            var transaction = await _tronConnection.CreateTransactionFromTokenMessageAsync(messageToken, _walletManager.Wallet.Address, ChatPartner.TronAddress);
-
-            _walletManager.Wallet.SignTransaction(transaction.Transaction);
-
-            var result = await _tronConnection.Client.BroadcastTransactionAsync(transaction.Transaction);*/
+            Message = string.Empty;
         }
 
         void ChatPageViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -93,11 +94,12 @@ namespace Converse.ViewModels
             {
                 case nameof(ScrollY):
                     // Try Load previous messages if near top and scroll direction to top
-                    if (ScrollY <= 500 && LastScrollY > ScrollY)
+                    /*if (ScrollY <= 10 && LastScrollY > ScrollY)
                     {
-                        // TODO load previous messages
-                        Debug.WriteLine("Load More");
-                    }
+                        // TODO load previous messages [Disabled bc scroll issue, using Load More Command]
+                        //Debug.WriteLine("Load More");
+                        //await LoadPreviousMessages();
+                    }*/
                     LastScrollY = ScrollY;
                     break;
                 default:
@@ -105,21 +107,116 @@ namespace Converse.ViewModels
             }
         }
 
-        async Task LoadNewMessages()
+        async void LoadMoreCommandExecuted(SfListView obj)
         {
-            if (Chat.ID == 0)
+            await LoadPreviousMessages();
+        }
+
+        async Task LoadPreviousMessages()
+        {
+            if (IsLoadingPreviousMessages || Chat.ID == 0)
             {
                 return;
             }
 
-            Chat = await _syncServer.GetChatAsync(Chat.ID, _walletManager.Wallet.Address);
+            var start = Messages.Count != 0 ? Messages.First().ID >= 11 ? (Messages.First().ID - 10) : 1 : 1;
+            var end = Messages.Count != 0 ? Messages.First().ID - 1 : 0;
 
-            var start = Messages.Count != 0 ? Messages.Last().ID + 1 : 1;
+            if (end < start)
+            {
+                Debug.WriteLine("Loaded all");
+                return;
+            }
+            Debug.WriteLine($"Load: {start} -> {end}");
+            IsLoadingPreviousMessages = true;
+
+            var dbMessages = await _database.ChatMessages.GetFromChatID(Chat.ID, start, end);
+
+            var addedRows = 0;
+            if (dbMessages.Count < end - start + 1)
+            {
+                Debug.WriteLine("Load from sync server");
+                var messages = await _syncServer.GetMessagesAsync(Chat.ID, start, end);
+                if (messages != null)
+                {
+                    foreach (var message in messages.Messages)
+                    {
+                        if (message.ID >= start && message.ID <= end)
+                        {
+                            message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
+                            Messages.Insert(0, message);
+                            addedRows++;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Loading from db");
+                dbMessages.Reverse();
+                foreach (var dbMessage in dbMessages)
+                {
+                    var message = dbMessage.ToChatMessage();
+                    message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
+                    Messages.Insert(0, message);
+                    addedRows++;
+                }
+            }
+
+            if (Messages.First()?.ID <= 1)
+            {
+                LoadMoreOption = LoadMoreOption.None;
+            }
+            else
+            {
+                // Add 1 for the Load More Row
+                addedRows++;
+            }
+
+            Debug.WriteLine(ScrollViewSize, "Scrolling Down");
+            Device.BeginInvokeOnMainThread(() => ScrollMessagesEvent(this, new ScrollEventArgs(addedRows, false, Syncfusion.ListView.XForms.ScrollToPosition.Start)));
+
+
+            IsLoadingPreviousMessages = false;
+        }
+
+        async Task LoadNewMessages()
+        {
+            if (IsLoadingNewMessages || Chat.ID == 0)
+            {
+                return;
+            }
+
+            IsLoadingNewMessages = true;
+
+            // Update chat to get latest message
+            var chat = await _syncServer.GetChatAsync(Chat.ID, _walletManager.Wallet.Address);
+            if (chat == null)
+            {
+                IsLoadingNewMessages = false;
+                return;
+            }
+
+            Chat = chat;
+
+            var loadCount = 40;
+
+            // TODO check
+            var start = Messages.Count != 0 ? Messages.Last().ID + 1 : Chat.LastMessage != null ? Chat.LastMessage.ID - loadCount : 1;
+            start = start <= 0 ? 1 : start;
             var end = Chat.LastMessage != null ? Chat.LastMessage.ID : 0;
 
             if (start > end)
             {
+                IsLoadingNewMessages = false;
                 return;
+            }
+
+            var needMore = false;
+            if (end - start > loadCount)
+            {
+                needMore = true;
+                end = start + loadCount;
             }
 
             var messages = await _syncServer.GetMessagesAsync(Chat.ID, start, end);
@@ -129,18 +226,24 @@ namespace Converse.ViewModels
                 foreach (var message in messages.Messages)
                 {
                     message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
-                    Messages.Add(message);
+                    Device.BeginInvokeOnMainThread(() => Messages.Add(message));
                 }
 
-                //Messages = new ObservableCollection<ChatMessage>(messages.Messages);
 
                 if (needScrollDown)
                 {
-                    await Task.Delay(100);
+                    //await Task.Delay(100);
                     Debug.WriteLine(ScrollViewSize, "Scrolling Down");
-                    ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, true));
+                    Device.BeginInvokeOnMainThread(() => ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, true, Syncfusion.ListView.XForms.ScrollToPosition.End)));
+                    //ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, true));
+                }
+
+                if (needMore)
+                {
+                    await LoadNewMessages();
                 }
             }
+            IsLoadingNewMessages = false;
         }
 
         public override void OnAppearing()
@@ -150,6 +253,12 @@ namespace Converse.ViewModels
 
         public override async void OnNavigatingTo(INavigationParameters parameters)
         {
+            if (Chat != null && Chat.ID > 0)
+            {
+                // Already loaded
+                return;
+            }
+
             UserInfo chatPartner = null;
             if (parameters.TryGetValue(KnownNavigationParameters.XamlParam, out object data)
                 || parameters.TryGetValue("address", out data))
@@ -191,12 +300,13 @@ namespace Converse.ViewModels
             }
         }
 
-        bool ru = false; // TODO remove
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            if (Chat.ID > 0)
+            _fcm.OnNotificationReceived += _fcm_OnNotificationReceived;
+
+            if (Chat.ID > 0 && Messages.Count == 0)
             {
-                var messages = await _database.ChatMessages.GetFromChatID(Chat.ID, 3);
+                var messages = await _database.ChatMessages.GetLatestFromChatID(Chat.ID, 10);
 
                 var chatMessages = new List<ChatMessage>();
                 foreach (var chatMessage in messages)
@@ -207,58 +317,54 @@ namespace Converse.ViewModels
                 }
                 Messages = new ObservableCollection<ChatMessage>(chatMessages);
 
-                Device.StartTimer(new TimeSpan(0, 0, 0, 0, 100), () =>
+                if (Messages.Count > 0 && Messages.First().ID > 1)
                 {
-                    if (ru == false)
-                    {
-                        ru = true;
-                        Device.BeginInvokeOnMainThread(async () =>
-                           {
-                               await LoadNewMessages();
-                               ru = false;
-                           }); 
-                    }
-                    return true;
-                });
+                    LoadMoreOption = LoadMoreOption.Manual;
+                }
+
+                Device.BeginInvokeOnMainThread(() => ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, false, Syncfusion.ListView.XForms.ScrollToPosition.End)));
+
             }
 
-            /*var messagesx = await _syncServer.GetMessagesAsync();
+            if (Chat.ID > 0)
+            {
+                await LoadNewMessages();
+            }
+        }
 
-foreach (var message in messagesx.Messages)
-{
-    message.IsSender = message.Sender.TronAddress.Equals(MySelf.TronAddress);
-}
-
-messagesx.Messages.ForEach(Messages.Add);
-//Messages = new ObservableCollection<ChatMessage>(messages.Messages);
-
-//await Task.Delay(1);
-Device.BeginInvokeOnMainThread(() => ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, false)));
-
-var random = new Random();
-while (true)
-{
-    var lastHeight = ScrollViewSize.Height;
-    Messages.Add(new ChatMessage
-    {
-        Message = WaffleGenerator.WaffleEngine.Text(1, false), //random.Next(2, int.MaxValue).ToString(),
-        Sender = MySelf,
-        IsSender = true,
-        Timestamp = DateTime.Now.AddMinutes(-1)
-    });
-    Debug.WriteLine(ScrollViewSize, "Before");
-
-    Device.BeginInvokeOnMainThread(() =>
-    {
-        Debug.WriteLine(ScrollViewSize, "After");
-        if (ScrollY+ScrollViewHeight >= ScrollViewSize.Height - (ScrollViewSize.Height - lastHeight) - 80)
+        public override void OnNavigatedFrom(INavigationParameters parameters)
         {
-            Debug.WriteLine(ScrollViewSize, "Scrolling Down");
-            ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, true));
+            _fcm.OnNotificationReceived -= _fcm_OnNotificationReceived;
         }
-    });
-    await Task.Delay(1500);
-}*/
+
+        async void _fcm_OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
+        {
+            if (Chat.ID == 0)
+            {
+                if (e.Data.ContainsKey("type") && e.Data.ContainsKey("data"))
+                {
+                    var tagObj = e.Data["type"];
+                    var dataObj = e.Data["data"];
+                    if (tagObj is string tag && tag == AppConstants.FCMTags.Message)
+                    {
+                        if (dataObj is string data)
+                        {
+                            try
+                            {
+                                var chatMessage = JsonConvert.DeserializeObject<ChatMessage>(data);
+                                Chat.ID = chatMessage.ChatID;
+                            }
+                            catch (JsonException ex)
+                            {
+                                Debug.WriteLine(ex);
+                            }
+                        }
+                    }
+                }
+            }
+
+            await LoadNewMessages();
         }
+
     }
 }

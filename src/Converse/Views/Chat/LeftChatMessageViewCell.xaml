@@ -10,7 +10,7 @@
     <Grid
         Padding="5,5,75,5"
         RowSpacing="0"
-        Margin="10,8,10,0"
+        Margin="10,4,10,4"
         ColumnSpacing="10">
         <Grid.Resources>
             <localvc:HasUnreadMessagesToColorConverter

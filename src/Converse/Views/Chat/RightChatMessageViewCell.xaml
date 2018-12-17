@@ -11,7 +11,7 @@
         Padding="75,5,5,5"
         HorizontalOptions="End"
         RowSpacing="0"
-        Margin="10,8,10,0"
+        Margin="10,4,10,4"
         ColumnSpacing="10">
         <Grid.Resources>
             <localvc:HasUnreadMessagesToColorConverter

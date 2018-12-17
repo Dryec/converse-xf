@@ -59,7 +59,7 @@ namespace Converse.Droid
 
         protected override void OnNewIntent(Intent intent)
         {
-            base.OnNewIntent(intent);
+            base.OnNewIntent(intent); 
             FirebasePushNotificationManager.ProcessIntent(this, intent);
         }
 
@@ -74,6 +74,29 @@ namespace Converse.Droid
             if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed))
             {
 
+            }
+        }
+
+        bool _ignoreNewFocus;
+        public override bool DispatchTouchEvent(MotionEvent ev)
+        {
+            var focused = CurrentFocus;
+            _ignoreNewFocus = (focused?.Parent is EditorRenderer entryRenderer && entryRenderer.Element.AutomationId == "ChatMessageEditor");
+            var result = base.DispatchTouchEvent(ev);
+            _ignoreNewFocus = false;
+            return result;
+        }
+
+        public override View CurrentFocus
+        {
+            get
+            {
+                if (_ignoreNewFocus)
+                {
+                    return null;
+                }
+
+                return base.CurrentFocus;
             }
         }
     }

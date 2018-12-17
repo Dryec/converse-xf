@@ -15,6 +15,7 @@
     xmlns:sflistview="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
     NavigationPage.HasNavigationBar="False"
     Title="{Binding Title}"
+    Icon="{Binding Icon}"
     x:Class="Converse.Views.ChatsOverviewPage">
     <ContentPage.Resources>
         <ResourceDictionary>

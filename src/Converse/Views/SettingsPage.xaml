@@ -17,6 +17,7 @@
     xmlns:sflistview="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
     NavigationPage.HasNavigationBar="False"
     Title="{Binding Title}"
+    Icon="{Binding Icon}"
     x:Class="Converse.Views.SettingsPage">
     <Grid
         RowSpacing="0">
@@ -100,11 +101,18 @@
                         </zx:ZXingBarcodeImageView.BarcodeOptions>
                         <ContentView.GestureRecognizers>
                             <TapGestureRecognizer
-                                Command="{prismnav:NavigateTo 'QrCodePopupPage'}" CommandParameter="{Binding AddressQrCodeContent}"
+                                Command="{prismnav:NavigateTo 'QrCodePopupPage'}"
+                                CommandParameter="{Binding AddressQrCodeContent}"
                                 NumberOfTapsRequired="1" />
                         </ContentView.GestureRecognizers>
                     </zx:ZXingBarcodeImageView>
                 </Grid>
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{prismnav:NavigateTo 'UserPopupPage'}"
+                        CommandParameter="{Binding User}"
+                        NumberOfTapsRequired="1" />
+                </ContentView.GestureRecognizers>
             </Frame>
             <TableView
                 Intent="Settings"

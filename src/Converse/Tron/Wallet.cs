@@ -123,14 +123,14 @@ namespace Converse.Tron
             }
         }
 
-        public string EncryptToHexString(string message, byte[] publicKey)
+        public byte[] Encrypt(string message, byte[] publicKey)
         {
-            return ECKey.Encrypt(Encoding.UTF8.GetBytes(message), publicKey).ToHexString();
+            return ECKey.Encrypt(Encoding.UTF8.GetBytes(message), publicKey);
         }
 
-        public string DecryptFromHexString(string encryptedMessage, byte[] publicKey)
+        public string Decrypt(byte[] encryptedMessage, byte[] publicKey)
         {
-            return Encoding.UTF8.GetString(Encoding.UTF8.GetString(ECKey.Decrypt(Encoding.UTF8.GetBytes(encryptedMessage), publicKey)).FromHexToByteArray());
+            return Encoding.UTF8.GetString(ECKey.Decrypt(encryptedMessage, publicKey));
         }
     }
 }

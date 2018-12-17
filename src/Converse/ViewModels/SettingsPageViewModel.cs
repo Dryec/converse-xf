@@ -26,6 +26,7 @@ namespace Converse.ViewModels
         : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService, converseDatabase)
         {
             Title = "Settings";
+            Icon = "baseline_settings_white_32";
         }
 
         public override async void OnNavigatingTo(INavigationParameters parameters)

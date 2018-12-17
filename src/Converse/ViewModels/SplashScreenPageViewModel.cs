@@ -30,6 +30,9 @@ namespace Converse.ViewModels
 
             var loadedWallet = await _walletManager.LoadWalletAsync();
 
+            //await _database.ChatMessages.DeleteAll();
+            //await _database.Chats.DeleteAll();
+
             // After performing the long running task we perform an absolute Navigation to remove the SplashScreen from the Navigation Stack.
             //loadedWallet = false;
             if (loadedWallet)

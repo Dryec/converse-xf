@@ -26,7 +26,8 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid
-        RowSpacing="0">
+        RowSpacing="0"
+        VerticalOptions="Fill">
         <Grid.ColumnDefinitions>
             <ColumnDefinition
                 Width="*" />
@@ -42,18 +43,29 @@
         <local:ChatTitleBarView
             Grid.Row="0"
             CanGoBack="true" />
-        <sflistview:SfListView
-            x:Name="ChatMessagesListView"
-            Grid.Row="1"
-            VerticalOptions="EndAndExpand"
-            ItemTemplate="{StaticResource ChatMessageTemplateSelector}"
-            ItemsSource="{Binding Messages}"
-            LoadMoreCommand="{Binding LoadMoreCommand}"
-            LoadMoreCommandParameter="{Binding Source={x:Reference ChatMessagesListView}}"
-            AutoFitMode="Height">
-        </sflistview:SfListView>
-        <local:ChatInputView
-            Grid.Row="2"
-            VerticalOptions="FillAndExpand" Message="{Binding Message}" SendCommand="{Binding SendMessageCommand}"/>
+        <ScrollView x:Name="ChatScrollView"
+            VerticalOptions="Fill"
+            Grid.Row="1">
+            <StackLayout Spacing="0"
+                VerticalOptions="Fill">
+                <sflistview:SfListView
+                    x:Name="ChatMessagesListView"
+                    Grid.Row="1"
+                    VerticalOptions="Start"
+                    ItemTemplate="{StaticResource ChatMessageTemplateSelector}"
+                    ItemsSource="{Binding Messages}"
+                    LoadMoreOption="{Binding LoadMoreOption}"
+                    LoadMorePosition="Top"
+                    LoadMoreCommand="{Binding LoadMoreCommand}"
+                    LoadMoreCommandParameter="{Binding Source={x:Reference ChatMessagesListView}}"
+                    AutoFitMode="Height">
+                </sflistview:SfListView>
+                <local:ChatInputView x:Name="InputView"
+                    Grid.Row="2"
+                    VerticalOptions="End"
+                    Message="{Binding Message}"
+                    SendCommand="{Binding SendMessageCommand}" />
+            </StackLayout>
+        </ScrollView>
     </Grid>
 </ContentPage>

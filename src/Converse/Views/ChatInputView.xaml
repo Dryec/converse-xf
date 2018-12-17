@@ -6,7 +6,7 @@
     xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
     x:Name="view"
     x:Class="Converse.Views.ChatInputView">
-    <Frame
+    <Frame Margin="4,0,4,7" CornerRadius="20"
         Padding="0">
         <Grid
             ColumnSpacing="0">
@@ -30,7 +30,7 @@
                 Keyboard="Chat"
                 VerticalOptions="FillAndExpand"
                 Text="{Binding Message,Source={x:Reference view}}"
-                AutoSize="TextChanges" />
+                AutoSize="TextChanges" AutomationId="ChatMessageEditor"/>
             <ContentView
                 Grid.Row="0"
                 Grid.Column="2"

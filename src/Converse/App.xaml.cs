@@ -115,10 +115,8 @@ namespace Converse
             //Handle notification when app is closed here
             CrossFirebasePushNotification.Current.OnNotificationReceived += (s, p) =>
             {
-
                 System.Diagnostics.Debug.WriteLine("Received", "Firebase");
-
-            };
+           };
             CrossFirebasePushNotification.Current.OnNotificationOpened += (s, p) =>
             {
                 System.Diagnostics.Debug.WriteLine("Opened", "Firebase");
@@ -178,8 +176,10 @@ namespace Converse
             containerRegistry.RegisterForNavigation<ChatsOverviewPage, ChatsOverviewPageViewModel>();
             containerRegistry.RegisterForNavigation<ChatPage, ChatPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
-            containerRegistry.RegisterForNavigation<AddChatOptionPopupPage, AddChatOptionPopupPageViewModel>(); 
+            containerRegistry.RegisterForNavigation<AddChatOptionPopupPage, AddChatOptionPopupPageViewModel>();
             containerRegistry.RegisterForNavigation<QrCodePopupPage, QrCodePopupPageViewModel>();
+            containerRegistry.RegisterForNavigation<UserPopupPage, UserPopupPageViewModel>();
+            containerRegistry.RegisterForNavigation<ImagePopupPage, ImagePopupPageViewModel>();
         }
 
         protected override void OnStart()

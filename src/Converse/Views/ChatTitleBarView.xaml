@@ -58,6 +58,12 @@
                 <ffimageloading:CachedImage.Transformations>
                     <fftransformations:CircleTransformation />
                 </ffimageloading:CachedImage.Transformations>
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{prismnav:NavigateTo 'UserPopupPage'}"
+                        CommandParameter="{Binding Chat.ChatPartner}"
+                        NumberOfTapsRequired="1" />
+                </ContentView.GestureRecognizers>
             </ffimageloading:CachedImage>
         </Grid>
     </Frame>

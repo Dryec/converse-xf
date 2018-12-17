@@ -21,6 +21,14 @@ namespace Converse.Database
         {
             _database = new SQLiteAsyncConnection(dbPath);
 
+            /*
+            _database.DeleteAllAsync<PendingTokenMessagesAccessor>();
+            _database.DeleteAllAsync<ChatsAccessor>();
+            _database.DeleteAllAsync<UserAccessor>();
+            _database.DeleteAllAsync<GroupsAccessor>();
+            _database.DeleteAllAsync<ChatMessagesAccessor>();
+            */           
+
             PendingTokenMessages = new PendingTokenMessagesAccessor(_database);
             Chats = new ChatsAccessor(_database);
             Users = new UserAccessor(_database);

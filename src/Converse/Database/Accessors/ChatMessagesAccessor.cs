@@ -57,7 +57,7 @@ namespace Converse.Database.Accessors
         public async Task<int> Update(Converse.Models.ChatMessages messages)
         {
             var rowsCount = 0;
-            if(messages != null)
+            if (messages != null)
             {
                 foreach (var message in messages.Messages)
                 {
@@ -107,7 +107,7 @@ namespace Converse.Database.Accessors
             return await _database.Table<Models.ChatMessage>().Where(p => p.ChatID == id).ToListAsync();
         }
 
-        public async Task<List<Models.ChatMessage>> GetFromChatID(int chatID, int amount)
+        public async Task<List<Models.ChatMessage>> GetLatestFromChatID(int chatID, int amount)
         {
             var messages = await _database.Table<Models.ChatMessage>()
                                 .Where(p => p.ChatID == chatID)
@@ -126,6 +126,11 @@ namespace Converse.Database.Accessors
         public async Task<int> Delete(int id)
         {
             return await _database.DeleteAsync<Models.ChatMessage>(id);
+        }
+
+        public async Task<int> DeleteAll()
+        {
+            return await _database.DeleteAllAsync<Models.ChatMessage>();
         }
     }
 }

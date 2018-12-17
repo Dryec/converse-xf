@@ -13,6 +13,7 @@ using Converse.Helpers;
 using Acr.UserDialogs;
 using Plugin.FirebasePushNotification.Abstractions;
 using Converse.Database;
+using Org.BouncyCastle.Utilities.Encoders;
 
 namespace Converse.ViewModels.Register
 {
@@ -65,7 +66,7 @@ namespace Converse.ViewModels.Register
                     AppConstants.PropertyAddress,
                     new AddDeviceIdTokenMessage
                     {
-                        DeviceID = _walletManager.Wallet.EncryptToHexString(_fcm.Token, AppConstants.PropertyAddressPublicKey)
+                        DeviceID = Base64.ToBase64String(_walletManager.Wallet.Encrypt(_fcm.Token, AppConstants.PropertyAddressPublicKey))
                     }
                 );
 
