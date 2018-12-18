@@ -31,10 +31,19 @@ namespace Converse.Helpers
             }
         }
 
-        public static class FCMTags
+        public static class FCM
         {
-            public const string Message = "msg";
-            public const string UpdateUser = "update_user";
+
+            public static class Topics
+            {
+                public const string Update = "update";
+            }
+
+            public static class Types
+            {
+                public const string Message = "msg";
+                public const string UpdateUser = "update_user";
+            }
         }
 
         public static class Keys

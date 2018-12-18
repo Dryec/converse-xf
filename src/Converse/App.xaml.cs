@@ -108,8 +108,8 @@ namespace Converse
                 //var eq = s1 == s2;
             }
 
-
-            CrossFirebasePushNotification.Current.Subscribe("test");*/
+    */
+            CrossFirebasePushNotification.Current.Subscribe("test");
 
             CrossFirebasePushNotification.Current.OnTokenRefresh += FCM_OnTokenRefresh;
             //Handle notification when app is closed here

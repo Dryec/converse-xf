@@ -50,7 +50,6 @@
                 VerticalOptions="Fill">
                 <sflistview:SfListView
                     x:Name="ChatMessagesListView"
-                    Grid.Row="1"
                     VerticalOptions="Start"
                     ItemTemplate="{StaticResource ChatMessageTemplateSelector}"
                     ItemsSource="{Binding Messages}"
@@ -61,7 +60,6 @@
                     AutoFitMode="Height">
                 </sflistview:SfListView>
                 <local:ChatInputView x:Name="InputView"
-                    Grid.Row="2"
                     VerticalOptions="End"
                     Message="{Binding Message}"
                     SendCommand="{Binding SendMessageCommand}" />

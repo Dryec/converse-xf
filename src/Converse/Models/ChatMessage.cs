@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using Converse.Tron;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Utilities.Encoders;
 
 namespace Converse.Models
 {
@@ -51,5 +54,18 @@ namespace Converse.Models
 
         [JsonProperty("pending_id")]
         public int PendingID { get; set; }
+
+        public void Decrypt(Wallet wallet, byte[] otherKey)
+        {
+            try
+            {
+                Message = wallet.Decrypt(Base64.Decode(Message), otherKey);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                Message = "…could not decrypt…";
+            }
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace Converse.Services
 
         public SyncServerConnection()
         {
-            _client = new RestClient("http://ec2-52-28-62-110.eu-central-1.compute.amazonaws.com");
+            _client = new RestClient("http://eu-west.converse-sync.net");
 
             _jsonSerializerSettings = new JsonSerializerSettings
             {
@@ -57,6 +57,7 @@ namespace Converse.Services
             }
             catch (JsonException e)
             {
+                Debug.WriteLine(e);
                 return null;
             }
         }
@@ -80,6 +81,7 @@ namespace Converse.Services
             }
             catch (JsonException e)
             {
+                Debug.WriteLine(e);
                 return null;
             }
         }
@@ -100,6 +102,7 @@ namespace Converse.Services
             }
             catch (JsonException e)
             {
+                Debug.WriteLine(e);
                 return null;
             }
         }
@@ -126,6 +129,7 @@ namespace Converse.Services
             }
             catch (JsonException e)
             {
+                Debug.WriteLine(e);
                 return null;
             }
         }
@@ -147,6 +151,7 @@ namespace Converse.Services
             }
             catch (JsonException e)
             {
+                Debug.WriteLine(e);
                 return null;
             }
         }
@@ -168,6 +173,7 @@ namespace Converse.Services
             }
             catch (JsonException e)
             {
+                Debug.WriteLine(e);
                 return null;
             }
         }

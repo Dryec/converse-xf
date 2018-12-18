@@ -20,7 +20,7 @@ namespace Converse.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("image")]
+        [JsonProperty("image"), DefaultValue("baseline_person_grayish_48")]
         public string ImageUrl { get; set; }
 
         [JsonProperty("status")]

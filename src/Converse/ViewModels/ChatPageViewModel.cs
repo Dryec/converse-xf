@@ -22,6 +22,7 @@ using Acr.UserDialogs;
 using ItemTappedEventArgs = Syncfusion.ListView.XForms.ItemTappedEventArgs;
 using Converse.Database;
 using Converse.Helpers;
+using Org.BouncyCastle.Utilities.Encoders;
 
 namespace Converse.ViewModels
 {
@@ -81,8 +82,8 @@ namespace Converse.ViewModels
         {
             await _tokenMessagesQueue.AddAsync(
                     _walletManager.Wallet.Address,
-                    Chat.ChatPartner.TronAddress,
-                    new SendMessageTokenMessage { Message = Message }
+                    Chat.ChatPartner.TronAddress, // TODO Check public Key
+                    new SendMessageTokenMessage { Message = _walletManager.Wallet.Encrypt(Message, Chat.ChatPartner.PublicKey) }
                 );
 
             Message = string.Empty;
@@ -144,6 +145,7 @@ namespace Converse.ViewModels
                         if (message.ID >= start && message.ID <= end)
                         {
                             message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
+                            message.Decrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey);
                             Messages.Insert(0, message);
                             addedRows++;
                         }
@@ -158,6 +160,7 @@ namespace Converse.ViewModels
                 {
                     var message = dbMessage.ToChatMessage();
                     message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
+                    message.Decrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey);
                     Messages.Insert(0, message);
                     addedRows++;
                 }
@@ -226,6 +229,7 @@ namespace Converse.ViewModels
                 foreach (var message in messages.Messages)
                 {
                     message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
+                    message.Decrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey);
                     Device.BeginInvokeOnMainThread(() => Messages.Add(message));
                 }
 
@@ -313,6 +317,7 @@ namespace Converse.ViewModels
                 {
                     var m = chatMessage.ToChatMessage();
                     m.IsSender = m.Sender.TronAddress == _walletManager.Wallet.Address;
+                    m.Decrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey);
                     chatMessages.Add(m);
                 }
                 Messages = new ObservableCollection<ChatMessage>(chatMessages);
@@ -339,31 +344,35 @@ namespace Converse.ViewModels
 
         async void _fcm_OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
         {
-            if (Chat.ID == 0)
+
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                if (e.Data.ContainsKey("type") && e.Data.ContainsKey("data"))
+                if (Chat.ID == 0)
                 {
-                    var tagObj = e.Data["type"];
-                    var dataObj = e.Data["data"];
-                    if (tagObj is string tag && tag == AppConstants.FCMTags.Message)
+                    if (e.Data.ContainsKey("type") && e.Data.ContainsKey("data"))
                     {
-                        if (dataObj is string data)
+                        var tagObj = e.Data["type"];
+                        var dataObj = e.Data["data"];
+                        if (tagObj is string tag && tag == AppConstants.FCM.Types.Message)
                         {
-                            try
+                            if (dataObj is string data)
                             {
-                                var chatMessage = JsonConvert.DeserializeObject<ChatMessage>(data);
-                                Chat.ID = chatMessage.ChatID;
-                            }
-                            catch (JsonException ex)
-                            {
-                                Debug.WriteLine(ex);
+                                try
+                                {
+                                    var chatMessage = JsonConvert.DeserializeObject<ChatMessage>(data);
+                                    Chat.ID = chatMessage.ChatID;
+                                }
+                                catch (JsonException ex)
+                                {
+                                    Debug.WriteLine(ex);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            await LoadNewMessages();
+                await LoadNewMessages();
+            });
         }
 
     }

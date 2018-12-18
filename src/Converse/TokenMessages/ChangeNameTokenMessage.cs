@@ -13,6 +13,6 @@ namespace Converse.TokenMessages
         public override int Type => AppConstants.TokenMessageTypes.User.ChangeName;
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public byte[] Name { get; set; }
     }
 }

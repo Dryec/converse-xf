@@ -13,7 +13,7 @@ namespace Converse.TokenMessages
         public override int Type => AppConstants.TokenMessageTypes.User.AddDeviceId;
 
         [JsonProperty("device_id")]
-        public string DeviceID { get; set; }
+        public byte[] DeviceID { get; set; }
 
     }
 }

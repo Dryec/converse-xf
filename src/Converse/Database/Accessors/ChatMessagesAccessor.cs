@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Converse.Database.Models;
 using Converse.Models;
@@ -47,7 +48,14 @@ namespace Converse.Database.Accessors
             var dbEntry = await _database.FindAsync<Database.Models.ChatMessage>(c => c.ChatID == chatMessage.ChatID && c.MessageID == chatMessage.MessageID);
             if (dbEntry == null)
             {
-                return await _database.InsertAsync(chatMessage);
+                try
+                {
+                    return await _database.InsertAsync(chatMessage);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
 
             chatMessage.ID = dbEntry.ID;

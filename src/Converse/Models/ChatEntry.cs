@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Converse.Enums;
@@ -8,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Converse.Models
 {
-    public class ChatEntry : INotifyPropertyChanged
+    public class ChatEntry : INotifyPropertyChanged, IComparable
     {
         [JsonProperty("id")]
         public int ID { get; set; }
@@ -35,5 +37,22 @@ namespace Converse.Models
         public int UnreadMessagesCount { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public int CompareTo(object obj)
+        {
+            if (obj is ChatEntry otherEntry)
+            {
+                try
+                {
+                    return LastMessage.Timestamp.CompareTo(otherEntry.LastMessage.Timestamp);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+
+            }
+            return 0;
+        }
     }
 }

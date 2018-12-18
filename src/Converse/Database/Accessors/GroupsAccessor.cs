@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Converse.Database.Models;
 using Converse.Models;
@@ -46,7 +47,14 @@ namespace Converse.Database.Accessors
             var dbEntry = await _database.FindAsync<Group>(c => c.Address == group.Address);
             if(dbEntry == null)
             {
-                return await _database.InsertAsync(group);
+                try
+                {
+                    return await _database.InsertAsync(group);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
 
             group.ID = dbEntry.ID;

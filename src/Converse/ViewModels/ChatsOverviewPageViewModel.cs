@@ -14,6 +14,8 @@ using Converse.Tron;
 using Plugin.FirebasePushNotification.Abstractions;
 using Acr.UserDialogs;
 using Converse.Database;
+using Xamarin.Forms;
+using Converse.Helpers;
 
 namespace Converse.ViewModels
 {
@@ -35,11 +37,16 @@ namespace Converse.ViewModels
         async void UpdateChatEntriesCommandExcecuted()
         {
             var chats = await _syncServer.GetChatsAsync(_walletManager.Wallet.Address);
+
             if (chats != null)
             {
                 foreach (var chat in chats)
                 {
                     var alreadyExist = false;
+                    if (chat.LastMessage != null)
+                    {
+                        chat.LastMessage.Decrypt(_walletManager.Wallet, chat.ChatPartner.PublicKey);
+                    }
                     for (var i = 0; i < ChatEntries.Count; i++)
                     {
                         if (chat.ID == ChatEntries[i].ID)
@@ -48,11 +55,13 @@ namespace Converse.ViewModels
                             alreadyExist = true;
                         }
                     }
-                    if(!alreadyExist)
+                    if (!alreadyExist)
                     {
-                        ChatEntries.Add(chat);
+                        ChatEntries.Insert(0, chat);
                     }
                 }
+
+                ChatEntries.Sort(false);
             }
         }
 
@@ -64,9 +73,14 @@ namespace Converse.ViewModels
             foreach (var dbChat in dbChats)
             {
                 var chatEntry = dbChat.ToChatEntry();
+                if (chatEntry.LastMessage != null)
+                {
+                    chatEntry.LastMessage.Decrypt(_walletManager.Wallet, chatEntry.ChatPartner.PublicKey);
+                }
                 chatEntries.Add(chatEntry);
             }
             ChatEntries = new ObservableCollection<ChatEntry>(chatEntries);
+            ChatEntries.Sort(false);
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
@@ -76,9 +90,14 @@ namespace Converse.ViewModels
             UpdateChatEntriesCommand.Execute();
         }
 
+        public override void OnNavigatedFrom(INavigationParameters parameters)
+        {
+            _fcm.OnNotificationReceived -= _fcm_OnNotificationReceived;
+        }
+
         void _fcm_OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
         {
-            UpdateChatEntriesCommand.Execute();
+            Device.BeginInvokeOnMainThread(UpdateChatEntriesCommand.Execute);
         }
 
     }

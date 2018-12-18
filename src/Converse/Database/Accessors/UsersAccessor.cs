@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Converse.Database.Models;
 using Converse.Models;
@@ -18,7 +19,7 @@ namespace Converse.Database.Accessors
         public async Task<int> Insert(UserInfo userInfo)
         {
             var p = User.FromUserInfo(userInfo);
-            if(p == null)
+            if (p == null)
             {
                 return -1;
             }
@@ -44,11 +45,17 @@ namespace Converse.Database.Accessors
                 return -1;
             }
             var dbEntry = await _database.FindAsync<User>(c => c.Address == user.Address);
-            if(dbEntry == null)
+            if (dbEntry == null)
             {
-                return await _database.InsertAsync(user);
+                try
+                {
+                    return await _database.InsertAsync(user);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
-
             user.ID = dbEntry.ID;
             return await _database.UpdateAsync(user);
         }

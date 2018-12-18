@@ -69,6 +69,7 @@
     <Folder Include="Database\Accessors\" />
     <Folder Include="Database\Models\" />
     <Folder Include="Views\Settings\" />
+    <Folder Include="Comparators\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\Client\Client.csproj" />

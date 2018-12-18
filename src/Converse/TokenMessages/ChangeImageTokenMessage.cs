@@ -16,7 +16,7 @@ namespace Converse.TokenMessages
         public bool Clear { get; set; }
 
         [JsonProperty("image")]
-        public string ImageUrl { get; set; }
+        public byte[] ImageUrl { get; set; }
 
     }
 }

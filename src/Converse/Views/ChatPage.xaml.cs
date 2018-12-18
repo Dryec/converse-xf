@@ -43,13 +43,16 @@ namespace Converse.Views
             }
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
             // Workaround for the unexpected scrolling
             ChatMessagesListView.HeightRequest = ChatScrollView.Height - InputView.Height;
+            await Task.Delay(1000);
+            ChatMessagesListView.HeightRequest = ChatScrollView.Height - InputView.Height;
         }
+
 
         async void Handle_ScrollMessagesEvent(object sender, System.EventArgs e)
         {

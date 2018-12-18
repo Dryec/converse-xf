@@ -13,6 +13,6 @@ namespace Converse.TokenMessages
         public override int Type => AppConstants.TokenMessageTypes.User.ChangeStatus;
 
         [JsonProperty("status")]
-        public string Status { get; set; }
+        public byte[] Status { get; set; }
     }
 }

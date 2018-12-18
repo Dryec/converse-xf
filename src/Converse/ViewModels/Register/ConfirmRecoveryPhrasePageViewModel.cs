@@ -58,41 +58,46 @@ namespace Converse.ViewModels.Register
                 IsBusy = true;
                 _userDialogs.ShowLoading();
 
-                await _walletManager.SaveAsync();
+                var wallet = _walletManager.Wallet;
+
+                _fcm.Subscribe($"{AppConstants.FCM.Topics.Update}_{wallet.Address}");
 
                 // Set firebase token to property address
                 var pendingId = await _tokenMessagesQueue.AddAsync(
-                    _walletManager.Wallet.Address,
+                    wallet.Address,
                     AppConstants.PropertyAddress,
                     new AddDeviceIdTokenMessage
                     {
-                        DeviceID = Base64.ToBase64String(_walletManager.Wallet.Encrypt(_fcm.Token, AppConstants.PropertyAddressPublicKey))
+                        DeviceID = wallet.Encrypt(_fcm.Token, AppConstants.PropertyAddressPublicKey)
                     }
                 );
 
                 // Set Name
                 await _tokenMessagesQueue.AddAsync(
-                    _walletManager.Wallet.Address,
+                    wallet.Address,
                     AppConstants.PropertyAddress,
-                    new ChangeNameTokenMessage { Name = _walletManager.Wallet.Name }
+                    new ChangeNameTokenMessage { Name = wallet.Encrypt(wallet.Name, AppConstants.PropertyAddressPublicKey) }
                 );
 
                 // Set Status to default
                 await _tokenMessagesQueue.AddAsync(
-                                     _walletManager.Wallet.Address,
+                                     wallet.Address,
                                      AppConstants.PropertyAddress,
-                                     new ChangeStatusTokenMessage { Status = AppConstants.DefaultStatusMessage });
+                                     new ChangeStatusTokenMessage { Status = wallet.Encrypt(AppConstants.DefaultStatusMessage, AppConstants.PropertyAddressPublicKey) });
 
                 // Set Image if exist
-                if (_walletManager.Wallet.ProfileImageUrl != null && Uri.IsWellFormedUriString(_walletManager.Wallet.ProfileImageUrl, UriKind.Absolute))
+                if (_walletManager.Wallet.ProfileImageUrl != null && Uri.IsWellFormedUriString(wallet.ProfileImageUrl, UriKind.Absolute))
                 {
                     await _tokenMessagesQueue.AddAsync(
-                                         _walletManager.Wallet.Address,
+                                         wallet.Address,
                                          AppConstants.PropertyAddress,
-                                         new ChangeImageTokenMessage { ImageUrl = _walletManager.Wallet.ProfileImageUrl });
+                                         new ChangeImageTokenMessage { ImageUrl = wallet.Encrypt(wallet.ProfileImageUrl, AppConstants.PropertyAddressPublicKey) });
                 }
 
+                await _walletManager.SaveAsync();
+
                 var result = await _tokenMessagesQueue.WaitForAsync(pendingId);
+
 
                 await _navigationService.NavigateAsync("/NavigationPage/MainPage");
                 _userDialogs.HideLoading();
