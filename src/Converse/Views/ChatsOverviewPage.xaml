@@ -43,6 +43,7 @@
             AddCommand="{prismnav:NavigateTo 'AddChatOptionPopupPage'}" />
         <sflistview:SfListView
             Grid.Row="1"
+            SelectionBackgroundColor="Transparent"
             ItemTemplate="{StaticResource ChatEntryTemplateSelector}"
             TapCommand="{prismnav:NavigateTo 'ChatPage'}"
             ItemsSource="{Binding ChatEntries}"

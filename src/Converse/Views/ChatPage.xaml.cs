@@ -17,7 +17,7 @@ namespace Converse.Views
         {
             InitializeComponent();
 
-            ChatMessagesListView.LayoutManager.ItemsCacheLimit = 0;
+            ChatMessagesListView.LayoutManager.ItemsCacheLimit = 2;
 
             _viewModel = (BindingContext as ChatPageViewModel);
             _viewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -49,8 +49,9 @@ namespace Converse.Views
 
             // Workaround for the unexpected scrolling
             ChatMessagesListView.HeightRequest = ChatScrollView.Height - InputView.Height;
-            await Task.Delay(1000);
-            ChatMessagesListView.HeightRequest = ChatScrollView.Height - InputView.Height;
+            await Task.Delay(750);
+            if (_viewModel.IsActive)
+                ChatMessagesListView.HeightRequest = ChatScrollView.Height - InputView.Height;
         }
 
 
@@ -58,11 +59,15 @@ namespace Converse.Views
         {
             if (e is ScrollEventArgs args)
             {
-                ChatMessagesListView.LayoutManager.ScrollToRowIndex(args.Index, args.ScrollPosition, !args.Animated);
-                if(ChatMessagesListView.Opacity <= 0)
+                if (_viewModel.IsActive)
                 {
-                    await Task.Delay(25);
-                    await ChatMessagesListView.FadeTo(1, 100, Easing.CubicInOut);
+                    ChatMessagesListView.LayoutManager.ScrollToRowIndex(args.Index, args.ScrollPosition, !args.Animated);
+                    if (ChatMessagesListView.Opacity <= 0)
+                    {
+                        await Task.Delay(75);
+                        if (_viewModel.IsActive)
+                            await ChatMessagesListView.FadeTo(1, 250, Easing.CubicInOut);
+                    }
                 }
             }
         }

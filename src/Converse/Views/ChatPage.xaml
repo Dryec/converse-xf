@@ -43,6 +43,14 @@
         <local:ChatTitleBarView
             Grid.Row="0"
             CanGoBack="true" />
+    <ffimageloading:CachedImage
+                Grid.Row="1"
+                Source="chat_background"
+                Aspect="AspectFill">
+                <ffimageloading:CachedImage.Transformations>
+                </ffimageloading:CachedImage.Transformations>
+            </ffimageloading:CachedImage>
+    
         <ScrollView x:Name="ChatScrollView"
             VerticalOptions="Fill"
             Grid.Row="1">
@@ -50,6 +58,7 @@
                 VerticalOptions="Fill">
                 <sflistview:SfListView
                     x:Name="ChatMessagesListView"
+            SelectionBackgroundColor="Transparent"
                     VerticalOptions="Start"
                     ItemTemplate="{StaticResource ChatMessageTemplateSelector}"
                     ItemsSource="{Binding Messages}"

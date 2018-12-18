@@ -35,7 +35,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mock|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -202,6 +201,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\baseline_save_black_48.png" />
     <AndroidResource Include="Resources\drawable-mdpi\baseline_save_black_48.png" />
     <AndroidResource Include="Resources\drawable-hdpi\baseline_save_black_48.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\chat_background.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

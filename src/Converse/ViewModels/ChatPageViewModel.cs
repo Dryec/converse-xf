@@ -120,7 +120,9 @@ namespace Converse.ViewModels
                 return;
             }
 
-            var start = Messages.Count != 0 ? Messages.First().ID >= 11 ? (Messages.First().ID - 10) : 1 : 1;
+            var loadCount = 40;
+
+            var start = Messages.Count != 0 ? Messages.First().ID >= loadCount+1 ? (Messages.First().ID - loadCount) : 1 : 1;
             var end = Messages.Count != 0 ? Messages.First().ID - 1 : 0;
 
             if (end < start)
@@ -310,7 +312,7 @@ namespace Converse.ViewModels
 
             if (Chat.ID > 0 && Messages.Count == 0)
             {
-                var messages = await _database.ChatMessages.GetLatestFromChatID(Chat.ID, 10);
+                var messages = await _database.ChatMessages.GetLatestFromChatID(Chat.ID, 40);
 
                 var chatMessages = new List<ChatMessage>();
                 foreach (var chatMessage in messages)
@@ -331,7 +333,7 @@ namespace Converse.ViewModels
 
             }
 
-            if (Chat.ID > 0)
+            if (Chat.ID > 0 && IsActive)
             {
                 await LoadNewMessages();
             }
@@ -342,9 +344,8 @@ namespace Converse.ViewModels
             _fcm.OnNotificationReceived -= _fcm_OnNotificationReceived;
         }
 
-        async void _fcm_OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
+        void _fcm_OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
         {
-
             Device.BeginInvokeOnMainThread(async () =>
             {
                 if (Chat.ID == 0)
