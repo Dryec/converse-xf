@@ -11,6 +11,9 @@ namespace Converse.Views
         public static readonly BindableProperty SendCommandProperty =
             BindableProperty.Create(nameof(SendCommand), typeof(ICommand), typeof(ChatInputView), null);
 
+        public static readonly BindableProperty MaxLengthProperty =
+            BindableProperty.Create(nameof(MaxLength), typeof(int), typeof(ChatInputView), null);
+
         public ChatInputView()
         {
             InitializeComponent();
@@ -26,6 +29,12 @@ namespace Converse.Views
         {
             get => (ICommand)GetValue(SendCommandProperty);
             set => SetValue(SendCommandProperty, value);
+        }
+
+        public int MaxLength
+        {
+            get => (int)GetValue(MaxLengthProperty);
+            set => SetValue(MaxLengthProperty, value);
         }
     }
 }

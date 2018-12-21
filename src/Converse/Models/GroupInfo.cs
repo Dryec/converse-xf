@@ -15,6 +15,9 @@ namespace Converse.Models
         [JsonProperty("address")]
         public string TronAddress { get; set; }
 
+        [JsonProperty("priv_key")]
+        public byte[] PrivateKey { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
 

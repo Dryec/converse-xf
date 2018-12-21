@@ -24,12 +24,22 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition
                 Width="Auto" />
+            <ColumnDefinition
+                Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
+        <ActivityIndicator
+            Grid.Row="0"
+            Grid.Column="0" HeightRequest="32" IsVisible="{Binding ExtendedMessage.IsPending}"
+            IsRunning="{Binding ExtendedMessage.IsPending}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center" />
         <Frame
+            Grid.Row="0"
+            Grid.Column="1"
             Padding="10,10,10,3"
             CornerRadius="10"
             BackgroundColor="{StaticResource RightMessageBubbleColor}">
@@ -47,14 +57,14 @@
                 </Grid.RowDefinitions>
                 <Label
                     Grid.Row="0"
-                    Text="{Binding Message}"
+                    Text="{Binding ExtendedMessage.Message}"
                     TextColor="Black" />
                 <Label
                     Grid.Row="1"
                     Margin="0,0,-5,0"
                     HorizontalOptions="End"
                     HorizontalTextAlignment="End"
-                    Text="{Binding Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}"
+                    Text="{Binding ExtendedMessage.Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}"
                     FontSize="11"
                     TextColor="Gray" />
             </Grid>

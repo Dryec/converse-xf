@@ -8,7 +8,7 @@ namespace Converse.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [JsonProperty("message")]
+        [JsonProperty("message"), DefaultValue("")]
         public string Message { get; set; }
 
         [JsonProperty("timestamp")]

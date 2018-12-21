@@ -35,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mock|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -136,7 +137,6 @@
     <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\drawable\hamburger.png" />
-    <AndroidResource Include="Resources\drawable\launchscreen_icon.png" />
     <AndroidResource Include="Resources\layout\SplashScreen.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\baseline_arrow_back_white.png" />
     <AndroidResource Include="Resources\drawable-mdpi\baseline_arrow_back_white.png" />
@@ -202,6 +202,11 @@
     <AndroidResource Include="Resources\drawable-mdpi\baseline_save_black_48.png" />
     <AndroidResource Include="Resources\drawable-hdpi\baseline_save_black_48.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\chat_background.jpg" />
+    <AndroidResource Include="Resources\drawable\logo_icon_blue_highres.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_logo_blue.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_logo_blue.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_logo_blue.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_logo_blue.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

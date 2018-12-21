@@ -27,7 +27,7 @@
             <BoxView
                 Grid.Row="0" />
             <ContentView
-                Grid.Row="0"
+                Grid.Row="0" IsEnabled="{Binding CanGoBack,Source={x:Reference view}}"
                 HorizontalOptions="Start">
                 <ffimageloading:CachedImage
                     Margin="12,15,0,15"

@@ -33,6 +33,9 @@ using System.Diagnostics;
 using Converse.Helpers;
 using Converse.TokenMessages;
 using Plugin.FirebasePushNotification.Abstractions;
+using System.IO;
+using Converse.ViewModels.Login;
+using Converse.Views.Login;
 
 namespace Converse
 {
@@ -66,7 +69,7 @@ namespace Converse
             // Handle Xamarin Form Logging events such as Binding Errors
             Log.Listeners.Add(new TraceLogListener());
 #endif
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDYzNDRAMzEzNjJlMzMyZTMwTTZpbldCNWx6cjNjbzlaSk13TzBlSFhSMElrVzZRR2xnL2p1SklPWG5XMD0=");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTI3MjJAMzEzNjJlMzQyZTMwa0RuT0xkMzhFZ2daWFkyMXRpUk9xbkxkcEJndlU4dVI1UnlXd3NYWWxpUT0=");
             LogUnobservedTaskExceptions();
             AppResources.Culture = CrossMultilingual.Current.DeviceCultureInfo;
 
@@ -170,6 +173,8 @@ namespace Converse
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<SplashScreenPage, SplashScreenPageViewModel>();
             containerRegistry.RegisterForNavigation<WelcomePage, WelcomePageViewModel>();
+            containerRegistry.RegisterForNavigation<LoginPage, LoginPageViewModel>();
+            containerRegistry.RegisterForNavigation<ConfirmLoginPopupPage, ConfirmLoginPopupPageViewModel>();
             containerRegistry.RegisterForNavigation<RegisterInfoPage, RegisterInfoPageViewModel>();
             containerRegistry.RegisterForNavigation<RegisterPage, RegisterPageViewModel>();
             containerRegistry.RegisterForNavigation<ConfirmRecoveryPhrasePage, ConfirmRecoveryPhrasePageViewModel>();

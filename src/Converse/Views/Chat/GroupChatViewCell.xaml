@@ -79,7 +79,7 @@
                     TextColor="{StaticResource Primary}" />
                 <Label
                     FontSize="14"
-                    Text="{Binding LastMessage.Message}"
+                    Text="{Binding LastMessage.ExtendedMessage.Message}"
                     LineBreakMode="TailTruncation" />
             </StackLayout>
             <Label

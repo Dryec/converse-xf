@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Client;
 using Converse.Database;
@@ -15,12 +16,19 @@ namespace Converse.Services
 {
     public class TokenMessagesQueueService
     {
-        TronConnection _tronConnection { get; set; }
-        ConverseDatabase _database { get; set; }
-        WalletManager _walletManager { get; set; }
-        SyncServerConnection _syncServerConnection { get; set; }
+        public static bool IsRunning { get; set; }
+
+        static TronConnection _tronConnection { get; set; }
+        static ConverseDatabase _database { get; set; }
+        static WalletManager _walletManager { get; set; }
+        static SyncServerConnection _syncServerConnection { get; set; }
 
         public TokenMessagesQueueService()
+        {
+
+        }
+
+        ~TokenMessagesQueueService()
         {
 
         }
@@ -32,7 +40,12 @@ namespace Converse.Services
             _walletManager = walletManager ?? throw new ArgumentNullException(nameof(walletManager));
             _syncServerConnection = syncServerConnection ?? throw new ArgumentNullException(nameof(syncServerConnection));
 
-            Task.Run(QueueTask);
+            if (!IsRunning)
+            {
+                IsRunning = true;
+
+                Task.Run(QueueTask);
+            }
         }
 
         public async Task<int> AddAsync(string sender, string receiver, TokenMessage tokenMessage)
@@ -189,7 +202,7 @@ namespace Converse.Services
                     }
 
                 }
-                await Task.Delay(500);
+                await Task.Delay(150);
             }
         }
     }

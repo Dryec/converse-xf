@@ -80,10 +80,10 @@ namespace Converse.Tron
             ECKey = eCKey;
         }
 
-        public Wallet(string mnemonic)
+        public Wallet(string privData, bool isPrivateKey = false)
         {
-            ECKey = new ECKey(BIP39.GetSeedBytes(mnemonic).Take(32).ToArray());
-            Mnemonic = mnemonic;
+            ECKey = isPrivateKey ? new ECKey(privData) : new ECKey(BIP39.GetSeedBytes(privData).Take(32).ToArray());
+            Mnemonic = privData;
         }
 
         public async Task<long> GetConverseTokenAmountAsync(TronConnection connection)

@@ -93,7 +93,7 @@
             Grid.Row="2"
             VerticalOptions="End" Margin="25">
             <Button
-                Text="Login"/>
+                Text="Login" Command="{prismnav:NavigateTo 'LoginPage'}"/>
             <Button
                 Text="Register" Command="{prismnav:NavigateTo 'RegisterInfoPage'}"/>
         </StackLayout>

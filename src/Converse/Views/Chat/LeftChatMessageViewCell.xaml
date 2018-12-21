@@ -44,7 +44,7 @@
                 </Grid.RowDefinitions>
                 <Label
                     Grid.Row="0"
-                    Text="{Binding Message}"
+                    Text="{Binding ExtendedMessage.Message}"
                     TextColor="Black" /> 
                 <Label
                     Grid.Row="1"

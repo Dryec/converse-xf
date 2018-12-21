@@ -17,13 +17,13 @@ namespace Converse.Models
         [JsonProperty("public_key")]
         public byte[] PublicKey { get; set; }
 
-        [JsonProperty("name")]
+        [JsonProperty("name"), DefaultValue("")]
         public string Name { get; set; }
 
         [JsonProperty("image"), DefaultValue("baseline_person_grayish_48")]
         public string ImageUrl { get; set; }
 
-        [JsonProperty("status")]
+        [JsonProperty("status"), DefaultValue(default(UserStatus))]
         public UserStatus Status { get; set; }
     }
 }

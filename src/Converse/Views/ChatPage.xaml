@@ -17,6 +17,7 @@
     prism:ViewModelLocator.AutowireViewModel="True"
     NavigationPage.HasNavigationBar="False"
     Title="{Binding Title}"
+    x:Name="page"
     x:Class="Converse.Views.ChatPage"
     BackgroundColor="#E1E8F2">
     <ContentPage.Resources>
@@ -37,39 +38,40 @@
                 Height="Auto" />
             <RowDefinition
                 Height="*" />
-            <RowDefinition
-                Height="Auto" />
         </Grid.RowDefinitions>
+        <ffimageloading:CachedImage
+            Grid.Row="1"
+            Source="chat_background"
+            Aspect="AspectFill">
+            <ffimageloading:CachedImage.Transformations>
+            </ffimageloading:CachedImage.Transformations>
+        </ffimageloading:CachedImage>
         <local:ChatTitleBarView
             Grid.Row="0"
             CanGoBack="true" />
-    <ffimageloading:CachedImage
-                Grid.Row="1"
-                Source="chat_background"
-                Aspect="AspectFill">
-                <ffimageloading:CachedImage.Transformations>
-                </ffimageloading:CachedImage.Transformations>
-            </ffimageloading:CachedImage>
-    
-        <ScrollView x:Name="ChatScrollView"
+        <ScrollView
+            x:Name="ChatScrollView"
             VerticalOptions="Fill"
             Grid.Row="1">
-            <StackLayout Spacing="0"
-                VerticalOptions="Fill">
+            <StackLayout
+                Spacing="0"
+                VerticalOptions="EndAndExpand">
                 <sflistview:SfListView
                     x:Name="ChatMessagesListView"
-            SelectionBackgroundColor="Transparent"
-                    VerticalOptions="Start"
+                    SelectionBackgroundColor="Transparent"
+                    VerticalOptions="End"
                     ItemTemplate="{StaticResource ChatMessageTemplateSelector}"
-                    ItemsSource="{Binding Messages}"
+                    ItemsSource="{Binding Messages, Source={x:Reference page}}"
                     LoadMoreOption="{Binding LoadMoreOption}"
                     LoadMorePosition="Top"
                     LoadMoreCommand="{Binding LoadMoreCommand}"
                     LoadMoreCommandParameter="{Binding Source={x:Reference ChatMessagesListView}}"
                     AutoFitMode="Height">
                 </sflistview:SfListView>
-                <local:ChatInputView x:Name="InputView"
+                <local:ChatInputView
+                    x:Name="InputView"
                     VerticalOptions="End"
+                    MaxLength="{Binding MaxMessageLength}"
                     Message="{Binding Message}"
                     SendCommand="{Binding SendMessageCommand}" />
             </StackLayout>

@@ -31,6 +31,7 @@
                     Margin="0"
                     Placeholder="Message"
                     Keyboard="Chat"
+          MaxLength="{Binding MaxLength, Source={x:Reference view}}"
                     VerticalOptions="FillAndExpand"
                     HorizontalOptions="FillAndExpand"
                     Text="{Binding Message,Source={x:Reference view}}"

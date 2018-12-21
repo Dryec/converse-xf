@@ -38,6 +38,18 @@ namespace Converse.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public void UpdateUnreadMessageCount(int lastReadMessageID)
+        {
+            if (LastMessage != null)
+            {
+                UnreadMessagesCount = LastMessage.ID - lastReadMessageID;
+            }
+            else
+            {
+                UnreadMessagesCount = MessageCount;
+            }
+        }
+
         public int CompareTo(object obj)
         {
             if (obj is ChatEntry otherEntry)

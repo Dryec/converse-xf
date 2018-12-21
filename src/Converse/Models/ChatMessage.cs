@@ -46,25 +46,44 @@ namespace Converse.Models
         [JsonProperty("sender")]
         public UserInfo Sender { get; set; }
 
-        [JsonProperty("message")]
-        public string Message { get; set; }
+        [JsonProperty("message")] // Should be an encrypted ExtendedMessage
+        public byte[] Message { get; set; }
 
         [JsonProperty("timestamp")]
         public DateTime Timestamp { get; set; }
 
-        [JsonProperty("pending_id")]
-        public int PendingID { get; set; }
+        //[JsonProperty("pending_id")]
+        //public int PendingID { get; set; }
+
+        [JsonIgnore]
+        public ExtendedMessage ExtendedMessage { get; set; }
 
         public void Decrypt(Wallet wallet, byte[] otherKey)
         {
             try
             {
-                Message = wallet.Decrypt(Base64.Decode(Message), otherKey);
+                ExtendedMessage = JsonConvert.DeserializeObject<ExtendedMessage>(wallet.Decrypt(Message, otherKey), new JsonSerializerSettings { DateTimeZoneHandling = DateTimeZoneHandling.Local });
             }
             catch (Exception ex)
             {
+                try
+                {
+                    ExtendedMessage = new ExtendedMessage
+                    {
+                        Message = wallet.Decrypt(Message, otherKey),
+                        Timestamp = Timestamp
+                    };
+                }
+                catch (Exception ex2)
+                {
+                    ExtendedMessage = new ExtendedMessage
+                    {
+                        Message = "…could not decrypt…",
+                        Timestamp = Timestamp
+                    };
+                    Debug.WriteLine(ex2);
+                }
                 Debug.WriteLine(ex);
-                Message = "…could not decrypt…";
             }
         }
     }

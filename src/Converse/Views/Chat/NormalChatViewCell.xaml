@@ -70,7 +70,7 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 FontSize="14"
-                Text="{Binding LastMessage.Message}"
+                Text="{Binding LastMessage.ExtendedMessage.Message}"
                 LineBreakMode="TailTruncation" />
             <Label
                 Grid.Row="0"

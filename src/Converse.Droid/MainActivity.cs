@@ -11,6 +11,7 @@ using Xamarin.Forms.Platform.Android;
 using Acr.UserDialogs;
 using Plugin.CurrentActivity;
 using Plugin.FirebasePushNotification;
+using Plugin.Permissions;
 
 namespace Converse.Droid
 {
@@ -28,7 +29,7 @@ namespace Converse.Droid
             base.OnCreate(savedInstanceState);
 
             global::Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
-            global::Xamarin.Forms.Forms.SetFlags("FastRenderers_Experimental");
+            //global::Xamarin.Forms.Forms.SetFlags("FastRenderers_Experimental");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::FFImageLoading.Forms.Platform.CachedImageRenderer.Init(enableFastRenderer: true);
             global::FFImageLoading.ImageService.Instance.Initialize();
@@ -65,8 +66,8 @@ namespace Converse.Droid
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
-            ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
         public override void OnBackPressed()

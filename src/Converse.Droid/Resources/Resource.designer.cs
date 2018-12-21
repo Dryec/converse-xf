@@ -3074,7 +3074,7 @@ namespace Converse.Droid
 			public const int inputlayout_togglevisibleicon = 2130837790;
 			
 			// aapt resource value: 0x7f02011f
-			public const int launchscreen_icon = 2130837791;
+			public const int logo_icon_blue_highres = 2130837791;
 			
 			// aapt resource value: 0x7f020120
 			public const int logo_icon_white_32 = 2130837792;
@@ -4151,6 +4151,9 @@ namespace Converse.Droid
 			
 			// aapt resource value: 0x7f030000
 			public const int ic_launcher = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int ic_logo_blue = 2130903041;
 			
 			static Mipmap()
 			{

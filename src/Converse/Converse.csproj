@@ -30,6 +30,7 @@
     <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
     <PackageReference Include="NETCore.Encrypt" Version="2.0.7" />
     <PackageReference Include="Plugin.FirebasePushNotification" Version="2.3.5" />
+    <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,6 +71,8 @@
     <Folder Include="Database\Models\" />
     <Folder Include="Views\Settings\" />
     <Folder Include="Comparators\" />
+    <Folder Include="Views\Login\" />
+    <Folder Include="ViewModels\Login\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\Client\Client.csproj" />

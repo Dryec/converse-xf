@@ -54,6 +54,7 @@ namespace Converse.Database.Accessors
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
+                    return 0;
                 }
             }
             user.ID = dbEntry.ID;

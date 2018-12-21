@@ -15,6 +15,9 @@ using Acr.UserDialogs;
 using Plugin.FirebasePushNotification.Abstractions;
 using Converse.Tron;
 using Converse.Database;
+using System.Diagnostics;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 
 namespace Converse.ViewModels
 {
@@ -48,7 +51,7 @@ namespace Converse.ViewModels
                 if (addressBytes != null)
                 {
                     var account = await _tronConnection.Client.GetAccountAsync(new Protocol.Account { Address = ByteString.CopyFrom(addressBytes) });
-                    if(!account.Address.IsEmpty)
+                    if (!account.Address.IsEmpty)
                     {
                         var user = await _syncServer.GetUserAsync(UserAddress);
 
@@ -60,7 +63,7 @@ namespace Converse.ViewModels
                         }
                         else
                         {
-                            _userDialogs.Toast("User is not registered");
+                            _userDialogs.Toast("User is not registered or unable to load");
                         }
                     }
                     else
@@ -85,14 +88,32 @@ namespace Converse.ViewModels
         {
             try
             {
-                UserAddress = await _barcodeScanner.ReadBarcodeAsync();
-                if (!string.IsNullOrWhiteSpace(UserAddress))
+                var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Camera);
+                if (status != PermissionStatus.Granted)
                 {
-                    OpenChatCommand.Execute();
+                    var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Camera);
+                    //Best practice to always check that the key exists
+                    if (results.ContainsKey(Permission.Camera))
+                        status = results[Permission.Camera];
+                }
+
+                if (status == PermissionStatus.Granted)
+                {
+                    var content = await _barcodeScanner.ReadBarcodeAsync();
+                    if (!string.IsNullOrWhiteSpace(content))
+                    {
+                        UserAddress = content;
+                        OpenChatCommand.Execute();
+                    }
+                }
+                else if (status != PermissionStatus.Unknown)
+                {
+                    await _userDialogs.AlertAsync("Camera access denied", "Not Available", "Ok");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _userDialogs.Toast(ex.Message);
             }
         }
     }

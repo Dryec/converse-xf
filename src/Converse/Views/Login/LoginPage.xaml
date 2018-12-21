@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Converse.Views;assembly=Converse"
+    xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+    xmlns:i18n="clr-namespace:Converse.i18n;assembly=Converse"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    NavigationPage.HasNavigationBar="False"
+    Title="{Binding Title}"
+    x:Class="Converse.Views.LoginPage">
+  
+    <Grid
+        RowSpacing="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+        <local:BasicTitleBarView
+            Grid.Row="0"
+            CanGoBack="true" />
+        <ScrollView
+            Grid.Row="1"
+            Padding="15,15,15,50"
+            VerticalOptions="CenterAndExpand">
+            <StackLayout>
+                <StackLayout
+                    Orientation="Vertical">
+                    <Label
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Text="Use Private Key" />
+                    <Switch
+                        HorizontalOptions="Center"
+                        IsToggled="{Binding UsePrivateKey}" />
+                </StackLayout>
+                <Grid>
+                    <Editor Grid.Row="0" IsVisible="{Binding UsePrivateKey}"
+                    AutoSize="TextChanges" Placeholder="Enter Private Key" Text="{Binding PrivateKey}">
+                    </Editor>
+                    <Frame
+                        Grid.Row="0"
+                        Margin="5,10,5,5"
+                        VerticalOptions="Center"
+                        IsVisible="{Binding UseRecoveryPhrase}">
+                        <StackLayout>
+                            <Label
+                                Margin="0,0,0,15"
+                                HorizontalOptions="Center"
+                                Text="Enter your recovery phrase"
+                                FontSize="18"
+                                FontAttributes="Bold" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="*" />
+                                    <RowDefinition
+                                        Height="*" />
+                                    <RowDefinition
+                                        Height="*" />
+                                    <RowDefinition
+                                        Height="*" />
+                                    <RowDefinition
+                                        Height="*" />
+                                    <RowDefinition
+                                        Height="*" />
+                                </Grid.RowDefinitions>
+                                <Entry
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Placeholder="1"
+                                    Text="{Binding RecoveryPhrase[0]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Placeholder="2"
+                                    Text="{Binding RecoveryPhrase[1]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Placeholder="3"
+                                    Text="{Binding RecoveryPhrase[2]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    Placeholder="4"
+                                    Text="{Binding RecoveryPhrase[3]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="4"
+                                    Grid.Column="0"
+                                    Placeholder="5"
+                                    Text="{Binding RecoveryPhrase[4]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="5"
+                                    Grid.Column="0"
+                                    Placeholder="6"
+                                    Text="{Binding RecoveryPhrase[5]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Placeholder="7"
+                                    Text="{Binding RecoveryPhrase[6]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Placeholder="8"
+                                    Text="{Binding RecoveryPhrase[7]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Placeholder="9"
+                                    Text="{Binding RecoveryPhrase[8]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Placeholder="10"
+                                    Text="{Binding RecoveryPhrase[9]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="4"
+                                    Grid.Column="1"
+                                    Placeholder="11"
+                                    Text="{Binding RecoveryPhrase[10]}"
+                                    HorizontalTextAlignment="Center" />
+                                <Entry
+                                    Grid.Row="5"
+                                    Grid.Column="1"
+                                    Placeholder="12"
+                                    Text="{Binding RecoveryPhrase[11]}"
+                                    HorizontalTextAlignment="Center" />
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+        <Button
+            Grid.Row="2"
+            Margin="-2,-2"
+            VerticalOptions="End"
+            Text="Continue" Command="{Binding ContinueCommand}"/>
+    </Grid>
+</ContentPage>

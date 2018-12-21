@@ -31,6 +31,10 @@ namespace Converse.ViewModels.Register
             Title = "Recovery Phrase";
 
             RecoveryPhraseConfirmation = new List<string>(new string[12]);
+            for (var i = 0; i < RecoveryPhraseConfirmation.Count; i++)
+            {
+                RecoveryPhraseConfirmation[i] = string.Empty;
+            }
             ContinueCommand = new DelegateCommand(Continue);
         }
 
@@ -40,7 +44,8 @@ namespace Converse.ViewModels.Register
             {
                 RecoveryPhrase = recoveryPhrase;
             }
-            else
+
+            if(RecoveryPhrase == null || RecoveryPhrase.Count < 12)
             {
                 await _navigationService.GoBackAsync();
             }

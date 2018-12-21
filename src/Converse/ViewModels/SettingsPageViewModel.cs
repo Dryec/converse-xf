@@ -31,17 +31,32 @@ namespace Converse.ViewModels
             Icon = "baseline_settings_white_32";
         }
 
+        async void UpdateUser()
+        {
+            var newUser = await _syncServer.GetUserAsync(_walletManager.Wallet.Address);
+            if(newUser != null)
+            {
+                User = newUser;
+            }
+        }
+
         public override async void OnNavigatingTo(INavigationParameters parameters)
         {
             _fcm.OnNotificationReceived += _fcm_OnNotificationReceived;
 
-            User = await _syncServer.GetUserAsync(_walletManager.Wallet.Address);
+            var dbUser = await _database.Users.GetByAddress(_walletManager.Wallet.Address);
+            if(dbUser != null)
+            {
+                User = dbUser.ToUserInfo();
+            }
+
+            UpdateUser();
         }
 
-        async void _fcm_OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
+        void _fcm_OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
         {
             Debug.WriteLine(e);
-            Device.BeginInvokeOnMainThread(async () => User = await _syncServer.GetUserAsync(_walletManager.Wallet.Address)); ;
+            Device.BeginInvokeOnMainThread(UpdateUser);
         }
     }
 }

@@ -14,13 +14,14 @@ namespace Converse.Tron
         public async Task<bool> LoadWalletAsync()
         {
             var mnemonic = await Xamarin.Essentials.SecureStorage.GetAsync(AppConstants.Keys.User.Mnemonic);
+            var privKey = await Xamarin.Essentials.SecureStorage.GetAsync(AppConstants.Keys.User.PrivateKey);
 
-            if (mnemonic == null)
+            if (privKey == null)
             {
                 return false;
             }
 
-            Wallet = new Wallet(mnemonic)
+            Wallet = new Wallet(privKey, true)
             {
                 Mnemonic = mnemonic,
                 Name = await Xamarin.Essentials.SecureStorage.GetAsync(AppConstants.Keys.User.Name),
@@ -30,24 +31,31 @@ namespace Converse.Tron
             return true;
         }
 
+        public bool LoadWalletAsync(string privateData, bool isPrivateKey)
+        {
+            Wallet = new Wallet(privateData, isPrivateKey);
+            return true;
+        }
+
         public Wallet CreateNewWalletAsync()
         {
-                var bip39 = new BIP39();
-                var mnemonic = bip39.MnemonicSentence;
-                var eCKey = new ECKey(bip39.SeedBytes.Take(32).ToArray());
+            var bip39 = new BIP39();
+            var mnemonic = bip39.MnemonicSentence;
+            var eCKey = new ECKey(bip39.SeedBytes.Take(32).ToArray());
 
-                Wallet = new Wallet(mnemonic);
+            Wallet = new Wallet(mnemonic);
             return Wallet;
         }
 
         public async Task<bool> SaveAsync()
         {
-            if (Wallet == null || string.IsNullOrWhiteSpace(Wallet.Mnemonic))
+            if (Wallet == null || string.IsNullOrWhiteSpace(Wallet.PrivateKey))
             {
                 return false;
             }
 
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Mnemonic, Wallet.Mnemonic);
+            await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.PrivateKey, Wallet.PrivateKey);
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Name, Wallet.Name ?? string.Empty);
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Email, Wallet.Email ?? string.Empty);
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.ProfileImageUrl, Wallet.ProfileImageUrl ?? string.Empty);
