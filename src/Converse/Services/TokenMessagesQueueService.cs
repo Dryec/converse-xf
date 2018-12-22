@@ -132,6 +132,7 @@ namespace Converse.Services
                                         switch (result.Code)
                                         {
                                             case Protocol.Return.Types.response_code.BandwithError:
+                                                MessagingCenter.Send(this, AppConstants.MessagingService.BandwidthError);
                                                 break;
                                             case Protocol.Return.Types.response_code.ServerBusy:
                                                 break;

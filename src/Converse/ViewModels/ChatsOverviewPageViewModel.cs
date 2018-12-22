@@ -17,14 +17,22 @@ using Converse.Database;
 using Xamarin.Forms;
 using Converse.Helpers;
 using System.Diagnostics;
+using Google.Protobuf;
+using Client;
+using Protocol;
 
 namespace Converse.ViewModels
 {
     public class ChatsOverviewPageViewModel : ViewModelBase
     {
         public DelegateCommand UpdateChatEntriesCommand { get; private set; }
+        public DelegateCommand DismissBandwidthWarningCommand { get; private set; }
 
         public ObservableCollection<ChatEntry> ChatEntries { get; private set; }
+
+        public bool IsBandwidthWarningVisible { get; set; }
+        public bool IsBandwidthWarningDismissed { get; set; }
+        public DateTime LastCheckBandwidthTime { get; set; }
 
         public ChatsOverviewPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IUserDialogs userDialogs, IFirebasePushNotification firebasePushNotification,
                                             SyncServerConnection syncServer, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService, ConverseDatabase converseDatabase)
@@ -33,6 +41,75 @@ namespace Converse.ViewModels
             Title = "Converse";
             Icon = "logo_icon_white_32";
             UpdateChatEntriesCommand = new DelegateCommand(UpdateChatEntriesCommandExcecuted);
+            DismissBandwidthWarningCommand = new DelegateCommand(DismissBandwidthWarningCommandExcecuted);
+
+            MessagingCenter.Subscribe<TokenMessagesQueueService>(this, AppConstants.MessagingService.BandwidthError, (p) => CheckFreeUsage());
+        }
+
+        void DismissBandwidthWarningCommandExcecuted()
+        {
+            IsBandwidthWarningDismissed = true;
+            IsBandwidthWarningVisible = false;
+        }
+
+        async void CheckFreeUsage()
+        {
+            if (IsBandwidthWarningDismissed || (LastCheckBandwidthTime.AddSeconds(15) >= DateTime.Now))
+            {
+                return;
+            }
+
+            LastCheckBandwidthTime = DateTime.Now;
+
+            try
+            {
+                var account = await _tronConnection.Client.GetAccountAsync(new Protocol.Account
+                {
+                    Address = ByteString.CopyFrom(WalletAddress.Decode58Check(_walletManager.Wallet.Address))
+                });
+                var accountNet = await _tronConnection.Client.GetAccountNetAsync(new Protocol.Account
+                {
+                    Address = ByteString.CopyFrom(WalletAddress.Decode58Check(_walletManager.Wallet.Address))
+                });
+
+                if (account != null && !account.Address.IsEmpty)
+                {
+                    var isBandwidthAvailable = false;
+                    var token = await _tronConnection.Client.GetAssetIssueByNameAsync(new BytesMessage { Value = ByteString.CopyFromUtf8(AppConstants.TokenName) });
+
+
+                    if (token != null && !token.OwnerAddress.IsEmpty)
+                    {
+                        // Check account free usage
+                        if (accountNet.AssetNetUsed.ContainsKey(AppConstants.TokenName))
+                        {
+                            isBandwidthAvailable = (token.PublicFreeAssetNetLimit - accountNet.AssetNetUsed[AppConstants.TokenName]) >= 1000;
+                        }
+                        else
+                        {
+                            isBandwidthAvailable = false;
+                        }
+
+                        if (isBandwidthAvailable)
+                        {
+                            // Check total token free bandwidth
+                            isBandwidthAvailable = token.FreeAssetNetLimit - token.PublicFreeAssetNetUsage >= 2500;
+                        }
+
+                        // Check own account bandwidth and balance
+                        if (!isBandwidthAvailable)
+                        {
+                            isBandwidthAvailable = (accountNet.NetLimit + accountNet.FreeNetLimit - accountNet.NetUsed - accountNet.FreeNetUsed) >= 1000 || account.Balance > 20 * 1000;
+                        }
+
+                        IsBandwidthWarningVisible = !isBandwidthAvailable && !IsBandwidthWarningDismissed;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
         }
 
         async void UpdateChatEntriesCommandExcecuted()
@@ -108,6 +185,8 @@ namespace Converse.ViewModels
                     Debug.WriteLine(ex);
                 }
             }
+
+            CheckFreeUsage();
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)

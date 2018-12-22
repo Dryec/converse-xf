@@ -70,6 +70,12 @@ namespace Converse.ViewModels.Register
                 await _pageDialogService.DisplayAlertAsync("Invalid Name", "Please enter a name", "Ok");
                 return;
             }
+            if (string.IsNullOrWhiteSpace(Wallet.ProfileImageUrl) || !Uri.IsWellFormedUriString(Wallet.ProfileImageUrl, UriKind.Absolute))
+            {
+                var res = await _userDialogs.ConfirmAsync("No profile picture, do you want to continue without?", "Profile Picture", "Yes", "No");
+                if (!res)
+                    return;
+            }
 
             var navParams = new NavigationParameters();
             navParams.Add("RecoveryPhrase", RecoveryPhrase);

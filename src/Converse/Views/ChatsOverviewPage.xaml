@@ -49,6 +49,28 @@
             ItemsSource="{Binding ChatEntries}"
             ItemSize="65">
         </sflistview:SfListView>
+        <Frame
+            Grid.Row="1" IsVisible="{Binding IsBandwidthWarningVisible}"
+            Margin="15"
+            VerticalOptions="End">
+            <ScrollView>
+                <StackLayout>
+                    <Label
+                        Text="Free Bandwidth Empty"
+                        FontAttributes="Bold"
+                        FontSize="16" />
+                    <Label
+                        Text="We offer every user a free daily amount of bandwidth if that amount is depleted you can't send messages anymore." />
+                    <Label
+                        Text="You can send TRX to your address using your QR Code, these will be used to pay the transaction fee on the blockchain." />
+                    <Label
+                        Text="1 TRX equals around 100 messages" FontAttributes="Bold"/>
+                    <Label
+                        Text="We are giving our best to increase your free bandwidth! Thanks for understanding!" />
+          <Button Margin="0,10,0,0" Text="Ok" BackgroundColor="{StaticResource Primary2}" Command="{Binding DismissBandwidthWarningCommand}"/>
+                </StackLayout>
+            </ScrollView>
+        </Frame>
     </Grid>
 </ContentPage>
 <!--prismnav:NavigateTo 'AddChatOptionPopupPage'-->

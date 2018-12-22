@@ -17,6 +17,7 @@ namespace Converse.Helpers
         public const int RequestTokenLimit = 20;
 
         public const int MaxMessageLength = 512;
+        public const int TrxInSun = 1000000;
 
         public const string DefaultStatusMessage = "Hey, I'm new here!";
 
@@ -58,6 +59,11 @@ namespace Converse.Helpers
                 public const string Email = "email";
                 public const string ProfileImageUrl = "profile_image_url";
             }
+        }
+
+        public static class MessagingService
+        {
+            public const string BandwidthError = "ms_bandwidth_error";
         }
     }
 }
