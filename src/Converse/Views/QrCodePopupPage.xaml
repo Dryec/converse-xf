@@ -26,5 +26,11 @@
                     Height="500" />
             </zx:ZXingBarcodeImageView.BarcodeOptions>
         </zx:ZXingBarcodeImageView>
+        <ContentView.GestureRecognizers>
+            <TapGestureRecognizer
+                Command="{Binding CopyCommand}"
+                CommandParameter="{Binding QrCodeContent}"
+                NumberOfTapsRequired="1" />
+        </ContentView.GestureRecognizers>
     </Frame>
 </pages:PopupPage>

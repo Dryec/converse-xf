@@ -22,7 +22,7 @@ namespace Converse.Models
         public string Name { get; set; }
 
         [JsonProperty("image")]
-        public Uri ImageUri { get; set; }
+        public Uri ImageUrl { get; set; }
 
         [JsonProperty("users")]
         public List<UserInfo> Users { get; set; }

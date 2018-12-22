@@ -28,7 +28,7 @@ namespace Converse.ViewModels
         public DelegateCommand UpdateChatEntriesCommand { get; private set; }
         public DelegateCommand DismissBandwidthWarningCommand { get; private set; }
 
-        public ObservableCollection<ChatEntry> ChatEntries { get; private set; }
+        public ExtendedObservableCollection<ChatEntry> ChatEntries { get; private set; }
 
         public bool IsBandwidthWarningVisible { get; set; }
         public bool IsBandwidthWarningDismissed { get; set; }
@@ -133,13 +133,20 @@ namespace Converse.ViewModels
                     {
                         if (chat.ID == ChatEntries[i].ID)
                         {
-                            ChatEntries[i] = chat;
+                            ChatEntries.RemoveAt(i);
+                            ChatEntries.Insert(i, chat);
                             alreadyExist = true;
                         }
                     }
                     if (!alreadyExist)
                     {
                         ChatEntries.Insert(0, chat);
+                    }
+
+                    var updateTopic = $"{AppConstants.FCM.Topics.Update}_{(chat.Type == ChatType.Normal ? chat.ChatPartner.TronAddress : chat.GroupInfo.TronAddress)}";
+                    if (!_fcm.SubscribedTopics.Contains(updateTopic))
+                    {
+                        _fcm.Subscribe(updateTopic);
                     }
                 }
 
@@ -167,7 +174,7 @@ namespace Converse.ViewModels
 
                     chatEntries.Add(chatEntry);
                 }
-                ChatEntries = new ObservableCollection<ChatEntry>(chatEntries);
+                ChatEntries = new ExtendedObservableCollection<ChatEntry>(chatEntries);
                 ChatEntries.Sort(false);
             }
             else if (parameters.GetNavigationMode() == NavigationMode.Back) // Navigated back to this page

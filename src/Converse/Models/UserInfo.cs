@@ -8,10 +8,10 @@ namespace Converse.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [JsonProperty("id")]
+        [JsonProperty("id"), DefaultValue(0)]
         public int UserID { get; set; }
 
-        [JsonProperty("address")]
+        [JsonProperty("address"), DefaultValue("")]
         public string TronAddress { get; set; }
 
         [JsonProperty("public_key")]
@@ -25,5 +25,14 @@ namespace Converse.Models
 
         [JsonProperty("status"), DefaultValue(default(UserStatus))]
         public UserStatus Status { get; set; }
+
+        public UserInfo()
+        {
+            UserID = 0;
+            TronAddress = string.Empty;
+            Name = string.Empty;
+            ImageUrl = "baseline_person_grayish_48";
+            Status = new UserStatus();
+        }
     }
 }

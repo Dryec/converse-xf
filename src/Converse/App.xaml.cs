@@ -184,6 +184,7 @@ namespace Converse
             containerRegistry.RegisterForNavigation<AddChatOptionPopupPage, AddChatOptionPopupPageViewModel>();
             containerRegistry.RegisterForNavigation<QrCodePopupPage, QrCodePopupPageViewModel>();
             containerRegistry.RegisterForNavigation<UserPopupPage, UserPopupPageViewModel>();
+            containerRegistry.RegisterForNavigation<UpdateUserPopupPage, UpdateUserPopupPageViewModel>();
             containerRegistry.RegisterForNavigation<ImagePopupPage, ImagePopupPageViewModel>();
         }
 

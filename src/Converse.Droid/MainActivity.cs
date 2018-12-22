@@ -12,6 +12,7 @@ using Acr.UserDialogs;
 using Plugin.CurrentActivity;
 using Plugin.FirebasePushNotification;
 using Plugin.Permissions;
+using Converse.Droid.Firebase;
 
 namespace Converse.Droid
 {
@@ -53,7 +54,7 @@ namespace Converse.Droid
 //#if DEBUG
 //            FirebasePushNotificationManager.Initialize(this, true);
 //#else
-              FirebasePushNotificationManager.Initialize(this, false);
+              FirebasePushNotificationManager.Initialize(this, new ConversePushNotificationHandler(), false);
 //#endif
             FirebasePushNotificationManager.ProcessIntent(this, Intent);
         }

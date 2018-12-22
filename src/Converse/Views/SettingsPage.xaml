@@ -109,8 +109,7 @@
                 </Grid>
                 <ContentView.GestureRecognizers>
                     <TapGestureRecognizer
-                        Command="{prismnav:NavigateTo 'UserPopupPage'}"
-                        CommandParameter="{Binding User}"
+                        Command="{prismnav:NavigateTo 'UpdateUserPopupPage'}"
                         NumberOfTapsRequired="1" />
                 </ContentView.GestureRecognizers>
             </Frame>

@@ -13,5 +13,11 @@ namespace Converse.Models
 
         [JsonProperty("timestamp")]
         public DateTime Timestamp { get; set; }
+
+        public UserStatus()
+        {
+            Message = string.Empty;
+            Timestamp = DateTime.Now;
+        }
     }
 }

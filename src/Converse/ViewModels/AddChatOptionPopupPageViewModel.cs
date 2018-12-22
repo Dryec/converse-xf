@@ -103,7 +103,7 @@ namespace Converse.ViewModels
                     if (!string.IsNullOrWhiteSpace(content))
                     {
                         UserAddress = content;
-                        OpenChatCommand.Execute();
+                        //OpenChatCommand.Execute();
                     }
                 }
                 else if (status != PermissionStatus.Unknown)

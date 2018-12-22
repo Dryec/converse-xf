@@ -139,7 +139,6 @@ namespace Converse.Services
                                             case Protocol.Return.Types.response_code.OtherError:
                                                 break;
                                             case Protocol.Return.Types.response_code.ContractValidateError: // TODO Could break queue when wallet address changes
-                                                    break;
                                             case Protocol.Return.Types.response_code.Success:
                                             case Protocol.Return.Types.response_code.Sigerror:
                                             case Protocol.Return.Types.response_code.ContractExeError:

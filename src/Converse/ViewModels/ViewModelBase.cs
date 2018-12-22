@@ -47,7 +47,11 @@ namespace Converse.ViewModels
             _database = converseDatabase;
             IsBusy = false;
             IsNotBusy = true;
+
+            CopyCommand = new DelegateCommand<string>((string content) => { Xamarin.Essentials.Clipboard.SetTextAsync(content); _userDialogs.Toast("Copied"); });
         }
+
+        public DelegateCommand<string> CopyCommand { get; private set; }
 
         public string Title { get; set; }
 
