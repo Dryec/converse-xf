@@ -7,6 +7,14 @@ Due to the speed of the TRON network, it is possible to run any transaction a us
 ## Screenshots
 <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/welcome_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/register_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/chat_overview_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/chat_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/user_info_popup.jpg" width="160">
 
+## Functionalities
+- Create an account on the tron network
+- Setup a profile (Name, Image, Status)
+- Write users by using their Tron Address
+- Every private information is encrypted
+- Create groups (Name, Image, Description), can be public or private and fully encrypted
+- Join and interact with groups
+
 ## How it works
 We use a direct connection to the node via GRPC for message transmission. It is transmitted through a token transaction where the app fills the data field with message information in JSON format and encrypts private information.  
 These token transactions are then processed by the TRON network and once a block has been created for them, our server scans each block for transactions with our token and processes the data and notifies the app to receive all messages directly.
