@@ -5,11 +5,7 @@ Converse is the first decentralized chat running on the TRON blockchain.
 Due to the speed of the TRON network, it is possible to run any transaction a user makes through the blockchain and encrypt it with the technology that the blockchain provides, instead of using a central intermediary to transport messages.
 
 ## Screenshots
-![ScreenShot](https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/welcome_page.jpg)
-![ScreenShot](https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/register_page.jpg)
-![ScreenShot](https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/chat_overview_page.jpg)
-![ScreenShot](https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/chat_page.jpg)
-![ScreenShot](https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/user_info_popup.jpg)
+<img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/welcome_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/register_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/chat_overview_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/chat_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/user_info_popup.jpg" width="160">
 
 ## How it works
 We use a direct connection to the node via GRPC for message transmission. It is transmitted through a token transaction where the app fills the data field with message information in JSON format and encrypts private information.  
