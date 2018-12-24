@@ -49,13 +49,13 @@ namespace Converse.Tron
 
         public async Task<bool> SaveAsync()
         {
-            if (Wallet == null || string.IsNullOrWhiteSpace(Wallet.PrivateKey))
+            if (Wallet == null || string.IsNullOrWhiteSpace(Wallet.PrivateKeyHexString))
             {
                 return false;
             }
 
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Mnemonic, Wallet.Mnemonic);
-            await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.PrivateKey, Wallet.PrivateKey);
+            await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.PrivateKey, Wallet.PrivateKeyHexString);
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Name, Wallet.Name ?? string.Empty);
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Email, Wallet.Email ?? string.Empty);
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.ProfileImageUrl, Wallet.ProfileImageUrl ?? string.Empty);

@@ -186,6 +186,7 @@ namespace Converse
             containerRegistry.RegisterForNavigation<UserPopupPage, UserPopupPageViewModel>();
             containerRegistry.RegisterForNavigation<UpdateUserPopupPage, UpdateUserPopupPageViewModel>();
             containerRegistry.RegisterForNavigation<ImagePopupPage, ImagePopupPageViewModel>();
+            containerRegistry.RegisterForNavigation<CreateGroupPopupPage, CreateGroupPopupPageViewModel>();
         }
 
         protected override void OnStart()

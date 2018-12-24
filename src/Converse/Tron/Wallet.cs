@@ -24,26 +24,27 @@ namespace Converse.Tron
         public string Email { get; set; }
         public string ProfileImageUrl { get; set; }
 
-        string _privateKey;
-        public string PrivateKey
+        string _privateKeyHexString;
+        public string PrivateKeyHexString
         {
             get
             {
-                if (_privateKey != null)
+                if (_privateKeyHexString != null)
                 {
-                    return _privateKey;
+                    return _privateKeyHexString;
                 }
                 else if (ECKey != null)
                 {
-                    _privateKey = ECKey.GetPrivateKey().ToHexString();
-                    return _privateKey;
+                    _privateKeyHexString = ECKey.GetPrivateKey().ToHexString();
+                    return _privateKeyHexString;
                 }
 
                 return string.Empty;
             }
-            set => _privateKey = value;
+            set => _privateKeyHexString = value;
         }
 
+        public byte[] PrivateKey { get { return PrivateKeyHexString.FromHexToByteArray(); } }
 
         string _address;
         public string Address
@@ -130,11 +131,16 @@ namespace Converse.Tron
             return ECKey.Encrypt(Encoding.UTF8.GetBytes(message), publicKey);
         }
 
+        public byte[] Encrypt(byte[] data, byte[] publicKey)
+        {
+            return ECKey.Encrypt(data, publicKey);
+        }
+
         public string Decrypt(byte[] encryptedMessage, byte[] publicKey)
         {
             var decryptedBytes = ECKey.Decrypt(encryptedMessage, publicKey);
 
-            if(decryptedBytes != null)
+            if (decryptedBytes != null)
             {
                 return Encoding.UTF8.GetString(decryptedBytes);
             }

@@ -5,6 +5,7 @@
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
     xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
     xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
     Title="{Binding Title}"
     x:Class="Converse.Views.AddChatOptionPopupPage">
@@ -24,7 +25,8 @@
             <Button Margin="0,0,0,0" IsEnabled="{Binding IsNotBusy}"
                 Text="Scan Address QR Code" Command="{Binding ScanCommand}"/>
             <Button Margin="0,25,0,0" IsEnabled="{Binding IsNotBusy}"
-                Text="Create New Group" Command="{Binding ScanCommand}"/>
+                Text="Create New Group"
+                                Command="{prismnav:NavigateTo 'CreateGroupPopupPage'}"/>
         </StackLayout>
     </Frame>
 </pages:PopupPage>

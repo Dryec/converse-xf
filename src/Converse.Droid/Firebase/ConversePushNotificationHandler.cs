@@ -17,6 +17,10 @@ using Android.Content.PM;
 using Android.Content.Res;
 using Java.Util;
 using Plugin.FirebasePushNotification;
+using Converse.Helpers;
+using Newtonsoft.Json;
+using Converse.Models;
+using Converse.Tron;
 
 namespace Converse.Droid.Firebase
 {
@@ -45,23 +49,56 @@ namespace Converse.Droid.Firebase
 
             var notifyId = 0;
             var title = context.ApplicationInfo.LoadLabel(context.PackageManager);
-            var message = string.Empty;
+            string message = null;
             var tag = string.Empty;
+            string type = null;
 
-            if (!string.IsNullOrEmpty(FirebasePushNotificationManager.NotificationContentTextKey) && parameters.TryGetValue(FirebasePushNotificationManager.NotificationContentTextKey, out var notificationContentText))
-                message = notificationContentText.ToString();
-            else if (parameters.TryGetValue(AlertKey, out var alert))
-                message = $"{alert}";
-            else if (parameters.TryGetValue(BodyKey, out var body))
-                message = $"{body}";
-            else if (parameters.TryGetValue(MessageKey, out var messageContent))
-                message = $"{messageContent}";
-            else if (parameters.TryGetValue(SubtitleKey, out var subtitle))
-                message = $"{subtitle}";
-            else if (parameters.TryGetValue(TextKey, out var text))
-                message = $"{text}";
+             if(parameters.TryGetValue(TypeKey, out var typeStr))
+            {
+                type = $"{typeStr}";
 
-            message = "Humpalumpa";
+                switch (type)
+                {
+                    case AppConstants.FCM.Types.Message:
+                    case AppConstants.FCM.Types.GroupMessage:
+                        if (parameters.TryGetValue(DataKey, out var data))
+                        {
+                            try
+                            {
+                                var chatMessage = JsonConvert.DeserializeObject<ChatMessage>($"{data}");
+                                var walletManager = (WalletManager)App.Current.Container.Resolve(typeof(WalletManager));
+
+                                chatMessage.Decrypt(walletManager.Wallet, chatMessage.Sender.PublicKey);
+                                message = chatMessage.ExtendedMessage.Message;
+                            }
+                            catch (Exception ex)
+                            {
+                                System.Diagnostics.Debug.WriteLine(ex);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (message == null)
+            {
+                if (!string.IsNullOrEmpty(FirebasePushNotificationManager.NotificationContentTextKey) && parameters.TryGetValue(FirebasePushNotificationManager.NotificationContentTextKey, out var notificationContentText))
+                    message = notificationContentText.ToString();
+                else if (parameters.TryGetValue(AlertKey, out var alert))
+                    message = $"{alert}";
+                else if (parameters.TryGetValue(BodyKey, out var body))
+                    message = $"{body}";
+                else if (parameters.TryGetValue(MessageKey, out var messageContent))
+                    message = $"{messageContent}";
+                else if (parameters.TryGetValue(SubtitleKey, out var subtitle))
+                    message = $"{subtitle}";
+                else if (parameters.TryGetValue(TextKey, out var text))
+                    message = $"{text}";
+                else
+                    message = string.Empty;
+            }
 
             if (!string.IsNullOrEmpty(FirebasePushNotificationManager.NotificationContentTitleKey) && parameters.TryGetValue(FirebasePushNotificationManager.NotificationContentTitleKey, out var notificationContentTitle))
                 title = notificationContentTitle.ToString();
@@ -338,6 +375,14 @@ namespace Converse.Droid.Firebase
         /// <param name="parameters">Notification parameters.</param>
         public virtual void OnBuildNotification(NotificationCompat.Builder notificationBuilder, IDictionary<string, object> parameters) { }
 
+        /// <summary>
+        /// Data
+        /// </summary>
+        public const string DataKey = "data";
+        /// <summary>
+        /// Type
+        /// </summary>
+        public const string TypeKey = "type";
         /// <summary>
         /// Title
         /// </summary>

@@ -32,6 +32,21 @@ namespace Converse.Helpers
                 public const int SendMessage = 5;
                 public const int AddDeviceId = 6;
             }
+
+            public static class Group
+            {
+                public const int Create = 50;
+                public const int ChangeName = 51;
+                public const int ChangeDescription= 52;
+                public const int ChangeImage = 53;
+                public const int AddUser = 54;
+                public const int KickUser = 55;
+                public const int SetUserRank = 56;
+                public const int Join = 57;
+                public const int Leave = 58;
+                public const int Message = 59;
+                public const int SetPublic = 60;
+            }
         }
 
         public static class FCM
@@ -45,6 +60,7 @@ namespace Converse.Helpers
             public static class Types
             {
                 public const string Message = "msg";
+                public const string GroupMessage = "grp_msg";
                 public const string UpdateUser = "update_user";
             }
         }
