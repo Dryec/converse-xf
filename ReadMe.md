@@ -1,88 +1,25 @@
-# Converse
+# Converse – Decentralized Chat
 
-This project was created using the Prism QuickStart Templates by Dan Siegel. Be sure
-to follow Dan on Twitter @DanJSiegel.
+## About
+Converse is the first decentralized chat running on the TRON blockchain. Due to the speed of the TRON network, it is possible to run any transaction a user makes through the blockchain and encrypt it with the technology that the blockchain provides, instead of using a central intermediary to transport messages.
 
-## Developer Notes
+## Screenshots
+![ScreenShot](https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/welcome_page.jpg)
+![ScreenShot](https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/register_page.jpg)
+![ScreenShot](https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/chat_overview_page.jpg)
+![ScreenShot](https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/chat_page.jpg)
+![ScreenShot](https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/user_info_popup.jpg)
 
-This Project uses Mobile.BuildTools to inject sensitive variables at build time. 
-After cloning this repository you will need to make sure that you have taken some
-time to do some basic setup in your environment prior to building.
+## How it works
+We use a direct connection to the node via GRPC for message transmission. It is transmitted through a token transaction where the app fills the data field with message information in JSON format and encrypts private information.
+These token transactions are then processed by the TRON network and once a block has been created for them, our server scans each block for transactions with our token and processes the data and notifies the app to receive all messages directly.
 
-### Application Secrets
+## What are the advantages
+By using the blockchain, messages are kept decentralized and through encryption, only the owners of the private keys of the sender and recipient will be able to read the messages.
+An example would be chats where messages are sensitive and important, in such a case none of the chat partners can pretend fraud by deleting chat messages or manipulating them through a centralized system.
+Even if our server is shut down, messages can still be retrieved through the blockchain.
+Our server acts exclusively as an interface for faster message retrieval as it synchronizes the blockchain and notifies users.
 
-Every application contains sensitive information that should never be checked into
-source control. In order to handle this the Mobile.BuildTools looks for a file in
-the project named `secrets.json`. If the file exists it will generate a new file
-`Helpers/Secrets.cs` with the values from your json file. Be sure to update this ReadMe
-with any Key values that get added over time so that other developers can add this
-for local builds.
-
-```json
-{
-  "AppCenter_iOS_Secret": "{App Center Secret}",
-  "AppCenter_Android_Secret": "{App Center Secret}",
-  "AppServiceEndpoint": "{Backend API URI}"
-}
-```
-
-#### Build Server Secrets
-
-Because `secrets.json` does not exist within the checked in code and `Helpers/Secrets.cs`
-is also not checked in, the Build Server must generate the `secrets.json` as part of the 
-build. This is done automatically by including prefixed Environmental variables in the 
-build. For instance the secret for `AppCenter_iOS_Secret` would be added as
-`Secret_AppCenter_iOS_Secret` to the build environment. You can additionally add 
-platform specific secrets that are not compiled as part of the shared code by using
-the following Prefix Matrix:
-
-| Platform | Secrets Prefix |
-| -------- | -------------- |
-| Android | DroidSecret_ |
-| iOS | iOSSecret_ |
-| UWP | UWPSecret_ |
-| macOS | MacSecret_ |
-| Tizen | TizenSecret_ |
-| Default | Secret_ |
-
-If you need to inject secrets into multiple shared libraries that are part of the same 
-solution you can do this by adding an override value for `BuildHostSecretPrefix` in
-the PropertyGroup of your CSProj like:
-
-```xml
-<Project>
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <BuildHostSecretPrefix>MyCustomPrefix_</BuildHostSecretPrefix>
-  </PropertyGroup>
-</Project>
-```
-
-### Application Manifests
-
-The Mobile.BuildTools also helps with protecting Application Secrets that may be
-contained within Application Manifests like `AndroidManifest.xml` or `Info.plist`.
-Contained within the build directory are templates for these manifests which are
-not checked into Source Control.
-
-#### Developer Setup
-
-The Manifest templates should be copied from the build directory to the appropriate
-platform project and any placeholders updated as needed. Be sure that any changes
-in app permissions, etc that you may make to the manifest are updated in the Template
-as well. New secrets can be added to the template by adding `$$variableName$$` to
-the template manifest. This will then be replaced automatically on the build server.
-
-#### Build Server Setup
-
-Any variables that may exist within the Manifest templates can be injected via a
-token replacement. By default the Build Task will look for `$$` before and after 
-the variable name that you wish to replace. The build task will use any environment
-variables that start with `Manifest_` to help facilitate token replacement.
-
-For example, you may add `Manifest_AADClientId` to the build environment, and have
-`$$AADClientId$$` as a token within your manifest. The Mobile.BuildTools by default
-will only copy Manifests when building a Platform target such as iOS, Android, UWP.
-If the build definition builds more than one platform target, any variables that 
-should be different from one platform to the next should use platform specific
-tokens within the manifest.
+## The added value for TRON
+Since every message, be it a username set, profile picture set or a chat message, is a transaction on the TRON network and these transactions are not only worth air but contain a real value on the basis of private messages, which users can still access years later and therefore the TRON blockchain receives another real benefit.
+An example for the quantity of transactions would be with estimated 5000 users with an average number of 100 messages per user per day and active groups, estimated 500 000 transactions per day.
