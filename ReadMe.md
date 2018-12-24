@@ -12,7 +12,7 @@ Due to the speed of the TRON network, it is possible to run any transaction a us
 - Create an account on the tron network
 - Setup a profile (Name, Image, Status)
 - Write users by using their Tron Address
-- Every private information is encrypted
+- All private information is encrypted
 - Create groups (Name, Image, Description), can be public or private and fully encrypted
 - Join and interact with groups
 
