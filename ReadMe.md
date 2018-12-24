@@ -1,5 +1,6 @@
 # Converse – Decentralized Chat
-
+*Converse is still in beta and is a project that was developed for the Tron Accelerator within a period of 1 month.*  
+*Further functions and UI improvements will follow.*
 ## About
 Converse is the first decentralized chat running on the TRON blockchain.  
 Due to the speed of the TRON network, it is possible to run any transaction a user makes through the blockchain and encrypt it with the technology that the blockchain provides, instead of using a central intermediary to transport messages.
