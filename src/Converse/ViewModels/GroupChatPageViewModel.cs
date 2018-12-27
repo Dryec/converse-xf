@@ -22,25 +22,12 @@ using Acr.UserDialogs;
 using ItemTappedEventArgs = Syncfusion.ListView.XForms.ItemTappedEventArgs;
 using Converse.Database;
 using Converse.Helpers;
-using Org.BouncyCastle.Utilities.Encoders;
+using System.Text;
 
 namespace Converse.ViewModels
 {
-    public class ScrollEventArgs : EventArgs
-    {
-        public int Index { get; }
-        public bool Animated { get; }
-        public Syncfusion.ListView.XForms.ScrollToPosition ScrollPosition { get; set; }
 
-        public ScrollEventArgs(int index, bool animated, Syncfusion.ListView.XForms.ScrollToPosition scrollToPosition)
-        {
-            Index = index;
-            Animated = animated;
-            ScrollPosition = scrollToPosition;
-        }
-    }
-
-    public class ChatPageViewModel : ViewModelBase
+    public class GroupChatPageViewModel : ViewModelBase
     {
         public event EventHandler ScrollMessagesEvent;
 
@@ -48,7 +35,7 @@ namespace Converse.ViewModels
         public ICommand SendMessageCommand { get; set; }
 
         public ChatEntry Chat { get; set; }
-        //public UserInfo MySelf { get; set; }
+        public Wallet GroupWallet { get; set; }
 
         public ObservableCollection<ChatMessage> Messages { get; set; }
         public ChatMessage SelectedMessage { get; set; }
@@ -68,11 +55,9 @@ namespace Converse.ViewModels
 
         Random _randomPendingID;
 
-
-        public ChatPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IFirebasePushNotification firebasePushNotification, IUserDialogs userDialogs,
-                                    SyncServerConnection syncServer, TokenMessagesQueueService tokenMessagesQueueService, TronConnection tronConnection, WalletManager walletManager, ConverseDatabase converseDatabase)
-            : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServer, tronConnection, walletManager, tokenMessagesQueueService, converseDatabase)
+        public GroupChatPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, Plugin.FirebasePushNotification.Abstractions.IFirebasePushNotification firebasePushNotification, Acr.UserDialogs.IUserDialogs userDialogs, Services.SyncServerConnection syncServerConnection, Services.TronConnection tronConnection, Tron.WalletManager walletManager, Services.TokenMessagesQueueService tokenMessagesQueueService, Database.ConverseDatabase converseDatabase) : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService, converseDatabase)
         {
+            GroupWallet = null;
             _randomPendingID = new Random();
             Message = string.Empty;
             Messages = new ObservableCollection<ChatMessage>();
@@ -82,7 +67,6 @@ namespace Converse.ViewModels
 
             PropertyChanged += ChatPageViewModel_PropertyChanged;
         }
-
 
         async void SendMessage()
         {
@@ -112,8 +96,8 @@ namespace Converse.ViewModels
             // Add to message queue
             await _tokenMessagesQueue.AddAsync(
                     _walletManager.Wallet.Address,
-                    Chat.ChatPartner.TronAddress, // TODO Check public Key
-                    new SendMessageTokenMessage { Message = extendedMessage.Encrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey) }
+                    Chat.GroupInfo.TronAddress, // TODO Check public Key
+                    new SendGroupMessageTokenMessage { Message = extendedMessage.Encrypt(_walletManager.Wallet, Chat.GroupInfo.PublicKey) }
                 );
 
             // Add to messages
@@ -203,7 +187,7 @@ namespace Converse.ViewModels
                         if (message.ID >= start && message.ID <= end)
                         {
                             message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
-                            message.Decrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey);
+                            message.Decrypt(GroupWallet, message.Sender.PublicKey);
                             Messages.Insert(0, message);
                             addedRows++;
                         }
@@ -218,7 +202,7 @@ namespace Converse.ViewModels
                 {
                     var message = dbMessage.ToChatMessage();
                     message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
-                    message.Decrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey);
+                    message.Decrypt(GroupWallet, message.Sender.PublicKey);
                     Messages.Insert(0, message);
                     addedRows++;
                 }
@@ -287,11 +271,11 @@ namespace Converse.ViewModels
                 foreach (var message in messages.Messages)
                 {
                     message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
-                    message.Decrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey);
+                    message.Decrypt(GroupWallet, message.Sender.PublicKey);
 
                     foreach (var msg in Messages)
                     {
-                        if (message.ExtendedMessage?.PendingID == msg.ExtendedMessage?.PendingID && msg.ExtendedMessage.IsPending)
+                        if (msg.ExtendedMessage?.IsPending == true && message.ExtendedMessage?.PendingID == msg.ExtendedMessage?.PendingID)
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
@@ -350,48 +334,27 @@ namespace Converse.ViewModels
         {
             if (parameters.GetNavigationMode() == NavigationMode.New)
             {
-                UserInfo chatPartner = null;
-                if(parameters.TryGetValue<ChatEntry>("ChatEntry", out var chat))
+                if (parameters.TryGetValue<ChatEntry>("ChatEntry", out var chat))
                 {
-                    Chat = chat;
-                }
-                else if (parameters.TryGetValue(KnownNavigationParameters.XamlParam, out object data)
-                    || parameters.TryGetValue("address", out data))
-                {
-                    if (data is string address && WalletAddress.Decode58Check(address) != null)
+                    if (chat != null && chat.Type == Enums.ChatType.Group)
                     {
-                        var user = await _database.Users.GetByAddress(address);
-                        if (user != null)
+                        Chat = chat;
+                        Title = Chat.GroupInfo.Name;
+                        if (chat.GroupInfo.PrivateKey != null)
                         {
-                            chatPartner = user.ToUserInfo();
-                        }
-                        else
-                        {
-                            chatPartner = await _syncServer.GetUserAsync(address);
+                            var privKey = _walletManager.Wallet.Decrypt(chat.GroupInfo.PrivateKey, chat.GroupInfo.PublicKey);
+                            if (privKey != null)
+                            {
+                                GroupWallet = new Wallet(privKey);
+                            }
                         }
                     }
-                    else if (data is ItemTappedEventArgs itemTappedEventArgs)
+
+                    if (GroupWallet == null)
                     {
-                        if (itemTappedEventArgs.ItemData is ChatEntry chatEntry)
-                        {
-                            Chat = chatEntry;
-                        }
+                        _userDialogs.Toast("not a group");
+                        await _navigationService.GoBackAsync();
                     }
-                }
-
-                if (Chat == null && chatPartner != null)
-                {
-                    Chat = new ChatEntry { ID = 0, ChatPartner = chatPartner, Type = Enums.ChatType.Normal };
-                }
-
-                if (Chat != null && Chat.Type == Enums.ChatType.Normal)
-                {
-                    Title = Chat.ChatPartner.Name;
-                }
-                else
-                {
-                    _userDialogs.Toast("not an user");
-                    await _navigationService.GoBackAsync();
                 }
             }
         }
@@ -414,7 +377,7 @@ namespace Converse.ViewModels
                         {
                             var m = chatMessage.ToChatMessage();
                             m.IsSender = m.Sender.TronAddress == _walletManager.Wallet.Address;
-                            m.Decrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey);
+                            m.Decrypt(GroupWallet, m.Sender.PublicKey);
                             chatMessages.Add(m);
                         }
 
@@ -426,14 +389,30 @@ namespace Converse.ViewModels
                         {
                             var extendedMessage = pendingMessage.ToExtendedMessage();
 
-                            chatMessages.Add(new ChatMessage
+                            var isStillPending = true;
+                            foreach (var message in chatMessages)
                             {
-                                ExtendedMessage = extendedMessage,
-                                Timestamp = extendedMessage.Timestamp,
-                                IsSender = true,
-                                ChatID = Chat.ID,
-                                ID = lastMessage != null ? lastMessage.ID : 0
-                            });
+                                if (message.ExtendedMessage?.PendingID == pendingMessage.PendingID)
+                                {
+                                    isStillPending = false;
+                                    break;
+                                }
+                            }
+                            if (isStillPending)
+                            {
+                                chatMessages.Add(new ChatMessage
+                                {
+                                    ExtendedMessage = extendedMessage,
+                                    Timestamp = extendedMessage.Timestamp,
+                                    IsSender = true,
+                                    ChatID = Chat.ID,
+                                    ID = lastMessage != null ? lastMessage.ID : 0
+                                });
+                            }
+                            else
+                            {
+                                await _database.PendingMessages.Delete(Chat.ID, pendingMessage.PendingID);
+                            }
                         }
                     }
 
@@ -502,6 +481,5 @@ namespace Converse.ViewModels
                 await LoadNewMessages();
             });
         }
-
     }
 }

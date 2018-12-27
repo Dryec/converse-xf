@@ -18,8 +18,7 @@
     NavigationPage.HasNavigationBar="False"
     Title="{Binding Title}"
     x:Name="page"
-    x:Class="Converse.Views.ChatPage"
-    BackgroundColor="#E1E8F2">
+    x:Class="Converse.Views.GroupChatPage">
     <ContentPage.Resources>
         <ResourceDictionary>
             <localdts:ChatMessageTemplateSelector
@@ -49,9 +48,9 @@
         <local:ChatTitleBarView
             Grid.Row="0"
             CanGoBack="true"
-            Image="{Binding Chat.ChatPartner.ImageUrl}"
-            ImageTappedCommand="{prismnav:NavigateTo 'UserPopupPage'}"
-            ImageTappedCommandParameter="{Binding Chat.ChatPartner}" />
+            Image="{Binding Chat.GroupInfo.ImageUrl}"
+            ImageTappedCommand="{prismnav:NavigateTo 'GroupPopupPage'}"
+            ImageTappedCommandParameter="{Binding Chat.GroupInfo}" />
         <ScrollView
             x:Name="ChatScrollView"
             VerticalOptions="Fill"

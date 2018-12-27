@@ -15,7 +15,7 @@ namespace Converse.Services
         {
             public const string Api = "api/";
             public const string Users = Api + "users/";
-            public const string Groups = Api + "groups/";
+            public const string Groups = Chats + "group/{addressOrId}/{userAddress}";
             public const string Chats = Api + "chats/";
             public const string ChatMessages = Chats + "{chatID}/messages/{start}/{end}";
             public const string RequestTokens = Users + "{address_id}/requesttokens";
@@ -156,11 +156,13 @@ namespace Converse.Services
             }
         }
 
-        public async Task<GroupInfo> GetGroupAsync(string addressOrId)
+        public async Task<GroupInfo> GetGroupAsync(object addressOrId, string userAddress)
         {
             try
             {
-                var request = new RestRequest(Endpoints.Groups + addressOrId, dataFormat: DataFormat.Json);
+                var request = new RestRequest(Endpoints.Groups, dataFormat: DataFormat.Json);
+                request.AddUrlSegment("addressOrId", addressOrId);
+                request.AddUrlSegment("userAddress", userAddress);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
                 var group = JsonConvert.DeserializeObject<GroupInfo>(response.Content, _jsonSerializerSettings);

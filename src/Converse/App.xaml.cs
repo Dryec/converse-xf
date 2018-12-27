@@ -180,10 +180,12 @@ namespace Converse
             containerRegistry.RegisterForNavigation<ConfirmRecoveryPhrasePage, ConfirmRecoveryPhrasePageViewModel>();
             containerRegistry.RegisterForNavigation<ChatsOverviewPage, ChatsOverviewPageViewModel>();
             containerRegistry.RegisterForNavigation<ChatPage, ChatPageViewModel>();
+            containerRegistry.RegisterForNavigation<GroupChatPage, GroupChatPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
             containerRegistry.RegisterForNavigation<AddChatOptionPopupPage, AddChatOptionPopupPageViewModel>();
             containerRegistry.RegisterForNavigation<QrCodePopupPage, QrCodePopupPageViewModel>();
             containerRegistry.RegisterForNavigation<UserPopupPage, UserPopupPageViewModel>();
+            containerRegistry.RegisterForNavigation<GroupPopupPage, GroupPopupPageViewModel>();
             containerRegistry.RegisterForNavigation<UpdateUserPopupPage, UpdateUserPopupPageViewModel>();
             containerRegistry.RegisterForNavigation<ImagePopupPage, ImagePopupPageViewModel>();
             containerRegistry.RegisterForNavigation<CreateGroupPopupPage, CreateGroupPopupPageViewModel>();

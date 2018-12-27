@@ -39,7 +39,7 @@
             VerticalOptions="Start">
             <Frame
                 Margin="10"
-                VerticalOptions="Start"
+                VerticalOptions="Start" HeightRequest="75"
                 Padding="15,15,0,15"
                 CornerRadius="15">
                 <Grid
@@ -113,6 +113,7 @@
                         NumberOfTapsRequired="1" />
                 </ContentView.GestureRecognizers>
             </Frame>
+            <!--
             <TableView
                 Intent="Settings"
                 HasUnevenRows="false">
@@ -139,6 +140,13 @@
                     </TableSection>
                 </TableRoot>
             </TableView>
+            -->
+            <Label
+                Margin="25,75,25,15"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Converse is still in the BETA phase, we apologize for any errors that may occur and would appreciate it if you would let us know.&#xA;&#xA;More features, improvements and advanced settings will follow within the next few weeks.&#xA;&#xA;This platform was developed for the #TronAccelerator by Tron Society and will be continued, for any questions and comments we are reachable via tron-society@outlook.com ." />
         </StackLayout>
     </Grid>
 </ContentPage>

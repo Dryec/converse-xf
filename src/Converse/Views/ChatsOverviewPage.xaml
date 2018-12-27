@@ -41,16 +41,23 @@
             Grid.Row="0"
             CanGoBack="false"
             AddCommand="{prismnav:NavigateTo 'AddChatOptionPopupPage'}" />
+        <ffimageloading:CachedImage
+            Grid.Row="1"
+            IsVisible="{Binding AreChatsEmpty}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Source="add_chat_hint" />
         <sflistview:SfListView
             Grid.Row="1"
             SelectionBackgroundColor="Transparent"
             ItemTemplate="{StaticResource ChatEntryTemplateSelector}"
-            TapCommand="{prismnav:NavigateTo 'ChatPage'}"
+            TapCommand="{Binding OpenChatCommand}"
             ItemsSource="{Binding ChatEntries}"
             ItemSize="65">
         </sflistview:SfListView>
         <Frame
-            Grid.Row="1" IsVisible="{Binding IsBandwidthWarningVisible}"
+            Grid.Row="1"
+            IsVisible="{Binding IsBandwidthWarningVisible}"
             Margin="15"
             VerticalOptions="End">
             <ScrollView>
@@ -64,10 +71,15 @@
                     <Label
                         Text="You can send TRX to your address using your QR Code, these will be used to pay the transaction fee on the blockchain." />
                     <Label
-                        Text="1 TRX equals around 100 messages" FontAttributes="Bold"/>
+                        Text="1 TRX equals around 100 messages"
+                        FontAttributes="Bold" />
                     <Label
                         Text="We are giving our best to increase your free bandwidth! Thanks for understanding!" />
-          <Button Margin="0,10,0,0" Text="Ok" BackgroundColor="{StaticResource Primary2}" Command="{Binding DismissBandwidthWarningCommand}"/>
+                    <Button
+                        Margin="0,10,0,0"
+                        Text="Ok"
+                        BackgroundColor="{StaticResource Primary2}"
+                        Command="{Binding DismissBandwidthWarningCommand}" />
                 </StackLayout>
             </ScrollView>
         </Frame>

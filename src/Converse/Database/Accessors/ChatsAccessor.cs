@@ -107,6 +107,11 @@ namespace Converse.Database.Accessors
             return await _database.DeleteAsync<Chat>(id);
         }
 
+        public async Task<int> DeleteByChatID(int id)
+        {
+            return await _database.Table<Chat>().Where(p => p.ChatID == id).DeleteAsync();
+        }
+
         public async Task<int> DeleteAll()
         {
             return await _database.DeleteAllAsync<Chat>();

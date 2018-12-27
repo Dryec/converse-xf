@@ -50,18 +50,18 @@
                 FontAttributes="None"
                 VerticalOptions="Center"
                 HorizontalOptions="Center" />
-            <ffimageloading:CachedImage
+            <ffimageloading:CachedImage x:Name="ChatImage"
                 Grid.Row="0"
                 Margin="5,6,6,6"
                 HorizontalOptions="End"
-                Source="{Binding Chat.ChatPartner.ImageUrl}">
+                Source="{Binding Image,Source={x:Reference view}}">
                 <ffimageloading:CachedImage.Transformations>
                     <fftransformations:CircleTransformation />
                 </ffimageloading:CachedImage.Transformations>
                 <ContentView.GestureRecognizers>
                     <TapGestureRecognizer
-                        Command="{prismnav:NavigateTo 'UserPopupPage'}"
-                        CommandParameter="{Binding Chat.ChatPartner}"
+                        Command="{Binding ImageTappedCommand,Source={x:Reference view}}"
+                        CommandParameter="{Binding ImageTappedCommandParameter,Source={x:Reference view}}"
                         NumberOfTapsRequired="1" />
                 </ContentView.GestureRecognizers>
             </ffimageloading:CachedImage>

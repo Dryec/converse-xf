@@ -11,6 +11,9 @@ namespace Converse.Models
         [JsonProperty("id"), DefaultValue(0)]
         public int UserID { get; set; }
 
+        [JsonProperty("rank"), DefaultValue(0)]
+        public int Rank { get; set; }
+
         [JsonProperty("address"), DefaultValue("")]
         public string TronAddress { get; set; }
 

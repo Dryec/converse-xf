@@ -19,11 +19,11 @@
             </ffimageloading:CachedImage>
                 <Entry
                     HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" IsEnabled="{Binding IsNotBusy}"
-                    Placeholder="Enter User or Group Address" Text="{Binding UserAddress}" />
+                    Placeholder="Enter User or Group Address" Text="{Binding Address}" />
             <Button BackgroundColor="{StaticResource Primary2}" IsEnabled="{Binding IsNotBusy}"
                 Text="Open Chat" Command="{Binding OpenChatCommand}"/>
             <Button Margin="0,0,0,0" IsEnabled="{Binding IsNotBusy}"
-                Text="Scan Address QR Code" Command="{Binding ScanCommand}"/>
+                Text="Scan User or Group QR Code" Command="{Binding ScanCommand}"/>
             <Button Margin="0,25,0,0" IsEnabled="{Binding IsNotBusy}"
                 Text="Create New Group"
                                 Command="{prismnav:NavigateTo 'CreateGroupPopupPage'}"/>

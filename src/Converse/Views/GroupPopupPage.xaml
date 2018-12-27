@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:zx="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+    xmlns:zxcm="clr-namespace:ZXing.Common;assembly=zxing.portable"
+    xmlns:sflistview="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    xmlns:data="clr-namespace:Syncfusion.DataSource;assembly=Syncfusion.DataSource.Portable"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    Title="{Binding Title}"
+    x:Class="Converse.Views.GroupPopupPage">
+    <Frame
+        Margin="15,75"
+        Padding="0,0,0,15"
+        VerticalOptions="Center"
+        HorizontalOptions="Fill">
+        <Grid
+            RowSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="120" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+            <ffimageloading:CachedImage
+                Grid.Row="0"
+                Source="{Binding Group.ImageUrl}"
+                Aspect="AspectFill">
+                <ffimageloading:CachedImage.Transformations>
+                    <fftransformations:BlurredTransformation
+                        Radius="25" />
+                </ffimageloading:CachedImage.Transformations>
+            </ffimageloading:CachedImage>
+            <ffimageloading:CachedImage
+                Grid.Row="0"
+                Margin="10"
+                Source="{Binding Group.ImageUrl}"
+                ErrorPlaceholder="baseline_person_grayish_48"
+                LoadingPlaceholder="baseline_person_grayish_48">
+                <ffimageloading:CachedImage.Transformations>
+                    <fftransformations:ColorFillTransformation
+                        HexColor="#efefef" />
+                    <fftransformations:CircleTransformation />
+                </ffimageloading:CachedImage.Transformations>
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{prismnav:NavigateTo 'ImagePopupPage'}"
+                        CommandParameter="{Binding Group.ImageUrl}"
+                        NumberOfTapsRequired="1" />
+                </ContentView.GestureRecognizers>
+            </ffimageloading:CachedImage>
+            <Frame
+                Grid.Row="0"
+                Margin="0,5,5,0"
+                VerticalOptions="Start"
+                HorizontalOptions="End"
+                HeightRequest="50"
+                WidthRequest="50"
+                Padding="0"
+                HasShadow="false">
+                    <zx:ZXingBarcodeImageView
+                        BarcodeFormat="QR_CODE"
+                        BarcodeValue="{Binding AddressQrCodeContent}"
+                        Aspect="AspectFill"
+                        HeightRequest="250"
+                        WidthRequest="250"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="CenterAndExpand">
+                        <zx:ZXingBarcodeImageView.BarcodeOptions>
+                            <zxcm:EncodingOptions
+                                Width="500"
+                                Height="500" />
+                        </zx:ZXingBarcodeImageView.BarcodeOptions>
+                        <ContentView.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{prismnav:NavigateTo 'QrCodePopupPage'}"
+                                CommandParameter="{Binding AddressQrCodeContent}"
+                                NumberOfTapsRequired="1" />
+                        </ContentView.GestureRecognizers>
+                    </zx:ZXingBarcodeImageView>
+            </Frame>
+            <ContentView
+                Grid.Row="1"
+                BackgroundColor="White">
+                <StackLayout
+                    Margin="15,0"
+                    Grid.Row="2">
+                    <Label
+                        Grid.Row="1"
+                        Margin="0,10,0,0"
+                        HorizontalOptions="Center"
+                        FontSize="21"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        Text="{Binding Group.Name}" />
+                    <Label
+                        HorizontalOptions="Center"
+                        Text="{Binding Group.Description}" />
+                    <BoxView
+                        Margin="15"
+                        WidthRequest="25"
+                        HeightRequest="1"
+                        HorizontalOptions="Center"
+                        Color="{StaticResource Primary2}" />
+                    <sflistview:SfListView
+                        x:Name="listView"
+                        VerticalOptions="StartAndExpand"
+                        SelectionBackgroundColor="Transparent"
+                        ItemSize="65"
+                        ItemsSource="{Binding Users}">
+                        <sflistview:SfListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ViewCell.View>
+                                        <Grid
+                                            RowSpacing="0"
+                                            Margin="0,8,10,0"
+                                            ColumnSpacing="10">
+                                            <Grid.Resources>
+                                            </Grid.Resources>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition
+                                                    Width="50" />
+                                                <ColumnDefinition
+                                                    Width="*" />
+                                                <ColumnDefinition
+                                                    Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition
+                                                    Height="*" />
+                                                <RowDefinition
+                                                    Height="8" />
+                                            </Grid.RowDefinitions>
+                                            <ffimageloading:CachedImage
+                                                Grid.Column="0"
+                                                Source="{Binding ImageUrl}"
+                                                ErrorPlaceholder="baseline_person_grayish_48"
+                                                LoadingPlaceholder="baseline_person_grayish_48">
+                                                <ffimageloading:CachedImage.Transformations>
+                                                    <fftransformations:ColorFillTransformation
+                                                        HexColor="#efefef" />
+                                                    <fftransformations:CircleTransformation />
+                                                </ffimageloading:CachedImage.Transformations>
+                                            </ffimageloading:CachedImage>
+                                            <Grid
+                                                Grid.Column="1"
+                                                RowSpacing="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition
+                                                        Width="*" />
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition
+                                                        Height="*" />
+                                                    <RowDefinition
+                                                        Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    VerticalOptions="End"
+                                                    Text="{Binding Name}"
+                                                    FontAttributes="Bold"
+                                                    TextColor="Black"
+                                                    FontSize="16"
+                                                    LineBreakMode="TailTruncation" />
+                                                <Label
+                                                    Grid.Row="1"
+                                                    Grid.Column="0"
+                                                    FontSize="14"
+                                                    Text="{Binding Status.Message}"
+                                                    LineBreakMode="TailTruncation" />
+                                            </Grid>
+                                            <BoxView
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                VerticalOptions="End"
+                                                HeightRequest="1"
+                                                Color="Gray"
+                                                Opacity=".2" />
+                                        </Grid>
+                                    </ViewCell.View>
+                                </ViewCell>
+                            </DataTemplate>
+                        </sflistview:SfListView.ItemTemplate>
+                    </sflistview:SfListView>
+                    <StackLayout
+                        IsVisible="{Binding Group.IsPublic}"
+                        Orientation="Horizontal">
+                        <Button
+                            IsVisible="{Binding IsMember}"
+                            BackgroundColor="{StaticResource Primary3}"
+                            Text="Leave"
+                            Command="{Binding LeaveCommand}"
+                            HorizontalOptions="Start" />
+                        <Button
+                            BackgroundColor="{StaticResource Primary}"
+                            Text="Share"
+                            HorizontalOptions="FillAndExpand" />
+                        <Button
+                            IsVisible="{Binding IsNotMember}"
+                            BackgroundColor="{StaticResource Primary2}"
+                            Text="Join"
+                            Command="{Binding JoinCommand}"
+                            HorizontalOptions="FillAndExpand" />
+                    </StackLayout>
+                    <StackLayout
+                        IsVisible="{Binding Group.IsPrivate}"
+                        Orientation="Horizontal">
+                        <Button
+                            BackgroundColor="{StaticResource Primary3}"
+                            Text="Leave"
+                            Command="{Binding LeaveCommand}"
+                            HorizontalOptions="Start" />
+                        <Button
+                            IsVisible="{Binding IsAdmin}"
+                            BackgroundColor="{StaticResource Primary}"
+                            Text="Add User"
+                            HorizontalOptions="FillAndExpand" />
+                    </StackLayout>
+                </StackLayout>
+            </ContentView>
+        </Grid>
+    </Frame>
+</pages:PopupPage>

@@ -15,8 +15,11 @@ namespace Converse.Models
         [JsonProperty("address"), DefaultValue("")]
         public string TronAddress { get; set; }
 
-        [JsonProperty("priv_key")]
+        [JsonProperty("private_key")]
         public byte[] PrivateKey { get; set; }
+
+        [JsonProperty("public_key")]
+        public byte[] PublicKey { get; set; }
 
         [JsonProperty("name"), DefaultValue("")]
         public string Name { get; set; }
@@ -29,6 +32,9 @@ namespace Converse.Models
 
         [JsonProperty("is_public"), DefaultValue(false)]
         public bool IsPublic { get; set; }
+
+        [JsonIgnore]
+        public bool IsPrivate => !IsPublic;
 
         [JsonProperty("users")]
         public List<UserInfo> Users { get; set; }

@@ -208,6 +208,7 @@
     <AndroidResource Include="Resources\mipmap-xhdpi\ic_logo_blue.png" />
     <AndroidResource Include="Resources\mipmap-mdpi\ic_logo_blue.png" />
     <AndroidResource Include="Resources\mipmap-hdpi\ic_logo_blue.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\add_chat_hint.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

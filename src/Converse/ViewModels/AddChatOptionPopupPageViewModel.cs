@@ -28,7 +28,7 @@ namespace Converse.ViewModels
         public DelegateCommand ScanCommand { get; }
         public DelegateCommand OpenChatCommand { get; }
 
-        public string UserAddress { get; set; }
+        public string Address { get; set; }
 
         public AddChatOptionPopupPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, IFirebasePushNotification firebasePushNotification,
                                                 IBarcodeScannerService barcodeScanner, IUserDialogs userDialogs, SyncServerConnection syncServerConnection, TronConnection tronConnection, WalletManager walletManager, TokenMessagesQueueService tokenMessagesQueueService, ConverseDatabase converseDatabase)
@@ -47,33 +47,43 @@ namespace Converse.ViewModels
             try
             {
                 await Task.Delay(1000);
-                var addressBytes = WalletAddress.Decode58Check(UserAddress);
+                var addressBytes = WalletAddress.Decode58Check(Address);
                 if (addressBytes != null)
                 {
                     var account = await _tronConnection.Client.GetAccountAsync(new Protocol.Account { Address = ByteString.CopyFrom(addressBytes) });
                     if (!account.Address.IsEmpty)
                     {
-                        var user = await _syncServer.GetUserAsync(UserAddress);
-
-                        if (user != null)
+                        var group = await _syncServer.GetGroupAsync(Address, _walletManager.Wallet.Address);
+                        if (group != null)
                         {
+
                             var navParams = new NavigationParameters();
-                            navParams.Add("address", UserAddress);
-                            await _navigationService.NavigateAsync("ChatPage", navParams);
+                            navParams.Add("group", group);
+                            await _navigationService.NavigateAsync("GroupPopupPage", navParams);
                         }
                         else
                         {
-                            _userDialogs.Toast("User is not registered or unable to load");
+                            var user = await _syncServer.GetUserAsync(Address);
+                            if (user != null)
+                            {
+                                var navParams = new NavigationParameters();
+                                navParams.Add("address", Address);
+                                await _navigationService.NavigateAsync("ChatPage", navParams);
+                            }
+                            else
+                            {
+                                _userDialogs.Toast("User is not registered or unable to load");
+                            }
                         }
                     }
                     else
                     {
-                        _userDialogs.Toast("User is not yet activated");
+                        _userDialogs.Toast("User or Group is not yet activated");
                     }
                 }
                 else
                 {
-                    _userDialogs.Toast("Not a user address");
+                    _userDialogs.Toast("Not an user or group address");
                 }
             }
             catch (RpcException ex)
@@ -102,7 +112,7 @@ namespace Converse.ViewModels
                     var content = await _barcodeScanner.ReadBarcodeAsync();
                     if (!string.IsNullOrWhiteSpace(content))
                     {
-                        UserAddress = content;
+                        Address = content;
                         //OpenChatCommand.Execute();
                     }
                 }

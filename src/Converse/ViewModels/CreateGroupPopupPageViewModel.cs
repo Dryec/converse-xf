@@ -73,7 +73,8 @@ namespace Converse.ViewModels
 
                 PublicKey = wallet.Encrypt(groupWallet.PublicKey, AppConstants.PropertyAddressPublicKey),
 
-                PrivateKey = wallet.Encrypt(groupWallet.PrivateKey, groupWallet.PublicKey),
+                PrivateKey = Group.IsPublic ? wallet.Encrypt(groupWallet.PrivateKey, AppConstants.PropertyAddressPublicKey) 
+                                            : wallet.Encrypt(groupWallet.PrivateKey, groupWallet.PublicKey),
 
                 IsPublic = Group.IsPublic
             };
@@ -82,7 +83,9 @@ namespace Converse.ViewModels
 
             var waitResult = await _tokenMessagesQueue.WaitForAsync(pendingId);
 
-            if(waitResult)
+            _fcm.Subscribe($"{AppConstants.FCM.Topics.Group}_{groupWallet.Address}");
+
+            if (waitResult)
             {
                 await _userDialogs.AlertAsync("Your group is pending and will appear soon in your chat overview", "Group Pending", "Ok");
             }

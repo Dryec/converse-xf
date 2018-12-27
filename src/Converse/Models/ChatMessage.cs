@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Text;
 using Converse.Tron;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Utilities.Encoders;
@@ -58,11 +59,20 @@ namespace Converse.Models
         [JsonIgnore]
         public ExtendedMessage ExtendedMessage { get; set; }
 
+        public void Decrypt(byte[] privateKey, byte[] otherKey)
+        {
+            if(privateKey != null && privateKey.Length > 0)
+            {
+                var wallet = new Wallet(privateKey);
+                Decrypt(wallet, otherKey);
+            }
+        }
+
         public void Decrypt(Wallet wallet, byte[] otherKey)
         {
             try
             {
-                ExtendedMessage = JsonConvert.DeserializeObject<ExtendedMessage>(wallet.Decrypt(Message, otherKey), new JsonSerializerSettings { DateTimeZoneHandling = DateTimeZoneHandling.Local });
+                ExtendedMessage = JsonConvert.DeserializeObject<ExtendedMessage>(wallet.DecryptToString(Message, otherKey), new JsonSerializerSettings { DateTimeZoneHandling = DateTimeZoneHandling.Local });
             }
             catch (Exception ex)
             {
@@ -70,17 +80,25 @@ namespace Converse.Models
                 {
                     ExtendedMessage = new ExtendedMessage
                     {
-                        Message = wallet.Decrypt(Message, otherKey),
+                        Message = wallet.DecryptToString(Message, otherKey),
                         Timestamp = Timestamp
                     };
                 }
                 catch (Exception ex2)
                 {
-                    ExtendedMessage = new ExtendedMessage
+                    try
                     {
-                        Message = "…could not decrypt…",
-                        Timestamp = Timestamp
-                    };
+                        ExtendedMessage = JsonConvert.DeserializeObject<ExtendedMessage>(Encoding.UTF8.GetString(Message));
+                    }
+                    catch (Exception ex3)
+                    {
+                        ExtendedMessage = new ExtendedMessage
+                        {
+                            Message = "…could not decrypt…",
+                            Timestamp = Timestamp
+                        };
+                        Debug.WriteLine(ex3);
+                    }
                     Debug.WriteLine(ex2);
                 }
                 Debug.WriteLine(ex);

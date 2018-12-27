@@ -55,6 +55,7 @@ namespace Converse.Helpers
             public static class Topics
             {
                 public const string Update = "update";
+                public const string Group = "group";
             }
 
             public static class Types

@@ -76,6 +76,11 @@ namespace Converse.Tron
             ECKey = new ECKey();
         }
 
+        public Wallet(byte[] privateKey)
+        {
+            ECKey = new ECKey(privateKey);
+        }
+
         public Wallet(ECKey eCKey)
         {
             ECKey = eCKey;
@@ -136,7 +141,7 @@ namespace Converse.Tron
             return ECKey.Encrypt(data, publicKey);
         }
 
-        public string Decrypt(byte[] encryptedMessage, byte[] publicKey)
+        public string DecryptToString(byte[] encryptedMessage, byte[] publicKey)
         {
             var decryptedBytes = ECKey.Decrypt(encryptedMessage, publicKey);
 
@@ -145,6 +150,12 @@ namespace Converse.Tron
                 return Encoding.UTF8.GetString(decryptedBytes);
             }
             return string.Empty;
+        }
+
+        public byte[] Decrypt(byte[] encryptedMessage, byte[] publicKey)
+        {
+            var decryptedBytes = ECKey.Decrypt(encryptedMessage, publicKey); 
+            return decryptedBytes;
         }
     }
 }
