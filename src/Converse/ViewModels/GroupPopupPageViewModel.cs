@@ -10,6 +10,9 @@ using Converse.Models;
 using System.Collections.ObjectModel;
 using Converse.TokenMessages;
 using Converse.Helpers;
+using Client;
+using Converse.Tron;
+using System.Diagnostics;
 
 namespace Converse.ViewModels
 {
@@ -26,6 +29,7 @@ namespace Converse.ViewModels
 
         public ObservableCollection<UserInfo> Users { get; private set; }
         public string AddressQrCodeContent { get; set; }
+        public bool IsLoaded { get; private set; }
 
         public GroupPopupPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IDeviceService deviceService, Plugin.FirebasePushNotification.Abstractions.IFirebasePushNotification firebasePushNotification, Acr.UserDialogs.IUserDialogs userDialogs, Services.SyncServerConnection syncServerConnection, Services.TronConnection tronConnection, Tron.WalletManager walletManager, Services.TokenMessagesQueueService tokenMessagesQueueService, Database.ConverseDatabase converseDatabase) : base(navigationService, pageDialogService, deviceService, firebasePushNotification, userDialogs, syncServerConnection, tronConnection, walletManager, tokenMessagesQueueService, converseDatabase)
         {
@@ -73,38 +77,90 @@ namespace Converse.ViewModels
 
         public override async void OnNavigatingTo(INavigationParameters parameters)
         {
-            if (parameters.TryGetValue(KnownNavigationParameters.XamlParam, out GroupInfo group)
-                || parameters.TryGetValue("group", out group))
+            var navMode = parameters.GetNavigationMode();
+            if (navMode == NavigationMode.New)
             {
-                AddressQrCodeContent = group.TronAddress;
+                if (parameters.TryGetValue(KnownNavigationParameters.XamlParam, out GroupInfo group)
+                    || parameters.TryGetValue("group", out group))
+                {
+                    AddressQrCodeContent = group.TronAddress;
 
-                var dbGroup = await _database.Groups.GetByGroupID(group.GroupID);
-                if (dbGroup != null)
-                {
-                    Group = dbGroup.ToGroupInfo();
-                }
-                group = await _syncServer.GetGroupAsync(group.GroupID, _walletManager.Wallet.Address);
-                if (group != null)
-                {
-                    Group = group;
-                }
-            }
-
-            if (Group != null)
-            {
-                Users = new ObservableCollection<UserInfo>(Group.Users);
-                foreach (var user in Group.Users)
-                {
-                    if (user.TronAddress.Equals(_walletManager.Wallet.Address))
+                    var dbGroup = await _database.Groups.GetByGroupID(group.GroupID);
+                    if (dbGroup != null)
                     {
-                        GroupUserInfo = user;
+                        Group = dbGroup.ToGroupInfo();
+                    }
+                    group = await _syncServer.GetGroupAsync(group.GroupID, _walletManager.Wallet.Address);
+                    if (group != null)
+                    {
+                        Group = group;
                     }
                 }
+
+                if (Group != null)
+                {
+                    Users = new ObservableCollection<UserInfo>(Group.Users);
+                    foreach (var user in Group.Users)
+                    {
+                        if (user.TronAddress.Equals(_walletManager.Wallet.Address))
+                        {
+                            GroupUserInfo = user;
+                        }
+                    }
+                    IsLoaded = true;
+                }
+                else
+                {
+                    _userDialogs.Toast("Could not load group info");
+                    await _navigationService.GoBackAsync();
+                }
             }
-            else
+            else if (navMode == NavigationMode.Back)
             {
-                _userDialogs.Toast("Could not load group info");
-                await _navigationService.GoBackAsync();
+                if (parameters.TryGetValue("selected_address", out string address))
+                {
+                    // Add user
+                    if (WalletAddress.Decode58Check(address) != null)
+                    {
+                        _userDialogs.ShowLoading();
+                        var user = await _syncServer.GetUserAsync(address);
+                        if (user != null)
+                        {
+                            var ok = await _userDialogs.ConfirmAsync($"Do you want to add {user.Name}?", Group.Name);
+                            if (ok)
+                            {
+                                try
+                                {
+                                    var privKey = _walletManager.Wallet.Decrypt(Group.PrivateKey, Group.PublicKey);
+                                    var groupWallet = new Wallet(privKey);
+                                    var privKeyEnc = groupWallet.Encrypt(groupWallet.PrivateKey, user.PublicKey);
+                                    var pubKeyEnc = _walletManager.Wallet.Encrypt(user.TronAddress, AppConstants.PropertyAddressPublicKey);
+
+                                    var pendingId = await _tokenMessagesQueue.AddAsync(_walletManager.Wallet.Address, Group.TronAddress,
+                                                                                       new AddUserToGroupTokenMessage
+                                                                                       {
+                                                                                           Address = pubKeyEnc,
+                                                                                           PrivateKey = privKeyEnc
+                                                                                       });
+
+                                    var waitResult = await _tokenMessagesQueue.WaitForAsync(pendingId);
+
+                                    await _userDialogs.AlertAsync($"{user.Name} will be added shortly", waitResult ? "Added" : "Pending");
+                                }
+                                catch (Exception ex)
+                                {
+                                    Debug.WriteLine(ex);
+                                    _userDialogs.Alert($"Something went wrong while adding {user.Name}", "Failed");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            _userDialogs.Alert("Could not find user", "Adding Failed");
+                        }
+                        _userDialogs.HideLoading();
+                    }
+                }
             }
         }
     }

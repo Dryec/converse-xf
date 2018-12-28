@@ -66,26 +66,26 @@
                 WidthRequest="50"
                 Padding="0"
                 HasShadow="false">
-                    <zx:ZXingBarcodeImageView
-                        BarcodeFormat="QR_CODE"
-                        BarcodeValue="{Binding AddressQrCodeContent}"
-                        Aspect="AspectFill"
-                        HeightRequest="250"
-                        WidthRequest="250"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="CenterAndExpand">
-                        <zx:ZXingBarcodeImageView.BarcodeOptions>
-                            <zxcm:EncodingOptions
-                                Width="500"
-                                Height="500" />
-                        </zx:ZXingBarcodeImageView.BarcodeOptions>
-                        <ContentView.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{prismnav:NavigateTo 'QrCodePopupPage'}"
-                                CommandParameter="{Binding AddressQrCodeContent}"
-                                NumberOfTapsRequired="1" />
-                        </ContentView.GestureRecognizers>
-                    </zx:ZXingBarcodeImageView>
+                <zx:ZXingBarcodeImageView
+                    BarcodeFormat="QR_CODE"
+                    BarcodeValue="{Binding AddressQrCodeContent}"
+                    Aspect="AspectFill"
+                    HeightRequest="250"
+                    WidthRequest="250"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="CenterAndExpand">
+                    <zx:ZXingBarcodeImageView.BarcodeOptions>
+                        <zxcm:EncodingOptions
+                            Width="500"
+                            Height="500" />
+                    </zx:ZXingBarcodeImageView.BarcodeOptions>
+                    <ContentView.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{prismnav:NavigateTo 'QrCodePopupPage'}"
+                            CommandParameter="{Binding AddressQrCodeContent}"
+                            NumberOfTapsRequired="1" />
+                    </ContentView.GestureRecognizers>
+                </zx:ZXingBarcodeImageView>
             </Frame>
             <ContentView
                 Grid.Row="1"
@@ -196,38 +196,42 @@
                         </sflistview:SfListView.ItemTemplate>
                     </sflistview:SfListView>
                     <StackLayout
-                        IsVisible="{Binding Group.IsPublic}"
-                        Orientation="Horizontal">
-                        <Button
-                            IsVisible="{Binding IsMember}"
-                            BackgroundColor="{StaticResource Primary3}"
-                            Text="Leave"
-                            Command="{Binding LeaveCommand}"
-                            HorizontalOptions="Start" />
-                        <Button
-                            BackgroundColor="{StaticResource Primary}"
-                            Text="Share"
-                            HorizontalOptions="FillAndExpand" />
-                        <Button
-                            IsVisible="{Binding IsNotMember}"
-                            BackgroundColor="{StaticResource Primary2}"
-                            Text="Join"
-                            Command="{Binding JoinCommand}"
-                            HorizontalOptions="FillAndExpand" />
-                    </StackLayout>
-                    <StackLayout
-                        IsVisible="{Binding Group.IsPrivate}"
-                        Orientation="Horizontal">
-                        <Button
-                            BackgroundColor="{StaticResource Primary3}"
-                            Text="Leave"
-                            Command="{Binding LeaveCommand}"
-                            HorizontalOptions="Start" />
-                        <Button
-                            IsVisible="{Binding IsAdmin}"
-                            BackgroundColor="{StaticResource Primary}"
-                            Text="Add User"
-                            HorizontalOptions="FillAndExpand" />
+                            IsVisible="{Binding IsLoaded}">
+                        <StackLayout
+                            IsVisible="{Binding Group.IsPublic}"
+                            Orientation="Horizontal">
+                            <Button
+                                IsVisible="{Binding IsMember}"
+                                BackgroundColor="{StaticResource Primary3}"
+                                Text="Leave"
+                                Command="{Binding LeaveCommand}"
+                                HorizontalOptions="Start" />
+                            <Button
+                                BackgroundColor="{StaticResource Primary}"
+                                Text="Share"
+                                HorizontalOptions="FillAndExpand" />
+                            <Button
+                                IsVisible="{Binding IsNotMember}"
+                                BackgroundColor="{StaticResource Primary2}"
+                                Text="Join"
+                                Command="{Binding JoinCommand}"
+                                HorizontalOptions="FillAndExpand" />
+                        </StackLayout>
+                        <StackLayout
+                            IsVisible="{Binding Group.IsPrivate}"
+                            Orientation="Horizontal">
+                            <Button
+                                BackgroundColor="{StaticResource Primary3}"
+                                Text="Leave"
+                                Command="{Binding LeaveCommand}"
+                                HorizontalOptions="Start" />
+                            <Button
+                                IsVisible="{Binding IsAdmin}"
+                                BackgroundColor="{StaticResource Primary}"
+                                Text="Add User"
+                                Command="{prismnav:NavigateTo 'SelectUserPopupPage'}"
+                                HorizontalOptions="FillAndExpand" />
+                        </StackLayout>
                     </StackLayout>
                 </StackLayout>
             </ContentView>

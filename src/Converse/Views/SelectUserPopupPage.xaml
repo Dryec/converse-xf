@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:zx="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+    xmlns:zxcm="clr-namespace:ZXing.Common;assembly=zxing.portable"
+    xmlns:sflistview="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    xmlns:data="clr-namespace:Syncfusion.DataSource;assembly=Syncfusion.DataSource.Portable"
+    xmlns:prismnav="clr-namespace:Prism.Navigation.Xaml;assembly=Prism.Forms"
+    Title="{Binding Title}"
+    x:Class="Converse.Views.SelectUserPopupPage">
+    <Frame
+        Margin="15,25"
+        Padding="0,15,0,15"
+        VerticalOptions="Center"
+        HorizontalOptions="Fill">
+        <StackLayout
+            Margin="15,0"
+            Grid.Row="0">
+            <Label
+                Grid.Row="1"
+                Margin="0,10,0,0"
+                HorizontalOptions="Center"
+                FontSize="21"
+                FontAttributes="Bold"
+                TextColor="Black"
+                Text="Select user address" />
+            <BoxView
+                Margin="15"
+                WidthRequest="25"
+                HeightRequest="1"
+                HorizontalOptions="Center"
+                Color="{StaticResource Primary2}" />
+            <Entry x:Name="AddressEntry"
+                HorizontalOptions="FillAndExpand"
+                Text="{Binding Address}"
+                Placeholder="Address" />
+            <Button
+                HorizontalOptions="FillAndExpand"
+                Text="Scan QR Code" Command="{Binding ScanCommand}" />
+            <BoxView
+                Margin="15"
+                WidthRequest="25"
+                HeightRequest="1"
+                HorizontalOptions="Center"
+                Color="{StaticResource Primary2}" />
+            <sflistview:SfListView
+                x:Name="listView"
+                VerticalOptions="StartAndExpand" ItemTapped="Handle_ItemTapped"
+                SelectionBackgroundColor="#11000000"
+                ItemSize="65"
+                ItemsSource="{Binding Users}">
+                <sflistview:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.View>
+                                <Grid
+                                    RowSpacing="0"
+                                    Margin="0,8,10,0"
+                                    ColumnSpacing="10">
+                                    <Grid.Resources>
+                                    </Grid.Resources>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition
+                                            Width="50" />
+                                        <ColumnDefinition
+                                            Width="*" />
+                                        <ColumnDefinition
+                                            Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition
+                                            Height="*" />
+                                        <RowDefinition
+                                            Height="8" />
+                                    </Grid.RowDefinitions>
+                                    <ffimageloading:CachedImage
+                                        Grid.Column="0"
+                                        Source="{Binding ImageUrl}"
+                                        ErrorPlaceholder="baseline_person_grayish_48"
+                                        LoadingPlaceholder="baseline_person_grayish_48">
+                                        <ffimageloading:CachedImage.Transformations>
+                                            <fftransformations:ColorFillTransformation
+                                                HexColor="#efefef" />
+                                            <fftransformations:CircleTransformation />
+                                        </ffimageloading:CachedImage.Transformations>
+                                    </ffimageloading:CachedImage>
+                                    <Grid
+                                        Grid.Column="1"
+                                        RowSpacing="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition
+                                                Height="*" />
+                                            <RowDefinition
+                                                Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            VerticalOptions="End"
+                                            Text="{Binding Name}"
+                                            FontAttributes="Bold"
+                                            TextColor="Black"
+                                            FontSize="16"
+                                            LineBreakMode="TailTruncation" />
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            FontSize="14"
+                                            Text="{Binding TronAddress}"
+                                            LineBreakMode="TailTruncation" />
+                                    </Grid>
+                                    <BoxView
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        VerticalOptions="End"
+                                        HeightRequest="1"
+                                        Color="Gray"
+                                        Opacity=".2" />
+                                </Grid>
+                            </ViewCell.View>
+                        </ViewCell>
+                    </DataTemplate>
+                </sflistview:SfListView.ItemTemplate>
+            </sflistview:SfListView>
+            <StackLayout
+                Orientation="Horizontal">
+                <Button
+                    BackgroundColor="{StaticResource Primary3}"
+                    Text="Cancel"
+                    Command="{prismnav:GoBack}"
+                    HorizontalOptions="Start" />
+                <Button
+                    BackgroundColor="{StaticResource Primary2}"
+                    Text="Select"
+                    Command="{Binding SelectCommand}"
+                    HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</pages:PopupPage>

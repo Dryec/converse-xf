@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Converse.DataTemplateSelectors;
 using Converse.Models;
 using Converse.ViewModels;
 using Syncfusion.ListView.XForms;
@@ -16,6 +17,7 @@ namespace Converse.Views
 
         // Workaround for crash when closing page while listview tries to scroll
         public ObservableCollection<ChatMessage> Messages { get; set; }
+        public ChatMessageTemplateSelector TemplateSelector {get;set;}
 
         public GroupChatPage()
         {
@@ -38,6 +40,7 @@ namespace Converse.Views
             ChatMessagesListView.Opacity = 0;
 
             Messages = new ObservableCollection<ChatMessage>();
+            TemplateSelector = new ChatMessageTemplateSelector(true);
         }
 
         void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
