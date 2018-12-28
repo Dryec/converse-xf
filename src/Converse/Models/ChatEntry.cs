@@ -56,6 +56,8 @@ namespace Converse.Models
             {
                 try
                 {
+                    if (otherEntry.LastMessage == null)
+                        return 1;
                     return LastMessage.Timestamp.CompareTo(otherEntry.LastMessage.Timestamp);
                 }
                 catch (Exception ex)
