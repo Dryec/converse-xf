@@ -81,6 +81,16 @@ namespace Converse.ViewModels
 
             var pendingId = await _tokenMessagesQueue.AddAsync(wallet.Address, AppConstants.PropertyAddress, message);
 
+            // Send init message
+            await _tokenMessagesQueue.AddAsync(
+                    _walletManager.Wallet.Address,
+                    groupWallet.Address,
+                    new SendGroupMessageTokenMessage { Message = new ExtendedMessage {
+                        Message = "- Group Created -",
+                        Timestamp = DateTime.Now,
+                    }.Encrypt(_walletManager.Wallet, groupWallet.PublicKey) }
+                );
+
             var waitResult = await _tokenMessagesQueue.WaitForAsync(pendingId);
 
             _fcm.Subscribe($"{AppConstants.FCM.Topics.Group}_{groupWallet.Address}");
