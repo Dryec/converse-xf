@@ -342,7 +342,7 @@ namespace Converse.ViewModels
                         Title = Chat.GroupInfo.Name;
                         if (chat.GroupInfo.PrivateKey != null)
                         {
-                            var privKey = _walletManager.Wallet.Decrypt(chat.GroupInfo.PrivateKey, chat.GroupInfo.PublicKey);
+                            var privKey = Chat.GroupInfo.IsPublic ? Chat.GroupInfo.PrivateKey : _walletManager.Wallet.Decrypt(chat.GroupInfo.PrivateKey, chat.GroupInfo.PublicKey);
                             if (privKey != null)
                             {
                                 GroupWallet = new Wallet(privKey);

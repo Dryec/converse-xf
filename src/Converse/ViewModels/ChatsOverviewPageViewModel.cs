@@ -176,7 +176,7 @@ namespace Converse.ViewModels
                         }
                         else if (chat.Type == ChatType.Group)
                         {
-                            var privKey = _walletManager.Wallet.Decrypt(chat.GroupInfo.PrivateKey, chat.GroupInfo.PublicKey);
+                            var privKey = chat.GroupInfo.IsPublic ? chat.GroupInfo.PrivateKey : _walletManager.Wallet.Decrypt(chat.GroupInfo.PrivateKey, chat.GroupInfo.PublicKey);
                             chat.LastMessage.Decrypt(privKey, chat.LastMessage.Sender.PublicKey);
                         }
                     }
@@ -239,7 +239,7 @@ namespace Converse.ViewModels
                         }
                         else if (chatEntry.Type == ChatType.Group)
                         {
-                            var privKey = _walletManager.Wallet.Decrypt(chatEntry.GroupInfo.PrivateKey, chatEntry.GroupInfo.PublicKey);
+                            var privKey = chatEntry.GroupInfo.IsPublic ? chatEntry.GroupInfo.PrivateKey : _walletManager.Wallet.Decrypt(chatEntry.GroupInfo.PrivateKey, chatEntry.GroupInfo.PublicKey);
                             chatEntry.LastMessage.Decrypt(privKey, chatEntry.LastMessage.Sender.PublicKey);
                         }
                     }
