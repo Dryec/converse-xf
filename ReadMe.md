@@ -15,10 +15,14 @@ Check out our statistics here http://eu-west.converse-sync.net/statistics
 
 ## Functionalities
 - Create an account on the tron network
-- Setup a profile (Name, Image, Status)
+  * Private and public keypair, which gets activated by us for free
+- Setup and update a profile
+  * Name, Image and Status
 - Write users by using their Tron Address
 - All private information is encrypted
-- Create groups (Name, Image, Description), can be public or private and fully encrypted
+- Create and update groups
+  * Name, Image, Description
+  * Public or private and fully encrypted
 - Join and interact with groups
 
 ## Planned (not ordered)
