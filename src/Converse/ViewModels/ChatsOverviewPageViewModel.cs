@@ -20,6 +20,7 @@ using System.Diagnostics;
 using Google.Protobuf;
 using Client;
 using Protocol;
+using Converse.TokenMessages;
 
 namespace Converse.ViewModels
 {
@@ -47,6 +48,28 @@ namespace Converse.ViewModels
             DismissBandwidthWarningCommand = new DelegateCommand(DismissBandwidthWarningCommandExcecuted);
 
             MessagingCenter.Subscribe<TokenMessagesQueueService>(this, AppConstants.MessagingService.BandwidthError, (p) => CheckFreeUsage());
+        }
+
+        // BETA
+        async Task TryJoinPublicBetaGroup()
+        {
+            try
+            {
+
+                var joinedBeta = Xamarin.Essentials.Preferences.Get("joined_beta", false);
+
+                if (!joinedBeta)
+                {
+                    var pendingId = await _tokenMessagesQueue.AddAsync(_walletManager.Wallet.Address, AppConstants.PublicBetaGroupAddress, new JoinGroupTokenMessage());
+                    _fcm.Subscribe($"{AppConstants.FCM.Topics.Group}_{AppConstants.PublicBetaGroupAddress}");
+
+                    Xamarin.Essentials.Preferences.Set("joined_beta", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
         }
 
         async void OpenChatCommandExcecuted(object obj)
@@ -251,6 +274,9 @@ namespace Converse.ViewModels
                 }
                 ChatEntries = new ExtendedObservableCollection<ChatEntry>(chatEntries);
                 ChatEntries.Sort(false);
+
+                // BETA
+                await TryJoinPublicBetaGroup();
             }
             else if (parameters.GetNavigationMode() == NavigationMode.Back) // Navigated back to this page
             {

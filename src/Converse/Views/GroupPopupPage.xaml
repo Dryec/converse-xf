@@ -97,7 +97,7 @@
                 WidthRequest="50"
                 Padding="0"
                 HasShadow="false">
-                <!--
+                
                 <zx:ZXingBarcodeImageView
                     BarcodeFormat="QR_CODE"
                     BarcodeValue="{Binding AddressQrCodeContent}"
@@ -118,7 +118,7 @@
                             NumberOfTapsRequired="1" />
                     </ContentView.GestureRecognizers>
                 </zx:ZXingBarcodeImageView>
-        -->
+        
             </Frame>
             <ContentView
                 Grid.Row="1"

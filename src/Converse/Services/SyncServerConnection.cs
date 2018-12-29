@@ -19,6 +19,7 @@ namespace Converse.Services
             public const string Chats = Api + "chats/";
             public const string ChatMessages = Chats + "{chatID}/messages/{start}/{end}";
             public const string RequestTokens = Users + "{address_id}/requesttokens";
+            public const string Email = Api + "subscribers/{email}/{action}";
         }
 
         RestClient _client { get; }
@@ -177,6 +178,21 @@ namespace Converse.Services
             {
                 Debug.WriteLine(e);
                 return null;
+            }
+        }
+
+        public async Task SubscribeEmail(string email, int action = 0)
+        {
+            try
+            {
+                var request = new RestRequest(Endpoints.Email, dataFormat: DataFormat.Json);
+                request.AddUrlSegment("email", email);
+                request.AddUrlSegment("action", action);
+                var response = await _client.ExecuteGetTaskAsync(request);
+            }
+            catch (JsonException e)
+            {
+                Debug.WriteLine(e);
             }
         }
     }
