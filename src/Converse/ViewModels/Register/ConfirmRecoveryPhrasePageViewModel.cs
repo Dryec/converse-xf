@@ -14,6 +14,8 @@ using Acr.UserDialogs;
 using Plugin.FirebasePushNotification.Abstractions;
 using Converse.Database;
 using Org.BouncyCastle.Utilities.Encoders;
+using System.Net.Mail;
+using System.Diagnostics;
 
 namespace Converse.ViewModels.Register
 {
@@ -58,7 +60,7 @@ namespace Converse.ViewModels.Register
                 return;
             }
 
-            if (true)//RecoveryPhraseConfirmation.Select(p => p.Trim()).SequenceEqual(RecoveryPhrase))
+            if (RecoveryPhraseConfirmation.Select(p => p.Trim()).SequenceEqual(RecoveryPhrase))
             {
                 IsBusy = true;
                 _userDialogs.ShowLoading();
@@ -101,6 +103,16 @@ namespace Converse.ViewModels.Register
 
                 await _walletManager.SaveAsync();
 
+                try
+                {
+                    var email = new MailAddress(wallet.Email);
+                    await _syncServer.SubscribeEmail(email.Address);
+                }
+                catch (FormatException ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+
                 var result = await _tokenMessagesQueue.WaitForAsync(pendingId);
 
 
@@ -113,6 +125,5 @@ namespace Converse.ViewModels.Register
                 await _pageDialogService.DisplayAlertAsync("No match", "The entered Recovery Phrase does not match", "Ok");
             }
         }
-
     }
 }
