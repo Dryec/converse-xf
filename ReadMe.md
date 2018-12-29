@@ -1,20 +1,48 @@
 # Converse – Decentralized Chat
 *Converse is still in beta and is a project that was developed for the Tron Accelerator within a period of 1 month.*  
-*Further functions and UI improvements will follow.*
+*Further functions and UI improvements will follow.*  
+*This project is an example of how powerful, applicable and easy to learn the TRON network is and can be used as an idea or template for other projects*
+
 ## About
 Converse is the first decentralized chat running on the TRON blockchain.  
 Due to the speed of the TRON network, it is possible to run any transaction a user makes through the blockchain and encrypt it with the technology that the blockchain provides, instead of using a central intermediary to transport messages.
+
+## Statistics
+Check out our statistics here http://eu-west.converse-sync.net/statistics
 
 ## Screenshots
 <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/welcome_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/register_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/chat_overview_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/chat_page.jpg" width="160"> <img src="https://raw.githubusercontent.com/Dryec/converse-xf/master/screenshots/user_info_popup.jpg" width="160">
 
 ## Functionalities
 - Create an account on the tron network
-- Setup a profile (Name, Image, Status)
+  * Private and public keypair, which gets activated by us for free
+- Setup and update a profile
+  * Name, Image and Status
 - Write users by using their Tron Address
 - All private information is encrypted
-- Create groups (Name, Image, Description), can be public or private and fully encrypted
+- Create and update groups
+  * Name, Image, Description
+  * Public or private and fully encrypted
 - Join and interact with groups
+
+## Planned (not ordered)
+- Additional login/register methods
+  * Google, Twitter, Email
+  * Give people not knowing blockchain technology an easy entry
+  * and people who don't want to keep their private key for them an alternative
+- Image and video messages
+- TRX & TRC-10 Tipping
+- Translations for multiple languages
+- Better message handling
+  * Better notifications
+  * Display events
+    * eg. group created, group joined, group left …
+- Advanced mode
+  * Enable more interaction possibilities with the blockchain
+    * Wallet view, freeze, vote and more
+- …
+
+Suggestions for improvements or comments? Contact us and let us know your idea!
 
 ## How it works
 We use a direct connection to the node via GRPC for message transmission. It is transmitted through a token transaction where the app fills the data field with message information in JSON format and encrypts private information.  
