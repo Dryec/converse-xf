@@ -49,7 +49,7 @@ namespace Converse.Services
         {
             try
             {
-                var request = new RestRequest(Endpoints.RequestTokens, dataFormat: DataFormat.Json);
+                var request = new RestRequest(Endpoints.RequestTokens, Method.GET , DataFormat.Json);
                 request.AddUrlSegment("address_id", addressOrId);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
@@ -67,7 +67,7 @@ namespace Converse.Services
         {
             try
             {
-                var request = new RestRequest(Endpoints.Chats + "all/" + addressOrId, dataFormat: DataFormat.Json);
+                var request = new RestRequest(Endpoints.Chats + "all/" + addressOrId, Method.GET, DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
                 var chats = JsonConvert.DeserializeObject<List<ChatEntry>>(response.Content, _jsonSerializerSettings);
@@ -91,7 +91,7 @@ namespace Converse.Services
         {
             try
             {
-                var request = new RestRequest(Endpoints.Chats + $"{chatId}/{userAddressOrId}", dataFormat: DataFormat.Json);
+                var request = new RestRequest(Endpoints.Chats + $"{chatId}/{userAddressOrId}", Method.GET, DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
                 var chat = JsonConvert.DeserializeObject<ChatEntry>(response.Content, _jsonSerializerSettings);
@@ -112,7 +112,7 @@ namespace Converse.Services
         {
             try
             {
-                var request = new RestRequest(Endpoints.ChatMessages, dataFormat: DataFormat.Json);
+                var request = new RestRequest(Endpoints.ChatMessages, Method.GET, DataFormat.Json);
                 request.AddUrlSegment("chatID", chatId);
                 request.AddUrlSegment("start", start);
                 request.AddUrlSegment("end", end);
@@ -139,7 +139,7 @@ namespace Converse.Services
         {
             try
             {
-                var request = new RestRequest(Endpoints.Users + addressOrId, dataFormat: DataFormat.Json);
+                var request = new RestRequest(Endpoints.Users + addressOrId, Method.GET, DataFormat.Json);
                 var response = await _client.ExecuteGetTaskAsync(request);
 
                 var user = JsonConvert.DeserializeObject<UserInfo>(response.Content, _jsonSerializerSettings);
@@ -161,7 +161,7 @@ namespace Converse.Services
         {
             try
             {
-                var request = new RestRequest(Endpoints.Groups, dataFormat: DataFormat.Json);
+                var request = new RestRequest(Endpoints.Groups, Method.GET, DataFormat.Json);
                 request.AddUrlSegment("addressOrId", addressOrId);
                 request.AddUrlSegment("userAddress", userAddress);
                 var response = await _client.ExecuteGetTaskAsync(request);
@@ -185,7 +185,7 @@ namespace Converse.Services
         {
             try
             {
-                var request = new RestRequest(Endpoints.Email, dataFormat: DataFormat.Json);
+                var request = new RestRequest(Endpoints.Email, Method.GET, DataFormat.Json);
                 request.AddUrlSegment("email", email);
                 request.AddUrlSegment("action", action);
                 var response = await _client.ExecuteGetTaskAsync(request);

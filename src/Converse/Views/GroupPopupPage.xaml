@@ -310,7 +310,7 @@
                                 IsVisible="{Binding IsAdmin}"
                                 BackgroundColor="{StaticResource Primary}"
                                 Text="Edit"
-                                Command="{Binding EditModeCommand}"
+                                Command="{Binding ToggleEditModeCommand}"
                                 HorizontalOptions="Start" />
                             <Button
                                 IsVisible="{Binding IsAdmin}"
