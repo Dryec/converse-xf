@@ -60,8 +60,7 @@
                     Grid.Row="1"
                     BackgroundColor="White">
                     <StackLayout
-                        Margin="15,0"
-                        Grid.Row="2">
+                        Margin="15,0">
                         <Label
                             Margin="25,10,25,0"
                             HorizontalOptions="Center"
@@ -69,7 +68,7 @@
                             Text="{Binding User.TronAddress}"
                             LineBreakMode="MiddleTruncation" />
                         <Entry
-                            Grid.Row="1"
+                            MaxLength="50"
                             HorizontalOptions="Fill"
                             HorizontalTextAlignment="Center"
                             Placeholder="Name"
@@ -84,7 +83,8 @@
                                 Command="{prismnav:GoBack}" />
                             <Button
                                 Text="Confirm"
-                                HorizontalOptions="FillAndExpand" Command="{Binding ConfirmCommand}"/>
+                                HorizontalOptions="FillAndExpand"
+                                Command="{Binding ConfirmCommand}" />
                         </StackLayout>
                     </StackLayout>
                 </ContentView>

@@ -56,11 +56,11 @@
                             NumberOfTapsRequired="1" />
                     </ContentView.GestureRecognizers>
                 </ContentView>
-                <Entry
+                <Entry MaxLength="50"
                     Placeholder="Name"
                     Text="{Binding Wallet.Name}"
                     HorizontalTextAlignment="Center" />
-                <Entry
+                <Entry MaxLength="256"
                     Placeholder="Email (Optional)"
                     Text="{Binding Wallet.Email}"
                     HorizontalTextAlignment="Center" />

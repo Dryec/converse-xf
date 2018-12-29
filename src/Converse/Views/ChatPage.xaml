@@ -63,7 +63,7 @@
                     x:Name="ChatMessagesListView"
                     SelectionBackgroundColor="Transparent"
                     VerticalOptions="End"
-                    ItemTemplate="{StaticResource ChatMessageTemplateSelector}"
+                    ItemTemplate="{StaticResource ChatMessageTemplateSelector}" HoldCommand="{Binding InteractMessageCommand}"
                     ItemsSource="{Binding Messages, Source={x:Reference page}}"
                     LoadMoreOption="{Binding LoadMoreOption}"
                     LoadMorePosition="Top"

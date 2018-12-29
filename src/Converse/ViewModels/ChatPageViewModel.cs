@@ -44,6 +44,7 @@ namespace Converse.ViewModels
     {
         public event EventHandler ScrollMessagesEvent;
 
+        public ICommand InteractMessageCommand { get; set; }
         public ICommand LoadMoreCommand { get; set; }
         public ICommand SendMessageCommand { get; set; }
 
@@ -79,10 +80,28 @@ namespace Converse.ViewModels
 
             LoadMoreCommand = new DelegateCommand<SfListView>(LoadMoreCommandExecuted);
             SendMessageCommand = new DelegateCommand(SendMessage);
+            InteractMessageCommand = new DelegateCommand<ItemHoldingEventArgs>(InteractMessageCommandExecuted);
 
             PropertyChanged += ChatPageViewModel_PropertyChanged;
         }
 
+        async void InteractMessageCommandExecuted(ItemHoldingEventArgs e)
+        {
+            if (e.ItemData is ChatMessage message)
+            {
+                var action = await _userDialogs.ActionSheetAsync("Action", "Cancel", null, null, "Copy");
+
+                switch (action)
+                {
+                    case "Copy":
+                        await Xamarin.Essentials.Clipboard.SetTextAsync(message.ExtendedMessage.Message);
+                        _userDialogs.Toast("Copied");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
         async void SendMessage()
         {

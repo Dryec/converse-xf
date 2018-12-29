@@ -21,6 +21,7 @@ using Converse.Helpers;
 using Newtonsoft.Json;
 using Converse.Models;
 using Converse.Tron;
+using Converse.Database;
 
 namespace Converse.Droid.Firebase
 {
@@ -38,7 +39,7 @@ namespace Converse.Droid.Firebase
             System.Diagnostics.Debug.WriteLine($"{DomainTag} - OnOpened");
         }
 
-        public void OnReceived(IDictionary<string, object> parameters)
+        public async void OnReceived(IDictionary<string, object> parameters)
         {
             System.Diagnostics.Debug.WriteLine($"{DomainTag} - OnReceived");
 
@@ -53,7 +54,20 @@ namespace Converse.Droid.Firebase
             var tag = string.Empty;
             string type = null;
 
-             if(parameters.TryGetValue(TypeKey, out var typeStr))
+            if (parameters.TryGetValue(IdKey, out var id))
+            {
+                try
+                {
+                    notifyId = Convert.ToInt32(id);
+                }
+                catch (Exception ex)
+                {
+                    // Keep the default value of zero for the notify_id, but log the conversion problem.
+                    System.Diagnostics.Debug.WriteLine($"Failed to convert {id} to an integer {ex}");
+                }
+            }
+
+            if (parameters.TryGetValue(TypeKey, out var typeStr))
             {
                 type = $"{typeStr}";
 
@@ -69,6 +83,22 @@ namespace Converse.Droid.Firebase
                                 var walletManager = (WalletManager)App.Current.Container.Resolve(typeof(WalletManager));
 
                                 chatMessage.Decrypt(walletManager.Wallet, chatMessage.Sender.PublicKey);
+
+                                if(chatMessage.ExtendedMessage == null)
+                                {
+                                    var database = (ConverseDatabase)App.Current.Container.Resolve(typeof(ConverseDatabase));
+                                    var dbChat = await database.Chats.GetByChatID(notifyId);
+                                    if(dbChat != null)
+                                    {
+                                        var chat = dbChat.ToChatEntry();
+                                        if(chat.Type == Enums.ChatType.Group)
+                                        {
+                                            var privKey = chat.GroupInfo.IsPublic ? chat.GroupInfo.PrivateKey : walletManager.Wallet.Decrypt(chat.GroupInfo.PrivateKey, chat.GroupInfo.PublicKey);
+                                            chatMessage.Decrypt(privKey, chatMessage.Sender.PublicKey);
+                                        }
+                                    }
+                                }
+
                                 message = chatMessage.ExtendedMessage.Message;
                             }
                             catch (Exception ex)
@@ -81,6 +111,7 @@ namespace Converse.Droid.Firebase
                         break;
                 }
             }
+
 
             if (message == null)
             {
@@ -110,18 +141,6 @@ namespace Converse.Droid.Firebase
                     message = $"{titleContent}";
             }
 
-            if (parameters.TryGetValue(IdKey, out var id))
-            {
-                try
-                {
-                    notifyId = Convert.ToInt32(id);
-                }
-                catch (Exception ex)
-                {
-                    // Keep the default value of zero for the notify_id, but log the conversion problem.
-                    System.Diagnostics.Debug.WriteLine($"Failed to convert {id} to an integer {ex}");
-                }
-            }
 
             if (parameters.TryGetValue(TagKey, out var tagContent))
                 tag = tagContent.ToString();

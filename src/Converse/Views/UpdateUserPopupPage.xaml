@@ -75,11 +75,11 @@
                             </ContentView.GestureRecognizers>
                         </Label>
                         <Entry
-                            Grid.Row="1"
+                            Grid.Row="1" MaxLength="50"
                             HorizontalOptions="Fill"
                             Placeholder="Name"
                             Text="{Binding User.Name}" />
-                        <Editor
+                        <Editor MaxLength="256"
                             HorizontalOptions="Fill"
                             Placeholder="Status"
                             Text="{Binding User.Status.Message}" />

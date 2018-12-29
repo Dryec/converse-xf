@@ -14,7 +14,7 @@
     Title="{Binding Title}"
     x:Class="Converse.Views.GroupPopupPage">
     <Frame
-        Margin="15,75"
+        Margin="15,60"
         Padding="0,0,0,15"
         VerticalOptions="Center"
         HorizontalOptions="Fill">
@@ -33,6 +33,7 @@
             <ffimageloading:CachedImage
                 Grid.Row="0"
                 Source="{Binding Group.ImageUrl}"
+                IsVisible="{Binding IsNotEditMode}"
                 Aspect="AspectFill">
                 <ffimageloading:CachedImage.Transformations>
                     <fftransformations:BlurredTransformation
@@ -41,6 +42,17 @@
             </ffimageloading:CachedImage>
             <ffimageloading:CachedImage
                 Grid.Row="0"
+                IsVisible="{Binding IsEditMode}"
+                Source="{Binding EditImageUrl}"
+                Aspect="AspectFill">
+                <ffimageloading:CachedImage.Transformations>
+                    <fftransformations:BlurredTransformation
+                        Radius="25" />
+                </ffimageloading:CachedImage.Transformations>
+            </ffimageloading:CachedImage>
+            <ffimageloading:CachedImage
+                Grid.Row="0"
+                IsVisible="{Binding IsNotEditMode}"
                 Margin="10"
                 Source="{Binding Group.ImageUrl}"
                 ErrorPlaceholder="baseline_person_grayish_48"
@@ -57,6 +69,25 @@
                         NumberOfTapsRequired="1" />
                 </ContentView.GestureRecognizers>
             </ffimageloading:CachedImage>
+            <ffimageloading:CachedImage
+                Grid.Row="0"
+                IsVisible="{Binding IsEditMode}"
+                Margin="10"
+                Source="{Binding EditImageUrl}"
+                ErrorPlaceholder="baseline_person_grayish_48"
+                LoadingPlaceholder="baseline_person_grayish_48">
+                <ffimageloading:CachedImage.Transformations>
+                    <fftransformations:ColorFillTransformation
+                        HexColor="#efefef" />
+                    <fftransformations:CircleTransformation />
+                </ffimageloading:CachedImage.Transformations>
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding SelectProfilePictureCommand}"
+                        CommandParameter="{Binding EditImageUrl}"
+                        NumberOfTapsRequired="1" />
+                </ContentView.GestureRecognizers>
+            </ffimageloading:CachedImage>
             <Frame
                 Grid.Row="0"
                 Margin="0,5,5,0"
@@ -66,6 +97,7 @@
                 WidthRequest="50"
                 Padding="0"
                 HasShadow="false">
+                <!--
                 <zx:ZXingBarcodeImageView
                     BarcodeFormat="QR_CODE"
                     BarcodeValue="{Binding AddressQrCodeContent}"
@@ -86,6 +118,7 @@
                             NumberOfTapsRequired="1" />
                     </ContentView.GestureRecognizers>
                 </zx:ZXingBarcodeImageView>
+        -->
             </Frame>
             <ContentView
                 Grid.Row="1"
@@ -93,17 +126,40 @@
                 <StackLayout
                     Margin="15,0"
                     Grid.Row="2">
-                    <Label
-                        Grid.Row="1"
-                        Margin="0,10,0,0"
-                        HorizontalOptions="Center"
-                        FontSize="21"
-                        FontAttributes="Bold"
-                        TextColor="Black"
-                        Text="{Binding Group.Name}" />
-                    <Label
-                        HorizontalOptions="Center"
-                        Text="{Binding Group.Description}" />
+                    <StackLayout
+                        IsVisible="{Binding IsNotEditMode}">
+                        <Label
+                            Margin="0,10,0,0"
+                            HorizontalOptions="Center"
+                            FontSize="21"
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            Text="{Binding Group.Name}" />
+                        <Label
+                            Margin="25,0,25,5"
+                            HorizontalOptions="Center"
+                            LineBreakMode="MiddleTruncation"
+                            FontSize="10"
+                            Text="{Binding Group.TronAddress}">
+                            <ContentView.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding ShareCommand}"
+                                    CommandParameter="{Binding User.TronAddress}"
+                                    NumberOfTapsRequired="1" />
+                            </ContentView.GestureRecognizers>
+                        </Label>
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="{Binding Group.Description}" />
+                    </StackLayout>
+                    <StackLayout
+                        IsVisible="{Binding IsEditMode}">
+                        <Entry MaxLength="50"
+                            Margin="0,10,0,0" Placeholder="Name"
+                            Text="{Binding EditName}" />
+                        <Entry MaxLength="512" Placeholder="Description"
+                            Text="{Binding EditDescription}" />
+                    </StackLayout>
                     <BoxView
                         Margin="15"
                         WidthRequest="25"
@@ -196,7 +252,23 @@
                         </sflistview:SfListView.ItemTemplate>
                     </sflistview:SfListView>
                     <StackLayout
-                            IsVisible="{Binding IsLoaded}">
+                        IsVisible="{Binding IsLoaded}">
+            
+                        <StackLayout
+                            IsVisible="{Binding IsEditMode}"
+                            Orientation="Horizontal" HorizontalOptions="Center">
+                            <Button
+                                BackgroundColor="{StaticResource Primary3}"
+                                Text="Cancel"
+                                Command="{Binding ToggleEditModeCommand}"
+                                HorizontalOptions="Start" />
+                            <Button
+                                IsVisible="{Binding IsAdmin}"
+                                BackgroundColor="{StaticResource Primary2}"
+                                Text="Save"
+                                Command="{Binding SaveCommand}"
+                                HorizontalOptions="Start" />
+                        </StackLayout>
                         <StackLayout
                             IsVisible="{Binding Group.IsPublic}"
                             Orientation="Horizontal">
@@ -207,8 +279,15 @@
                                 Command="{Binding LeaveCommand}"
                                 HorizontalOptions="Start" />
                             <Button
+                                IsVisible="{Binding IsAdmin}"
+                                BackgroundColor="{StaticResource Primary}"
+                                Text="Edit"
+                                Command="{Binding ToggleEditModeCommand}"
+                                HorizontalOptions="FillAndExpand" />
+                            <Button
                                 BackgroundColor="{StaticResource Primary}"
                                 Text="Share"
+                                Command="{Binding ShareCommand}"
                                 HorizontalOptions="FillAndExpand" />
                             <Button
                                 IsVisible="{Binding IsNotMember}"
@@ -217,6 +296,8 @@
                                 Command="{Binding JoinCommand}"
                                 HorizontalOptions="FillAndExpand" />
                         </StackLayout>
+            
+            
                         <StackLayout
                             IsVisible="{Binding Group.IsPrivate}"
                             Orientation="Horizontal">
@@ -228,6 +309,12 @@
                             <Button
                                 IsVisible="{Binding IsAdmin}"
                                 BackgroundColor="{StaticResource Primary}"
+                                Text="Edit"
+                                Command="{Binding EditModeCommand}"
+                                HorizontalOptions="Start" />
+                            <Button
+                                IsVisible="{Binding IsAdmin}"
+                                BackgroundColor="{StaticResource Primary2}"
                                 Text="Add User"
                                 Command="{prismnav:NavigateTo 'SelectUserPopupPage'}"
                                 HorizontalOptions="FillAndExpand" />
