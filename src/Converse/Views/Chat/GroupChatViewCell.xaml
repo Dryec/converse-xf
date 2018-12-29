@@ -74,8 +74,9 @@
                 Orientation="Horizontal">
                 <Label
                     FontSize="14"
+                    HorizontalOptions="Start"
+                    LineBreakMode="NoWrap"
                     Text="{Binding LastMessage.Sender.Name, Converter={StaticResource AddColonToStringConverter}}"
-                    LineBreakMode="TailTruncation"
                     TextColor="{StaticResource Primary}" />
                 <Label
                     FontSize="14"

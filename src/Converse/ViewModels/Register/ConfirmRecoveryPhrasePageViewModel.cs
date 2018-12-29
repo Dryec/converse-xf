@@ -108,7 +108,7 @@ namespace Converse.ViewModels.Register
                     var email = new MailAddress(wallet.Email);
                     await _syncServer.SubscribeEmail(email.Address);
                 }
-                catch (FormatException ex)
+                catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
                 }

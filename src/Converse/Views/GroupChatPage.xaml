@@ -68,6 +68,7 @@
                     LoadMorePosition="Top"
                     LoadMoreCommand="{Binding LoadMoreCommand}"
                     LoadMoreCommandParameter="{Binding Source={x:Reference ChatMessagesListView}}"
+                    HoldCommand="{Binding InteractMessageCommand}"
                     AutoFitMode="Height">
                 </sflistview:SfListView>
                 <local:ChatInputView

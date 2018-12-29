@@ -10,6 +10,6 @@ namespace Converse.Views
         }
 
         // Prevent hide popup
-        protected override bool OnBackButtonPressed() => true;
+        protected override bool OnBackButtonPressed() => false;
     }
 }
