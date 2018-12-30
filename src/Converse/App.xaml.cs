@@ -119,7 +119,7 @@ namespace Converse
             CrossFirebasePushNotification.Current.OnNotificationReceived += (s, p) =>
             {
                 System.Diagnostics.Debug.WriteLine("Received", "Firebase");
-           };
+            };
             CrossFirebasePushNotification.Current.OnNotificationOpened += (s, p) =>
             {
                 System.Diagnostics.Debug.WriteLine("Opened", "Firebase");
@@ -215,7 +215,27 @@ namespace Converse
 
         async void FCM_OnTokenRefresh(object source, Plugin.FirebasePushNotification.Abstractions.FirebasePushNotificationTokenEventArgs e)
         {
+            try
+            {
+                var walletManager = Container.Resolve<WalletManager>();
+                var queue = Container.Resolve<TokenMessagesQueueService>();
 
+                if (Xamarin.Essentials.Preferences.Get(AppConstants.Preferences.WalletSaved, false) && walletManager.Wallet != null)
+                {
+                    var pendingId = await queue.AddAsync(
+                        walletManager.Wallet.Address,
+                        AppConstants.PropertyAddress,
+                        new AddDeviceIdTokenMessage
+                        {
+                            DeviceID = walletManager.Wallet.Encrypt(e.Token, AppConstants.PropertyAddressPublicKey)
+                        }
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         void LogUnobservedTaskExceptions()

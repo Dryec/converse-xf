@@ -59,6 +59,7 @@ namespace Converse.Tron
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Name, Wallet.Name ?? string.Empty);
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.Email, Wallet.Email ?? string.Empty);
             await Xamarin.Essentials.SecureStorage.SetAsync(AppConstants.Keys.User.ProfileImageUrl, Wallet.ProfileImageUrl ?? string.Empty);
+            Xamarin.Essentials.Preferences.Set(AppConstants.Preferences.WalletSaved, true);
             return true;
         }
     }

@@ -84,5 +84,10 @@ namespace Converse.Helpers
         {
             public const string BandwidthError = "ms_bandwidth_error";
         }
+
+        public static class Preferences
+        {
+            public const string WalletSaved = "wallet_saved";
+        }
     }
 }

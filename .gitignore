@@ -58,6 +58,4 @@ project.lock.json
 Converse.*.nuget.*
 
 # Manifests
-Info.plist
-AndroidManifest.xml
 src/Converse.Droid/google-services.json
