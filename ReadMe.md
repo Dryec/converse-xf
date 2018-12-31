@@ -8,7 +8,7 @@ Converse is the first decentralized chat running on the TRON blockchain.
 Due to the speed of the TRON network, it is possible to run any transaction a user makes through the blockchain and encrypt it with the technology that the blockchain provides, instead of using a central intermediary to transport messages.
 
 ## Statistics
-Check out our statistics here http://eu-west.converse-sync.net/statistics
+Check out our statistics here http://eu-west.converse-sync.net/statistics  
 or directly our token where you can track all transactions https://tronscan.org/#/token/Converse/TFnJbbEXKWVNz84L9ysbWMvJGD2v8seZu8/
 
 Genesis Block is 5,350,000
