@@ -66,6 +66,14 @@ namespace Converse.Models
                 var wallet = new Wallet(privateKey);
                 Decrypt(wallet, otherKey);
             }
+            else
+            {
+                ExtendedMessage = new ExtendedMessage
+                {
+                    Message = "…could not decrypt…",
+                    Timestamp = Timestamp
+                };
+            }
         }
 
         public void Decrypt(Wallet wallet, byte[] otherKey)

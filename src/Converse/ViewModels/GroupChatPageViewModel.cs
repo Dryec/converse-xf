@@ -75,10 +75,15 @@ namespace Converse.ViewModels
         {
             if (e.ItemData is ChatMessage message)
             {
-                var action = await _userDialogs.ActionSheetAsync("Action", "Cancel", null, null, "Copy");
+                var action = await _userDialogs.ActionSheetAsync($"Message from {message.Sender?.Name}", "Cancel", null, null, "Open Chat", "Copy");
 
                 switch (action)
                 {
+                    case "Open Chat":
+                        var navParams = new NavigationParameters();
+                        navParams.Add("user", message.Sender);
+                        await _navigationService.NavigateAsync("ChatPage", navParams);
+                        break;
                     case "Copy":
                         await Xamarin.Essentials.Clipboard.SetTextAsync(message.ExtendedMessage.Message);
                         _userDialogs.Toast("Copied");

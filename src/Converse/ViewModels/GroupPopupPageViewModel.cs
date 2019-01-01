@@ -17,6 +17,7 @@ using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Firebase.Storage;
 using NETCore.Encrypt;
+using Syncfusion.ListView.XForms;
 
 namespace Converse.ViewModels
 {
@@ -28,6 +29,7 @@ namespace Converse.ViewModels
         public DelegateCommand ToggleEditModeCommand { get; private set; }
         public DelegateCommand SelectProfilePictureCommand { get; private set; }
         public DelegateCommand SaveCommand { get; private set; }
+        public DelegateCommand<ItemTappedEventArgs> UserTappedCommand { get; private set; }
 
         public GroupInfo Group { get; private set; }
         public UserInfo GroupUserInfo { get; private set; }
@@ -57,9 +59,31 @@ namespace Converse.ViewModels
             ToggleEditModeCommand = new DelegateCommand(ToggleEditModeCommandExecuted);
             SelectProfilePictureCommand = new DelegateCommand(SelectProfilePictureCommandExecuted);
             SaveCommand = new DelegateCommand(SaveCommandExecuted);
+            UserTappedCommand = new DelegateCommand<ItemTappedEventArgs>(UserTappedCommandExecuted);
         }
 
+        async void UserTappedCommandExecuted(ItemTappedEventArgs e)
+        {
+            if (e.ItemData is UserInfo user)
+            {
+                var action = await _userDialogs.ActionSheetAsync(user.Name, "Cancel", null, null, "Open Chat", "Show Info");
 
+                var navParams = new NavigationParameters();
+                switch (action)
+                {
+                    case "Open Chat":
+                        navParams.Add("user", user);
+                        await _navigationService.NavigateAsync("ChatPage", navParams);
+                        break;
+                    case "Show Info":
+                        navParams.Add("user", user);
+                        await _navigationService.NavigateAsync("UserPopupPage", navParams);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
         async void SaveCommandExecuted()
         {

@@ -97,7 +97,6 @@
                 WidthRequest="50"
                 Padding="0"
                 HasShadow="false">
-                
                 <zx:ZXingBarcodeImageView
                     BarcodeFormat="QR_CODE"
                     BarcodeValue="{Binding AddressQrCodeContent}"
@@ -118,7 +117,6 @@
                             NumberOfTapsRequired="1" />
                     </ContentView.GestureRecognizers>
                 </zx:ZXingBarcodeImageView>
-        
             </Frame>
             <ContentView
                 Grid.Row="1"
@@ -154,10 +152,15 @@
                     </StackLayout>
                     <StackLayout
                         IsVisible="{Binding IsEditMode}">
-                        <Entry MaxLength="50"
-                            Margin="0,10,0,0" Placeholder="Name"
+                        <Entry
+                            MaxLength="50"
+                            Margin="0,10,0,0"
+                            Placeholder="Name"
                             Text="{Binding EditName}" />
-                        <Entry MaxLength="512" Placeholder="Description"
+                        <Editor
+                            MaxLength="512"
+                            Placeholder="Description"
+                            AutoSize="TextChanges"
                             Text="{Binding EditDescription}" />
                     </StackLayout>
                     <BoxView
@@ -167,7 +170,7 @@
                         HorizontalOptions="Center"
                         Color="{StaticResource Primary2}" />
                     <sflistview:SfListView
-                        x:Name="listView"
+                        x:Name="listView" TapCommand="{Binding UserTappedCommand}"
                         VerticalOptions="StartAndExpand"
                         SelectionBackgroundColor="Transparent"
                         ItemSize="65"
@@ -253,10 +256,10 @@
                     </sflistview:SfListView>
                     <StackLayout
                         IsVisible="{Binding IsLoaded}">
-            
                         <StackLayout
                             IsVisible="{Binding IsEditMode}"
-                            Orientation="Horizontal" HorizontalOptions="Center">
+                            Orientation="Horizontal"
+                            HorizontalOptions="Center">
                             <Button
                                 BackgroundColor="{StaticResource Primary3}"
                                 Text="Cancel"
@@ -296,8 +299,6 @@
                                 Command="{Binding JoinCommand}"
                                 HorizontalOptions="FillAndExpand" />
                         </StackLayout>
-            
-            
                         <StackLayout
                             IsVisible="{Binding Group.IsPrivate}"
                             Orientation="Horizontal">

@@ -39,7 +39,7 @@
             VerticalOptions="Start">
             <Frame
                 Margin="10"
-                VerticalOptions="Start" HeightRequest="75"
+                VerticalOptions="Start" HeightRequest="65"
                 Padding="15,15,0,15"
                 CornerRadius="15">
                 <Grid

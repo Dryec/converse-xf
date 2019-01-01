@@ -40,7 +40,7 @@ namespace Converse.Views
             ChatMessagesListView.Opacity = 0;
 
             Messages = new ObservableCollection<ChatMessage>();
-            TemplateSelector = new ChatMessageTemplateSelector(true);
+            TemplateSelector = new ChatMessageTemplateSelector(true, true);
         }
 
         void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

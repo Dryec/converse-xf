@@ -11,16 +11,17 @@ namespace Converse.DataTemplateSelectors
         readonly DataTemplate _rightMessageDataTemplate;
         readonly DataTemplate _leftMessageDataTemplate;
 
-        public ChatMessageTemplateSelector() : this(false)
+        public ChatMessageTemplateSelector() : this(false, false)
         {
 
         }
 
-        public ChatMessageTemplateSelector(bool showName)
+        public ChatMessageTemplateSelector(bool showName, bool showImage)
         {
             _rightMessageDataTemplate = new DataTemplate(typeof(RightChatMessageViewCell));
             _leftMessageDataTemplate = new DataTemplate(typeof(LeftChatMessageViewCell));
             _leftMessageDataTemplate.SetValue(LeftChatMessageViewCell.ShowNameProperty, showName);
+            _leftMessageDataTemplate.SetValue(LeftChatMessageViewCell.ShowImageProperty, showImage);
         }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)

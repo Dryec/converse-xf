@@ -167,7 +167,7 @@ namespace Converse.ViewModels.Login
                 new ChangeNameTokenMessage { Name = wallet.Encrypt(wallet.Name, AppConstants.PropertyAddressPublicKey) }
             );
 
-            if (User.Status == null)
+            if (User.Status == null || string.IsNullOrEmpty(User.Status.Message))
             {
                 // Set Status to default
                 await _tokenMessagesQueue.AddAsync(

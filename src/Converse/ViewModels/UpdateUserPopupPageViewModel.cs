@@ -50,6 +50,13 @@ namespace Converse.ViewModels
                 _userDialogs.Toast("Could not yet load user, try again later");
                 await _navigationService.GoBackAsync();
             }
+            else
+            {
+                if(User.Status == null)
+                {
+                    User.Status = new UserStatus();
+                }
+            }
         }
 
         async void SelectProfilePictureCommandExecuted()
@@ -168,7 +175,7 @@ namespace Converse.ViewModels
             await _tokenMessagesQueue.AddAsync(
                                  wallet.Address,
                                  AppConstants.PropertyAddress,
-                                 new ChangeStatusTokenMessage { Status = wallet.Encrypt(User.Status.Message, AppConstants.PropertyAddressPublicKey) });
+                                 new ChangeStatusTokenMessage { Status = wallet.Encrypt(User.Status?.Message, AppConstants.PropertyAddressPublicKey) });
 
             // Set Image if exist
             var existImage = _walletManager.Wallet.ProfileImageUrl != null && Uri.IsWellFormedUriString(wallet.ProfileImageUrl, UriKind.Absolute);

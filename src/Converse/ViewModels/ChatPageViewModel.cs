@@ -374,15 +374,29 @@ namespace Converse.ViewModels
                 {
                     Chat = chat;
                 }
+                else if(parameters.TryGetValue("user", out UserInfo user))
+                {
+                    chatPartner = user;
+
+                    var dbChats = await _database.Chats.GetAll();
+                    foreach (var dbChat in dbChats)
+                    {
+                        chat = dbChat.ToChatEntry();
+                        if(chat.ChatPartner?.TronAddress == user.TronAddress)
+                        {
+                            Chat = chat;
+                        }
+                    }
+                }
                 else if (parameters.TryGetValue(KnownNavigationParameters.XamlParam, out object data)
                     || parameters.TryGetValue("address", out data))
                 {
                     if (data is string address && WalletAddress.Decode58Check(address) != null)
                     {
-                        var user = await _database.Users.GetByAddress(address);
-                        if (user != null)
+                        var dbUser = await _database.Users.GetByAddress(address);
+                        if (dbUser != null)
                         {
-                            chatPartner = user.ToUserInfo();
+                            chatPartner = dbUser.ToUserInfo();
                         }
                         else
                         {

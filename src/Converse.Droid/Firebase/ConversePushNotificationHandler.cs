@@ -82,6 +82,11 @@ namespace Converse.Droid.Firebase
                                 var chatMessage = JsonConvert.DeserializeObject<ChatMessage>($"{data}");
                                 var walletManager = (WalletManager)App.Current.Container.Resolve(typeof(WalletManager));
 
+                                if(chatMessage.Sender.TronAddress == walletManager.Wallet.Address)
+                                {
+                                    return;
+                                }
+
                                 chatMessage.Decrypt(walletManager.Wallet, chatMessage.Sender.PublicKey);
 
                                 if(chatMessage.ExtendedMessage == null)

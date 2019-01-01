@@ -89,7 +89,7 @@ namespace Converse.Tron
         public Wallet(string privData, bool isPrivateKey = false)
         {
             ECKey = isPrivateKey ? new ECKey(privData) : new ECKey(BIP39.GetSeedBytes(privData).Take(32).ToArray());
-            Mnemonic = privData;
+            Mnemonic = isPrivateKey ? string.Empty : privData;
         }
 
         public async Task<long> GetConverseTokenAmountAsync(TronConnection connection)
@@ -154,8 +154,15 @@ namespace Converse.Tron
 
         public byte[] Decrypt(byte[] encryptedMessage, byte[] publicKey)
         {
-            var decryptedBytes = ECKey.Decrypt(encryptedMessage, publicKey); 
-            return decryptedBytes;
+            try
+            {
+                var decryptedBytes = ECKey.Decrypt(encryptedMessage, publicKey); 
+                return decryptedBytes;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

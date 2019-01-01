@@ -8,7 +8,7 @@
     x:Name="view"
     x:Class="Converse.Views.Chat.LeftChatMessageViewCell">
     <Grid
-        Padding="5,5,75,5"
+        Padding="0,5,75,5"
         RowSpacing="0"
         Margin="10,4,10,4"
         ColumnSpacing="10">
@@ -23,12 +23,29 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition
                 Width="Auto" />
+            <ColumnDefinition
+                Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
+        <ffimageloading:CachedImage
+            x:Name="ChatImage"
+            Grid.Row="0"
+            IsVisible="{Binding ShowImage,Source={x:Reference view}}"
+            Margin="0,3,0,0"
+      HeightRequest="32" WidthRequest="32" DownsampleToViewSize="true"
+            HorizontalOptions="Start" VerticalOptions="Start"
+            Source="{Binding Sender.ImageUrl}">
+            <ffimageloading:CachedImage.Transformations>
+                            <fftransformations:ColorFillTransformation
+                                HexColor="#efefef" />
+                <fftransformations:CircleTransformation />
+            </ffimageloading:CachedImage.Transformations>
+        </ffimageloading:CachedImage>
         <Frame
+            Grid.Column="1"
             Padding="10,10,10,3"
             CornerRadius="10"
             BackgroundColor="{StaticResource LeftMessageBubbleColor}">
@@ -46,7 +63,9 @@
                     <RowDefinition
                         Height="Auto" />
                 </Grid.RowDefinitions>
-                <Label Margin="0" FontAttributes="Bold"
+                <Label
+                    Margin="0"
+                    FontAttributes="Bold"
                     IsVisible="{Binding ShowName,Source={x:Reference view}}"
                     Grid.Row="0"
                     Text="{Binding Sender.Name}"
