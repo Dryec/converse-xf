@@ -69,7 +69,7 @@ namespace Converse.ViewModels.Register
 
                 _fcm.Subscribe($"{AppConstants.FCM.Topics.Update}_{wallet.Address}");
 
-                // Set firebase token to property address
+                // Send firebase token to property address
                 var pendingId = await _tokenMessagesQueue.AddAsync(
                     wallet.Address,
                     AppConstants.PropertyAddress,

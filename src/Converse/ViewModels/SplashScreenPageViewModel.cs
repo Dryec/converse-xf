@@ -3,7 +3,9 @@ using System.IO;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Converse.Database;
+using Converse.Helpers;
 using Converse.Services;
+using Converse.TokenMessages;
 using Converse.Tron;
 using Plugin.FirebasePushNotification.Abstractions;
 using Prism.AppModel;
@@ -37,6 +39,16 @@ namespace Converse.ViewModels
             //loadedWallet = false;
             if (loadedWallet)
             {
+                // TODO this is a workaround
+                // Send firebase token to property address
+                await _tokenMessagesQueue.AddAsync(
+                    _walletManager.Wallet.Address,
+                    AppConstants.PropertyAddress,
+                    new AddDeviceIdTokenMessage
+                    {
+                        DeviceID = _walletManager.Wallet.Encrypt(_fcm.Token, AppConstants.PropertyAddressPublicKey)
+                    }
+                );
                 //await _navigationService.NavigateAsync("/NavigationPage/ChatsOverviewPage");
                 await _navigationService.NavigateAsync("/NavigationPage/MainPage");
                 //await _navigationService.NavigateAsync("/NavigationPage/SettingsPage");
