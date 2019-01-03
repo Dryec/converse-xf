@@ -357,6 +357,7 @@ namespace Converse.ViewModels
                     //ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, true));
                 }
 
+                IsLoadingNewMessages = false;
                 if (needMore)
                 {
                     await LoadNewMessages();
@@ -481,9 +482,9 @@ namespace Converse.ViewModels
 
                         var lastReadId = await _database.LastReadMessageIDs.GetByChatID(Chat.ID);
 
-                        if (Messages.Count > 0)
+                        if (Chat.LastMessage != null)
                         {
-                            await _database.LastReadMessageIDs.Update(Chat.ID, Messages.Last().ID);
+                            await _database.LastReadMessageIDs.Update(Chat.ID, Chat.LastMessage.ID);
                         }
 
                         var scrollIndex = lastReadId != null ?
