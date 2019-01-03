@@ -34,6 +34,11 @@ Genesis Block is 5,350,000
   * Give people not knowing blockchain technology an easy entry
   * and people who don't want to keep their private key for them an alternative
 - Image and video messages
+- Extended Messaging System
+  * 3 Steps Message
+    * Temporary message sent directly without delay
+    * Message received
+    * Message gets confirmed by blockchain
 - TRX & TRC-10 Tipping
 - Translations for multiple languages
 - Better message handling
