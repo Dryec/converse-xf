@@ -480,6 +480,12 @@ namespace Converse.ViewModels
                         await Task.Delay(50);
 
                         var lastReadId = await _database.LastReadMessageIDs.GetByChatID(Chat.ID);
+
+                        if (Messages.Count > 0)
+                        {
+                            await _database.LastReadMessageIDs.Update(Chat.ID, Messages.Last().ID);
+                        }
+
                         var scrollIndex = lastReadId != null ?
                                             lastReadId.LastReadID < Messages.Count && lastReadId.LastReadID >= 0 ?
                                                 lastReadId.LastReadID : Messages.Count
