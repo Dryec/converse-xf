@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Bitcoin.BIP39;
@@ -40,10 +42,18 @@ namespace Converse.Services
 
         public async Task<TransactionExtention> CreateTransactionFromTokenMessageAsync(string sender, string receiver, ITokenMessage message)
         {
+            var p14DateTime = new DateTime(2019, 1, 5, 12, 0, 0, DateTimeKind.Utc).ToUniversalTime();
+            var isProposal14Active = DateTime.UtcNow > p14DateTime;
+            Debug.WriteLine(isProposal14Active ? "Using Token ID" : "Using Token Name");
+            if (!isProposal14Active)
+            {
+                Debug.WriteLine($"Time until #14 is active: {(p14DateTime - DateTime.UtcNow).ToString()}");
+            }
+
             var contract = new TransferAssetContract
             {
                 Amount = 1,
-                AssetName = ByteString.CopyFromUtf8(AppConstants.TokenName),
+                AssetName = ByteString.CopyFromUtf8(isProposal14Active ? AppConstants.TokenID : AppConstants.TokenName),
                 OwnerAddress = ByteString.CopyFrom(WalletAddress.Decode58Check(sender)),
                 ToAddress = ByteString.CopyFrom(WalletAddress.Decode58Check(receiver))
             };
@@ -59,10 +69,18 @@ namespace Converse.Services
 
         public async Task<TransactionExtention> CreateTransactionAsync(string sender, string receiver, string data)
         {
+            var p14DateTime = new DateTime(2019, 1, 5, 12, 0, 0, DateTimeKind.Utc).ToUniversalTime();
+            var isProposal14Active = DateTime.UtcNow > p14DateTime;
+            Debug.WriteLine(isProposal14Active ? "Using Token ID" : "Using Token Name");
+            if(!isProposal14Active)
+            {
+                Debug.WriteLine($"Time until #14 is active: {(p14DateTime - DateTime.UtcNow).ToString()}");
+            }
+
             var contract = new TransferAssetContract
             {
                 Amount = 1,
-                AssetName = ByteString.CopyFromUtf8(AppConstants.TokenName),
+                AssetName = ByteString.CopyFromUtf8(isProposal14Active ? AppConstants.TokenID : AppConstants.TokenName),
                 OwnerAddress = ByteString.CopyFrom(WalletAddress.Decode58Check(sender)),
                 ToAddress = ByteString.CopyFrom(WalletAddress.Decode58Check(receiver))
             };

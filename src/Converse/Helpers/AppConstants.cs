@@ -6,6 +6,7 @@ namespace Converse.Helpers
     public static class AppConstants
     {
         public const string TokenName = "Converse";
+        public const string TokenID = "1001689";
 
         public const string DefaultFullNodeIP = "54.236.37.243";
         public const int DefaultFullNodePort = 50051;

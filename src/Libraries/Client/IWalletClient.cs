@@ -49,9 +49,11 @@ namespace Client
         Task<AssetIssueList> GetAssetIssueByAccountAsync(Account account);
         
         Task<AccountResourceMessage> GetAccountResourceAsync(Account account);
-        
+
         Task<AssetIssueContract> GetAssetIssueByNameAsync(BytesMessage message);
-        
+
+        Task<AssetIssueContract> GetAssetIssueByIdAsync(BytesMessage message);
+
         Task<BlockExtention> GetNowBlockAsync();
         
         Task<BlockExtention> GetBlockByNumAsync(NumberMessage message);

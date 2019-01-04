@@ -196,5 +196,10 @@ namespace Client
         {
             return await _grpcClient.ExchangeTransactionAsync(contract);
         }
+
+        public async Task<AssetIssueContract> GetAssetIssueByIdAsync(BytesMessage message)
+        {
+            return await _grpcClient.GetAssetIssueByIdAsync(message);
+        }
     }
 }

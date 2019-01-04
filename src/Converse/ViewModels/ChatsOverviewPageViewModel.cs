@@ -124,7 +124,7 @@ namespace Converse.ViewModels
                 if (account != null && !account.Address.IsEmpty)
                 {
                     var isBandwidthAvailable = false;
-                    var token = await _tronConnection.Client.GetAssetIssueByNameAsync(new BytesMessage { Value = ByteString.CopyFromUtf8(AppConstants.TokenName) });
+                    var token = await _tronConnection.Client.GetAssetIssueByIdAsync(new BytesMessage { Value = ByteString.CopyFromUtf8(AppConstants.TokenID) });
 
 
                     if (token != null && !token.OwnerAddress.IsEmpty)
