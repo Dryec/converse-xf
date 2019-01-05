@@ -130,9 +130,9 @@ namespace Converse.ViewModels
                     if (token != null && !token.OwnerAddress.IsEmpty)
                     {
                         // Check account free usage
-                        if (accountNet.AssetNetUsed.ContainsKey(AppConstants.TokenName))
+                        if (accountNet.AssetNetUsed.ContainsKey(AppConstants.TokenID))
                         {
-                            isBandwidthAvailable = (token.PublicFreeAssetNetLimit - accountNet.AssetNetUsed[AppConstants.TokenName]) >= 1000;
+                            isBandwidthAvailable = (token.PublicFreeAssetNetLimit - accountNet.AssetNetUsed[AppConstants.TokenID]) >= 1000;
                         }
                         else
                         {

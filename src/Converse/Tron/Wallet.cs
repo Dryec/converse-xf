@@ -97,7 +97,7 @@ namespace Converse.Tron
             try
             {
                 var account = await connection.Client.GetAccountAsync(new Account { Address = ByteString.CopyFrom(WalletAddress.Decode58Check(Address)) });
-                return account.Asset.ContainsKey(AppConstants.TokenName) ? account.Asset[AppConstants.TokenName] : 0;
+                return account.AssetV2.ContainsKey(AppConstants.TokenID) ? account.AssetV2[AppConstants.TokenID] : 0;
             }
             catch (Exception)
             {
