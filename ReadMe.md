@@ -55,6 +55,8 @@ Genesis Block is 5,350,000
     * Wallet view, freeze, vote and more
 - …
 
+Full overview over planned features on Trello: https://trello.com/b/KmXpJ8xF/converse-decentralized-chat
+
 Suggestions for improvements or comments? Contact us and let us know your idea!
 
 ## How it works
