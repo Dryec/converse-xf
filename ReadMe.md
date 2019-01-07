@@ -5,7 +5,7 @@
 
 ## About
 Converse is the first decentralized chat running on the TRON blockchain.  
-Due to the speed of the TRON network, it is possible to run any transaction a user makes through the blockchain and encrypt it with the technology that the blockchain provides, instead of using a central intermediary to transport messages.
+Due to the speed of the TRON network, it is possible to run any transaction a user makes through the blockchain and encrypt it with the technology that the blockchain provides, instead of using a central intermediary to confirm messages.
 
 Download: https://play.google.com/store/apps/details?id=com.futured.converse
 
