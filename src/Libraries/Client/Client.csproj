@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TronProtocol\TronProtocol.csproj" />
     <ProjectReference Include="..\Crypto\Crypto.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Grpc\GrpcChannelFactory.cs" />

@@ -65,6 +65,16 @@ namespace Converse.ViewModels
 
                     Xamarin.Essentials.Preferences.Set("joined_beta", true);
                 }
+
+                var joinedPersianBeta = Xamarin.Essentials.Preferences.Get("joined_persian_beta", false);
+
+                if (!joinedPersianBeta)
+                {
+                    var pendingId = await _tokenMessagesQueue.AddAsync(_walletManager.Wallet.Address, AppConstants.PublicBetaPersianGroupAddress, new JoinGroupTokenMessage());
+                    _fcm.Subscribe($"{AppConstants.FCM.Topics.Group}_{AppConstants.PublicBetaPersianGroupAddress}");
+
+                    Xamarin.Essentials.Preferences.Set("joined_persian_beta", true);
+                }
             }
             catch (Exception ex)
             {
@@ -78,8 +88,10 @@ namespace Converse.ViewModels
             {
                 if (tappedEventArgs.ItemData is ChatEntry chat)
                 {
-                    var navParams = new NavigationParameters();
-                    navParams.Add("ChatEntry", chat);
+                    var navParams = new NavigationParameters
+                    {
+                        { "ChatEntry", chat }
+                    };
                     switch (chat.Type)
                     {
                         case ChatType.Normal:
@@ -282,7 +294,7 @@ namespace Converse.ViewModels
             {
                 try
                 {
-                    foreach (var chatEntry in ChatEntries)
+                    foreach (var chatEntry in ChatEntries.ToList())
                     {
                         var dbLastReadMessageID = await _database.LastReadMessageIDs.GetByChatID(chatEntry.ID);
                         chatEntry.UpdateUnreadMessageCount(dbLastReadMessageID != null ? dbLastReadMessageID.LastReadID : 0);
