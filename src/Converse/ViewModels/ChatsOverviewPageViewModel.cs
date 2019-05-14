@@ -55,7 +55,6 @@ namespace Converse.ViewModels
         {
             try
             {
-
                 var joinedBeta = Xamarin.Essentials.Preferences.Get("joined_beta", false);
 
                 if (!joinedBeta)

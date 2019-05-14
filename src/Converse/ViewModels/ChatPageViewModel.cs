@@ -298,54 +298,13 @@ namespace Converse.ViewModels
                 end = start + loadCount;
             }
 
-            var pendingMessagesCount = await _database.PendingMessages.GetCount(Chat.ID);
             var messages = await _syncServer.GetMessagesAsync(Chat.ID, start, end);
             if (messages != null)
             {
                 var needScrollDown = ScrollY + ScrollViewHeight >= ScrollViewSize.Height - 80;
                 foreach (var message in messages.Messages)
                 {
-                    message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
-                    message.Decrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey);
-
-                    foreach (var msg in Messages)
-                    {
-                        if (message.ExtendedMessage?.PendingID == msg.ExtendedMessage?.PendingID && msg.ExtendedMessage.IsPending)
-                        {
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                try
-                                {
-                                    Messages.Remove(msg);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Debug.WriteLine(ex);
-                                }
-                            });
-                        }
-                    }
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        Messages.Add(message);
-
-                        if (message.IsSender && message.ExtendedMessage != null && pendingMessagesCount > 0)
-                        {
-                            // try deleting from table
-                            await _database.PendingMessages.Delete(Chat.ID, message.ExtendedMessage.PendingID);
-
-                            // delete from messages list
-                            /*var moved = 0;
-                            for (var i = 0; i < Messages.Count - moved; i++)
-                            {
-                                if (Messages[i].ExtendedMessage?.IsPending == true)
-                                {
-                                    moved++;
-                                    Messages.Move(i, Messages.Count - 1);
-                                }
-                            }*/
-                        }
-                    });
+                    await ProcessMessage(message);
                 }
 
 
@@ -366,16 +325,61 @@ namespace Converse.ViewModels
             IsLoadingNewMessages = false;
         }
 
+        async Task ProcessMessage(ChatMessage message)
+        {
+            message.IsSender = message.Sender.TronAddress == _walletManager.Wallet.Address;
+            message.Decrypt(_walletManager.Wallet, Chat.ChatPartner.PublicKey);
+
+            for (var i = Messages.Count - 1; i >= 0; i--)
+            {
+                var msg = Messages[i];
+                if (message.ExtendedMessage?.PendingID == msg.ExtendedMessage?.PendingID && msg.ExtendedMessage.IsPending)
+                {
+                    try
+                    {
+                        if(Messages.Remove(msg))
+                        {
+                            break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
+                }
+            }
+
+
+            Messages.Add(message);
+
+            if (message.IsSender && message.ExtendedMessage != null)
+            {
+                // try deleting from table
+                await _database.PendingMessages.Delete(Chat.ID, message.ExtendedMessage.PendingID);
+
+                // delete from messages list
+                /*var moved = 0;
+                for (var i = 0; i < Messages.Count - moved; i++)
+                {
+                    if (Messages[i].ExtendedMessage?.IsPending == true)
+                    {
+                        moved++;
+                        Messages.Move(i, Messages.Count - 1);
+                    }
+                }*/
+            }
+        }
+
         public override async void OnNavigatingTo(INavigationParameters parameters)
         {
             if (parameters.GetNavigationMode() == NavigationMode.New)
             {
                 UserInfo chatPartner = null;
-                if(parameters.TryGetValue<ChatEntry>("ChatEntry", out var chat))
+                if (parameters.TryGetValue<ChatEntry>("ChatEntry", out var chat))
                 {
                     Chat = chat;
                 }
-                else if(parameters.TryGetValue("user", out UserInfo user))
+                else if (parameters.TryGetValue("user", out UserInfo user))
                 {
                     chatPartner = user;
 
@@ -383,7 +387,7 @@ namespace Converse.ViewModels
                     foreach (var dbChat in dbChats)
                     {
                         chat = dbChat.ToChatEntry();
-                        if(chat.ChatPartner?.TronAddress == user.TronAddress)
+                        if (chat.ChatPartner?.TronAddress == user.TronAddress)
                         {
                             Chat = chat;
                         }
@@ -511,37 +515,42 @@ namespace Converse.ViewModels
             }
         }
 
-        void _fcm_OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e)
+        void _fcm_OnNotificationReceived(object source, FirebasePushNotificationDataEventArgs e) =>
+        Device.BeginInvokeOnMainThread(async () =>
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            if (e.Data.ContainsKey("type") && e.Data.ContainsKey("data"))
             {
-                if (Chat.ID == 0)
+                var tagObj = e.Data["type"];
+                var dataObj = e.Data["data"];
+                if (tagObj is string tag && tag == AppConstants.FCM.Types.Message)
                 {
-                    if (e.Data.ContainsKey("type") && e.Data.ContainsKey("data"))
+                    if (dataObj is string data)
                     {
-                        var tagObj = e.Data["type"];
-                        var dataObj = e.Data["data"];
-                        if (tagObj is string tag && tag == AppConstants.FCM.Types.Message)
+                        try
                         {
-                            if (dataObj is string data)
+                            var chatMessage = JsonConvert.DeserializeObject<ChatMessage>(data);
+                            Chat.ID = chatMessage.ChatID;
+
+                            var needScrollDown = ScrollY + ScrollViewHeight >= ScrollViewSize.Height - 80;
+                            await ProcessMessage(chatMessage);
+                            if (needScrollDown)
                             {
-                                try
-                                {
-                                    var chatMessage = JsonConvert.DeserializeObject<ChatMessage>(data);
-                                    Chat.ID = chatMessage.ChatID;
-                                }
-                                catch (JsonException ex)
-                                {
-                                    Debug.WriteLine(ex);
-                                }
+                                //await Task.Delay(100);
+                                Debug.WriteLine(ScrollViewSize, "Scrolling Down");
+                                Device.BeginInvokeOnMainThread(() => ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, true, Syncfusion.ListView.XForms.ScrollToPosition.End)));
+                                //ScrollMessagesEvent(this, new ScrollEventArgs(Messages.Count, true));
                             }
+                        }
+                        catch (JsonException ex)
+                        {
+                            Debug.WriteLine(ex);
                         }
                     }
                 }
+            }
 
-                await LoadNewMessages();
-            });
-        }
+            //await LoadNewMessages();
+        });
 
     }
 }
